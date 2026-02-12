@@ -5,7 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.PivotSubsystem;
+import frc.team1699.subsystems.ShooterHoodSubsystem;
+import frc.team1699.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -14,18 +15,28 @@ public class RobotContainer {
   private final CommandXboxController operatorController =
       new CommandXboxController(OIConstants.kOperatorControllerPort);
 
-  private final PivotSubsystem pivot = new PivotSubsystem();
+  private final ShooterHoodSubsystem shootHood = new ShooterHoodSubsystem();
+  private final ShooterSubsystem shoot = new ShooterSubsystem();
   public RobotContainer() {
     configureBindings();
   }
 
   private void configureBindings() {
     operatorController.povUp()
-      .onTrue(pivot.setRaw(0.2))
-      .onFalse(pivot.setRaw(0));
+      .onTrue(shootHood.setRaw(0.2))
+      .onFalse(shootHood.setRaw(0));
     operatorController.povUp()
-      .onTrue(pivot.setRaw(-0.2))
-      .onFalse(pivot.setRaw(0));
+      .onTrue(shootHood.setRaw(-0.2))
+      .onFalse(shootHood.setRaw(0));
+
+    operatorController.leftBumper()
+      .onTrue(shoot.setTopRaw(0.2)
+        .alongWith(shoot.setBottomRaw(0.2)))
+      .onFalse(shoot.stopAll());
+    operatorController.rightBumper()
+      .onTrue(shoot.setTopRaw(-0.2)
+        .alongWith(shoot.setBottomRaw(-0.2)))
+      .onFalse(shoot.stopAll());
   }
 
   // public Command getAutonomousCommand() {
