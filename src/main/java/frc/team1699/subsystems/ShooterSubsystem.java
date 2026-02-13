@@ -6,9 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.ShooterConfigs;
-import frc.robot.Configs.ShooterHoodConfigs;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.ShooterHoodConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
     private ShootingSpeeds currentSpeed;
@@ -51,11 +49,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean topInTolerance() {
-        return getTopError() < ShooterHoodConstants.kTolerance;
+        return getTopError() < ShooterConstants.kTolerance;
     }
 
     public boolean bottomInTolerance() {
-        return getBottomError() < ShooterHoodConstants.kTolerance;
+        return getBottomError() < ShooterConstants.kTolerance;
     }
 
     public Command setSpeed(ShootingSpeeds speed) {
@@ -85,12 +83,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void pauseControl() {
-        topMotor.setControl(ShooterHoodConfigs.pauseMotion);
-        bottomMotor.setControl(ShooterHoodConfigs.pauseMotion);
+        topMotor.setControl(ShooterConfigs.pauseMotion);
+        bottomMotor.setControl(ShooterConfigs.pauseMotion);
     }
 
     private boolean hasMotionControl() {
-        return topMotor.getAppliedControl().equals(ShooterHoodConfigs.motionRequest);
+        return topMotor.getAppliedControl().equals(ShooterConfigs.motionRequest);
     }
 
    @Override
