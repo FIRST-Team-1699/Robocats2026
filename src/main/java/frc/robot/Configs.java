@@ -44,8 +44,7 @@ public final class Configs {
         public static final MotorOutputConfigs topMotorConfigs = new MotorOutputConfigs();
         public static MotorOutputConfigs bottomMotorConfigs;
 
-        public static final FeedbackConfigs topFeedback = new FeedbackConfigs();
-        public static FeedbackConfigs bottomFeedback = new FeedbackConfigs();
+        public static final FeedbackConfigs feedback = new FeedbackConfigs();
 
         public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
         public static final  MotionMagicVelocityVoltage motionRequest = new MotionMagicVelocityVoltage(0);
@@ -72,7 +71,7 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicAcceleration = ShooterConstants.kMotionMagicAcceleration;
             talonConfigs.MotionMagic.MotionMagicJerk =  ShooterConstants.kMotionMagicJerk;
 
-            topFeedback.SensorToMechanismRatio = ShooterConstants.kPositionConversionFactor;
+            feedback.SensorToMechanismRatio = ShooterConstants.kPositionConversionFactor;
         }
     }
 }

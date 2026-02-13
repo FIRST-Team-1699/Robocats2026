@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.team1699.subsystems.ShooterHoodSubsystem;
 import frc.team1699.subsystems.ShooterSubsystem;
+import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -30,13 +31,11 @@ public class RobotContainer {
       .onFalse(shootHood.setRaw(0));
 
     operatorController.leftBumper()
-      .onTrue(shoot.setTopRaw(0.2)
-        .alongWith(shoot.setBottomRaw(0.2)))
-      .onFalse(shoot.stopAll());
+      .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
+      .onFalse(shoot.setSpeed(ShootingSpeeds.STORED));
     operatorController.rightBumper()
-      .onTrue(shoot.setTopRaw(-0.2)
-        .alongWith(shoot.setBottomRaw(-0.2)))
-      .onFalse(shoot.stopAll());
+      .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
+      .onFalse(shoot.setSpeed(ShootingSpeeds.STORED));
   }
 
   // public Command getAutonomousCommand() {

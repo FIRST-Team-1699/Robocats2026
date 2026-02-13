@@ -3,6 +3,7 @@ package frc.team1699.subsystems;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.ShooterHoodConfigs;
@@ -57,11 +58,13 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Encoder position: " + encoderPosition());
+        SmartDashboard.putNumber("Shooter position: ", encoderPosition());
     }
 
     public enum HoodPositions {
-        STORED(0), AIMING(0), CLIMB(0);
+        STORED(0), 
+        AIMING(-1), 
+        CLIMB(-1);
 
         private double degrees;
         private HoodPositions(double degrees) {

@@ -2,6 +2,7 @@ package frc.team1699.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.ShooterConfigs;
@@ -9,14 +10,14 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterHoodConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private ShootingSpeeds currentPosition;
+    private ShootingSpeeds currentSpeed;
     private TalonFX topMotor, bottomMotor;
 
     public ShooterSubsystem() {
         topMotor=new TalonFX(ShooterConstants.kTopMotorID);
         bottomMotor= new TalonFX(ShooterConstants.kBottomMotorID);
 
-        currentPosition=ShootingSpeeds.STORED;
+        currentSpeed=ShootingSpeeds.STORED;
         configureMotors();
     }
 
@@ -24,20 +25,20 @@ public class ShooterSubsystem extends SubsystemBase {
         topMotor.getConfigurator().apply(ShooterConfigs.talonConfigs.Slot0);
         topMotor.getConfigurator().apply(ShooterConfigs.talonConfigs.MotionMagic);
         topMotor.getConfigurator().apply(ShooterConfigs.topMotorConfigs);
-        topMotor.getConfigurator().apply(ShooterConfigs.topFeedback);
+        topMotor.getConfigurator().apply(ShooterConfigs.feedback);
 
         bottomMotor.getConfigurator().apply(ShooterConfigs.talonConfigs.Slot0);
         bottomMotor.getConfigurator().apply(ShooterConfigs.talonConfigs.MotionMagic);
         bottomMotor.getConfigurator().apply(ShooterConfigs.bottomMotorConfigs);
-        bottomMotor.getConfigurator().apply(ShooterConfigs.bottomFeedback);
+        bottomMotor.getConfigurator().apply(ShooterConfigs.feedback);
     }
 
     public double getTopError() {
-        return Math.abs(Math.abs(currentPosition.getTopSpeed())-Math.abs(topEncoderPosition()));
+        return Math.abs(Math.abs(currentSpeed.getTopSpeed())-Math.abs(topEncoderPosition()));
     }
 
     public double getBottomError() {
-        return Math.abs(Math.abs(currentPosition.getBottomSpeed())-Math.abs(bottomEncoderPosition()));
+        return Math.abs(Math.abs(currentSpeed.getBottomSpeed())-Math.abs(bottomEncoderPosition()));
     }
 
     public boolean topInTolerance() {
@@ -56,37 +57,35 @@ public class ShooterSubsystem extends SubsystemBase {
         return bottomMotor.getPosition().getValueAsDouble();
     }
 
-    public Command setPosition(ShootingSpeeds position) {
+    public Command setSpeed(ShootingSpeeds speed) {
         return runOnce(() -> {
-            this.currentPosition=position;
-            topMotor.setControl(ShooterConfigs.motionRequest.withVelocity(position.getTopSpeed()));
-            bottomMotor.setControl(ShooterConfigs.motionRequest.withVelocity(position.getBottomSpeed()));
+            this.currentSpeed=speed;
+            topMotor.setControl(ShooterConfigs.motionRequest.withVelocity(speed.getTopSpeed()));
+            bottomMotor.setControl(ShooterConfigs.motionRequest.withVelocity(speed.getBottomSpeed()));
         });
     }
 
-    public Command setTopRaw(double speed) {
+    public Command setRaw(double topVoltage, double bottomVoltage) {
         return runOnce(() -> {
-            topMotor.set(speed);
+            topMotor.set(topVoltage);
+            bottomMotor.set(bottomVoltage);
         });
     }
 
-    public Command setBottomRaw(double speed) {
-        return runOnce(() -> {
-            bottomMotor.set(speed);
-        });
-    }
-
-    public Command stopAll() {
-        return runOnce(() -> {
-            bottomMotor.set(0);
-            topMotor.set(0);
-        });
+   @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Top Intake Speed: " , topMotor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Bottom Intake Speed: " , bottomMotor.getVelocity().getValueAsDouble());
     }
 
     public enum ShootingSpeeds {
         STORED(0,0), 
-        // TODO: TUNE
-        CLOSE(-1,-1), FAR(-1,-1), INTERPOLATED(-1,-1);
+        INTAKE(5,5),
+        OUTTAKE(-5,-5),
+        // TODO: SET
+        CLOSE(-1,-1), 
+        FAR(-1,-1), 
+        INTERPOLATED(-1,-1);
 
 
         private double topSpeed, bottomSpeed;

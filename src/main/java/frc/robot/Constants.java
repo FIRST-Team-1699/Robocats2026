@@ -23,12 +23,12 @@ public final class Constants {
     public static final int kFollowMotorID=-1;
 
     // TODO: TUNE
-    public static final double kForwardLimit=0.6;
-    public static final double kReverseLimit=-0.6;
+    public static final double kForwardLimit=0.8;
+    public static final double kReverseLimit=-0.8;
 
     public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
-    public static final MotorAlignmentValue kFollowInverted= MotorAlignmentValue.Aligned;
+    public static final MotorAlignmentValue kFollowInverted= MotorAlignmentValue.Opposed;
 
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
@@ -45,7 +45,7 @@ public final class Constants {
     public static final double kMotionMagicAcceleration = 160;
     public static final double kMotionMagicJerk = 1600;
 
-    // TODO: SET
+    // TODO: VERIFY
     public static final double kPositionConversionFactor = 360/81;
     // TODO: SET
     public static final double kOffset=0.0;
@@ -59,8 +59,8 @@ public final class Constants {
     public static final int kBottomMotorID=-1;
 
     // TODO: TUNE
-    public static final double kForwardLimit=0.6;
-    public static final double kReverseLimit=-0.6;
+    public static final double kForwardLimit=0.8;
+    public static final double kReverseLimit=-0.8;
 
     public static final InvertedValue kTopInverted= InvertedValue.Clockwise_Positive;
     public static final InvertedValue kBottomInverted= InvertedValue.Clockwise_Positive;
