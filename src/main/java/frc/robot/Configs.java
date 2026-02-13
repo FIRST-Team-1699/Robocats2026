@@ -73,14 +73,6 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  ShooterConstants.kMotionMagicJerk;
 
             topFeedback.SensorToMechanismRatio = ShooterConstants.kPositionConversionFactor;
-
-            // TODO: GET EXTERNAL ENCODER OR USE CTRE PRO FOR TORQUE CONTROL
-            topFeedback.FeedbackRemoteSensorID=ShooterConstants.kTopEncoderID;
-            topFeedback.FeedbackSensorSource=ShooterConstants.kFeedbackSource;
-
-            bottomFeedback=topFeedback.clone();
-
-            bottomFeedback.FeedbackRemoteSensorID=ShooterConstants.kBottomEncoderID;
         }
     }
 }

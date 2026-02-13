@@ -26,7 +26,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         leadMotor.getConfigurator().apply(ShooterHoodConfigs.motorConfigs);
         leadMotor.getConfigurator().apply(ShooterHoodConfigs.feedback);
 
-        followMotor.setControl(new Follower(leadMotor.getDeviceID(), ShooterHoodConstants.kFollowInverted));
+        followMotor.setControl(new Follower(ShooterHoodConstants.kLeadMotorID, ShooterHoodConstants.kFollowInverted));
     }
     
 

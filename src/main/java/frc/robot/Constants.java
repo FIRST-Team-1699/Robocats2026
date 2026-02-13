@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -58,11 +57,6 @@ public final class Constants {
   public static class ShooterConstants {
     public static final int kTopMotorID=-1;
     public static final int kBottomMotorID=-1;
-
-    public static final int kTopEncoderID=-1;
-    public static final int kBottomEncoderID=-1;
-
-    public static final FeedbackSensorSourceValue kFeedbackSource= FeedbackSensorSourceValue.RemoteCANcoder;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.6;
