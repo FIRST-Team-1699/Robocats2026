@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.EmptyControl;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 
@@ -13,8 +14,11 @@ public final class Configs {
     public static class ShooterHoodConfigs { 
         public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
         public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
+
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
+
         public static final  MotionMagicVoltage motionRequest = new MotionMagicVoltage(0);
+        public static final  EmptyControl pauseMotion = new EmptyControl();
 
         static {
             motorConfigs.Inverted = ShooterHoodConstants.kInverted;
@@ -41,13 +45,14 @@ public final class Configs {
     }
 
     public static class ShooterConfigs {
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
         public static final MotorOutputConfigs topMotorConfigs = new MotorOutputConfigs();
         public static MotorOutputConfigs bottomMotorConfigs;
 
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
         public static final  MotionMagicVelocityVoltage motionRequest = new MotionMagicVelocityVoltage(0);
+        public static final  EmptyControl pauseMotion = new EmptyControl();
 
         static {
             topMotorConfigs.Inverted = ShooterConstants.kTopInverted;

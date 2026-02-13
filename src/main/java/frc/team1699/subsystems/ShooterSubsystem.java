@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.ShooterConfigs;
+import frc.robot.Configs.ShooterHoodConfigs;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterHoodConstants;
 
@@ -33,12 +34,20 @@ public class ShooterSubsystem extends SubsystemBase {
         bottomMotor.getConfigurator().apply(ShooterConfigs.feedback);
     }
 
+    public double getTopVelocity() {
+        return topMotor.getVelocity().getValueAsDouble();
+    }
+
+    public double getBottomVelocity() {
+        return bottomMotor.getVelocity().getValueAsDouble();
+    }
+
     public double getTopError() {
-        return Math.abs(Math.abs(currentSpeed.getTopSpeed())-Math.abs(topEncoderPosition()));
+        return Math.abs(Math.abs(currentSpeed.getTopSpeed())-Math.abs(getTopVelocity()));
     }
 
     public double getBottomError() {
-        return Math.abs(Math.abs(currentSpeed.getBottomSpeed())-Math.abs(bottomEncoderPosition()));
+        return Math.abs(Math.abs(currentSpeed.getBottomSpeed())-Math.abs(getBottomVelocity()));
     }
 
     public boolean topInTolerance() {
@@ -47,14 +56,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean bottomInTolerance() {
         return getBottomError() < ShooterHoodConstants.kTolerance;
-    }
-
-    public double topEncoderPosition() {
-        return topMotor.getPosition().getValueAsDouble();
-    }
-
-    public double bottomEncoderPosition() {
-        return bottomMotor.getPosition().getValueAsDouble();
     }
 
     public Command setSpeed(ShootingSpeeds speed) {
@@ -67,15 +68,38 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public Command setRaw(double topVoltage, double bottomVoltage) {
         return runOnce(() -> {
+            pauseControl();
+
             topMotor.set(topVoltage);
             bottomMotor.set(bottomVoltage);
         });
+    }
+
+    public Command stopAll() {
+        return runOnce(() -> {
+            pauseControl();
+
+            topMotor.set(0);
+            bottomMotor.set(0);
+        });
+    }
+
+    private void pauseControl() {
+        topMotor.setControl(ShooterHoodConfigs.pauseMotion);
+        bottomMotor.setControl(ShooterHoodConfigs.pauseMotion);
+    }
+
+    private boolean hasMotionControl() {
+        return topMotor.getAppliedControl().equals(ShooterHoodConfigs.motionRequest);
     }
 
    @Override
     public void periodic() {
         SmartDashboard.putNumber("Top Intake Speed: " , topMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Bottom Intake Speed: " , bottomMotor.getVelocity().getValueAsDouble());
+        SmartDashboard.putBoolean("Top Intake Is In Tolerance: ", topInTolerance());
+        SmartDashboard.putBoolean("Bottom Intake Is In Tolerance: ", bottomInTolerance());
+        SmartDashboard.putBoolean("Intake Has Motion Paused: ", !hasMotionControl());
     }
 
     public enum ShootingSpeeds {

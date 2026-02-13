@@ -32,7 +32,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     
 
     public double getError() {
-        return Math.abs(Math.abs(currentPosition.degrees)-Math.abs(encoderPosition()));
+        return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
     }
 
     public boolean isInTolerance() {
@@ -52,13 +52,25 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public Command setRaw(double speed) {
         return runOnce(() -> {
+            pauseControl();
+
             leadMotor.set(speed);
         });
     }
 
+    private void pauseControl() {
+        leadMotor.setControl(ShooterHoodConfigs.pauseMotion);
+    }
+
+    private boolean hasMotionControl() {
+        return leadMotor.getAppliedControl().equals(ShooterHoodConfigs.motionRequest);
+    }
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter position: ", encoderPosition());
+        SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
+        SmartDashboard.putBoolean("Shooter Pivot Is In Tolerance: ", isInTolerance());
+        SmartDashboard.putBoolean("Shooter Pivot Has Motion Paused: ", !hasMotionControl());
     }
 
     public enum HoodPositions {
@@ -71,10 +83,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
             this.degrees=degrees;
         }
 
-        public void setPosition(double degrees) {
+        public void setDegrees(double degrees) {
             this.degrees=degrees;
         }
-        public double getPosition() {
+        public double getDegrees() {
             return this.degrees;
         }
     }

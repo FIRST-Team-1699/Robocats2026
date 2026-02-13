@@ -7,7 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.team1699.subsystems.ShooterHoodSubsystem;
 import frc.team1699.subsystems.ShooterSubsystem;
-import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
@@ -31,14 +31,15 @@ public class RobotContainer {
       .onFalse(shootHood.setRaw(0));
 
     operatorController.leftBumper()
-      .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
-      .onFalse(shoot.setSpeed(ShootingSpeeds.STORED));
+      .onTrue(shoot.setRaw(0.2, 0.2))
+      .onFalse(shoot.stopAll());
     operatorController.rightBumper()
-      .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
-      .onFalse(shoot.setSpeed(ShootingSpeeds.STORED));
+      .onTrue(shoot.setRaw(-0.2, -0.2))
+      .onFalse(shoot.stopAll());
   }
 
-  // public Command getAutonomousCommand() {
-  //
-  // }
+  public Command getAutonomousCommand() {
+    // placeholder
+    return shoot.runOnce(() -> System.out.println("Running auto..."));
+  }
 }
