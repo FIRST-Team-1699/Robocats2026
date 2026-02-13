@@ -2,6 +2,7 @@ package frc.team1699.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.IntakeConfigs;
@@ -59,6 +60,43 @@ public class IntakeSubsystem extends SubsystemBase {
     private void pauseControl() {
         topMotor.setControl(IntakeConfigs.pauseMotion);
         bottomMotor.setControl(IntakeConfigs.pauseMotion);
+    }
+
+    private double getTopVelocity() {
+        return topMotor.getVelocity().getValueAsDouble();
+    }
+
+    private double getBottomVelocity() {
+        return bottomMotor.getVelocity().getValueAsDouble();
+    }
+
+    private double getTopError() {
+        return Math.abs(Math.abs(currentSpeed.topSpeed)-Math.abs(getTopVelocity()));
+    }
+
+    private double getBottomError() {
+        return Math.abs(Math.abs(currentSpeed.topSpeed)-Math.abs(getBottomVelocity()));
+    }
+
+    public boolean isTopInTolerance() {
+        return getTopError() < IntakeConstants.kTolerance;
+    }
+
+    public boolean isBottomInTolerance() {
+        return getBottomError() < IntakeConstants.kTolerance;
+    }
+
+    private boolean hasMotionControl() {
+        return topMotor.getAppliedControl().equals(IntakeConfigs.motionRequest);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Intake Top Motor velocity: ", getTopVelocity());
+        SmartDashboard.putNumber("IntakeBottom Motor velocity: ", getBottomVelocity());
+        SmartDashboard.putBoolean("Is Intake Motion Paused: ", !hasMotionControl());
+        SmartDashboard.putBoolean("Is Intake Top In Tolerance: ", isTopInTolerance());
+        SmartDashboard.putBoolean("Is Intake Bottom In Tolerance: ", isBottomInTolerance());
     }
 
     public enum IntakeSpeeds {
