@@ -4,16 +4,46 @@
 
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
+
 public final class Constants {
-  public static class OperatorConstants {
+  public static class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
+  }
+  public static class IndexerConstants {
+    public static final int kLeadMotorID=-1;
+
+    // TODO: TUNE
+    public static final double kForwardLimit=0.8;
+    public static final double kReverseLimit=-0.8;
+
+    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
+
+    public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
+
+    public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
+
+    // TODO: TUNE
+    public static final double kS = 0.25;
+    public static final double kV = 0.12;
+    public static final double kA = 0.01;
+    public static final double kP = 4.8;
+    public static final double kI = 0;
+    public static final double kD = 0.1;
+
+    public static final double kMotionMagicVelocity = 80;
+    public static final double kMotionMagicAcceleration = 160;
+    public static final double kMotionMagicJerk = 1600;
+
+    // TODO: SET
+    public static final double kPositionConversionFactor = -1;
+    // TODO: SET
+    public static final double kOffset=0.0;
+
+    // EVERYTHING ELSE
+    public static final double kTolerance=2.0;
   }
 }
