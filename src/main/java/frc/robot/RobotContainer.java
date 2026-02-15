@@ -16,10 +16,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-import frc.robot.swerve.*;
 import frc.team1699.subsystems.CommandSwerveDrivetrain;
 import frc.team1699.subsystems.IndexerSubsystem;
 import frc.robot.Constants.OIConstants;
+import frc.robot.swerve.Telemetry;
+import frc.robot.swerve.TunerConstants;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);

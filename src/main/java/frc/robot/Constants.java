@@ -46,4 +46,10 @@ public final class Constants {
     // EVERYTHING ELSE
     public static final double kTolerance=2.0;
   }
+
+  public static class BeamBreakConstants {
+        public static final int kSensorID = 47;
+        public static final double kHasBallInRange = 100;
+        public static final double kTimeDelay= 24;
+  }
 }

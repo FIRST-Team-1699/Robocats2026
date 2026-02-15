@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.IndexerConfigs;
 import frc.robot.Constants.IndexerConstants;
+import frc.utils.BeamBreak;
 
 public class IndexerSubsystem extends SubsystemBase {
     private IndexingSpeeds currentSpeed;
@@ -66,6 +67,8 @@ public class IndexerSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Indexer Speed: " , leadMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putBoolean("Indexer Speed Is In Tolerance: ", topInTolerance());
         SmartDashboard.putBoolean("Indexer Speed Has Motion Paused: ", !hasMotionControl());
+        SmartDashboard.putNumber("Distance from beambreak to ball: ", BeamBreak.getDistance());
+        SmartDashboard.putBoolean("Is ball in Beambreak: ", BeamBreak.hasBall().getAsBoolean());
     }
 
     public enum IndexingSpeeds {
