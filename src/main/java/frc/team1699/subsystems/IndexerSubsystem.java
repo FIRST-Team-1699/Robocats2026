@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Configs.IndexerConfigs;
 import frc.robot.Constants.IndexerConstants;
 import frc.utils.BeamBreak;
@@ -46,6 +47,12 @@ public class IndexerSubsystem extends SubsystemBase {
         });
     }
 
+    public Command indexUntilFull() {
+        return setSpeed(IndexingSpeeds.INTAKE)
+            .andThen(new WaitUntilCommand(BeamBreak.hasBall()))
+            .andThen(setSpeed(IndexingSpeeds.STORED));
+    }
+
     public Command setRaw(double voltage) {
         return runOnce(() -> {
             pauseControl();
@@ -74,8 +81,8 @@ public class IndexerSubsystem extends SubsystemBase {
     public enum IndexingSpeeds {
         STORED(0), 
         // TODO: TUNE
-        INTAKE(1),
-        OUTTAKE(-1);
+        INTAKE(0.5),
+        OUTTAKE(-0.5);
 
 
         private double speed;
