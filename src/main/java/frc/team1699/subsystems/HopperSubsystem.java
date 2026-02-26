@@ -9,13 +9,13 @@ import frc.robot.Configs.HopperConfigs;
 import frc.robot.Constants.HopperConstants;
 
 public class HopperSubsystem extends SubsystemBase {
-    private IndexingSpeeds currentSpeed;
+    private HopperSpeeds currentSpeed;
     private TalonFX leadMotor;
 
     public HopperSubsystem() {
         leadMotor=new TalonFX(HopperConstants.kLeadMotorID);
 
-        currentSpeed=IndexingSpeeds.STORED;
+        currentSpeed=HopperSpeeds.STORED;
         configureMotors();
     }
 
@@ -38,7 +38,7 @@ public class HopperSubsystem extends SubsystemBase {
         return getError() < HopperConstants.kTolerance;
     }
 
-    public Command setSpeed(IndexingSpeeds speed) {
+    public Command setSpeed(HopperSpeeds speed) {
         return runOnce(() -> {
             this.currentSpeed=speed;
             leadMotor.setControl(HopperConfigs.motionRequest.withVelocity(speed.getSpeed()));
@@ -68,7 +68,7 @@ public class HopperSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Hopper Speed Has Motion Paused: ", !hasMotionControl());
     }
 
-    public enum IndexingSpeeds {
+    public enum HopperSpeeds {
         STORED(0), 
         // TODO: TUNE
         INTAKE(.1),
@@ -76,7 +76,7 @@ public class HopperSubsystem extends SubsystemBase {
 
 
         private double speed;
-        IndexingSpeeds(double speed) {
+        HopperSpeeds(double speed) {
             this.speed=speed;
         }
 
