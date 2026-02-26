@@ -133,6 +133,8 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Y: ", this.y);
             SmartDashboard.putNumber("Recorded Yaw: ", bestTag.getYaw());
             SmartDashboard.putNumber("Actual Yaw: ", this.yaw);
+            SmartDashboard.putBoolean("is Left", isLeft);
+            SmartDashboard.putBoolean("is In Tolerance", isInTolerance());
             return;
         } 
         currentAmbiguity=1;
