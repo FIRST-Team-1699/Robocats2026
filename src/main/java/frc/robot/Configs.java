@@ -1,11 +1,13 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.EmptyControl;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterHoodConstants;
@@ -41,6 +43,9 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  ShooterHoodConstants.kMotionMagicJerk;
 
             feedback.SensorToMechanismRatio = ShooterHoodConstants.kPositionConversionFactor;
+
+            feedback.FeedbackRemoteSensorID= ShooterHoodConstants.kFeedbackID;
+            feedback.FeedbackSensorSource= ShooterHoodConstants.kFeedbackSensorSource;
         }
     }
 

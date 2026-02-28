@@ -7,6 +7,8 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.team1699.subsystems.ShooterHoodSubsystem;
 import frc.team1699.subsystems.ShooterSubsystem;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
+import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -23,18 +25,23 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    // operatorController.povUp()
+    //   .onTrue(shootHood.setRaw(0.2))
+    //   .onFalse(shootHood.setRaw(0));
+    // operatorController.povDown()
+    //   .onTrue(shootHood.setRaw(-0.2))
+    //   .onFalse(shootHood.setRaw(0));
     operatorController.povUp()
-      .onTrue(shootHood.setRaw(0.2))
-      .onFalse(shootHood.setRaw(0));
-    operatorController.povUp()
-      .onTrue(shootHood.setRaw(-0.2))
-      .onFalse(shootHood.setRaw(0));
+      .onTrue(shootHood.setPosition(HoodPositions.MAX));
+    operatorController.povDown()
+      .onTrue(shootHood.setPosition(HoodPositions.MIN));
+
 
     operatorController.leftBumper()
-      .onTrue(shoot.setRaw(0.2, 0.2))
+      .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
       .onFalse(shoot.stopAll());
     operatorController.rightBumper()
-      .onTrue(shoot.setRaw(-0.2, -0.2))
+      .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
       .onFalse(shoot.stopAll());
   }
 

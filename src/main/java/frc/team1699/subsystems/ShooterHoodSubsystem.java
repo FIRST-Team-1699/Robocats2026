@@ -1,6 +1,7 @@
 package frc.team1699.subsystems;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,6 +12,7 @@ import frc.robot.Constants.ShooterHoodConstants;
 
 public class ShooterHoodSubsystem extends SubsystemBase {
     private TalonFX leadMotor, followMotor;
+    private CANcoder encoder;
     private HoodPositions currentPosition;
 
     public ShooterHoodSubsystem() {
@@ -32,7 +34,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     
 
     public double getError() {
-        return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
+        return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()*360));
     }
 
     public boolean isInTolerance() {
@@ -46,14 +48,13 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public Command setPosition(HoodPositions position) {
         return runOnce(() -> {
             this.currentPosition=position;
-            leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(position.degrees));
+            leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(position.degrees/360));
         });
     }
 
     public Command setRaw(double speed) {
         return runOnce(() -> {
-            pauseControl();
-
+            // pauseControl();
             leadMotor.set(speed);
         });
     }
@@ -68,7 +69,8 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
+        SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition()*360);
+        SmartDashboard.putNumber("Shooter hypothetical: ", this.currentPosition.degrees);
         SmartDashboard.putBoolean("Shooter Pivot Is In Tolerance: ", isInTolerance());
         SmartDashboard.putBoolean("Shooter Pivot Has Motion Paused: ", !hasMotionControl());
     }
@@ -76,7 +78,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     public enum HoodPositions {
         STORED(0), 
         AIMING(-1), 
-        CLIMB(-1);
+        CLIMB(-1),
+
+        MIN(0),
+        MAX(56.16);
 
         private double degrees;
         private HoodPositions(double degrees) {

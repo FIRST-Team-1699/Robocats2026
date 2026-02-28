@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -19,44 +20,47 @@ public final class Constants {
   public static class ShooterHoodConstants {
     // MOTOR CONFIGS
     // TODO: SET
-    public static final int kLeadMotorID=-1;
-    public static final int kFollowMotorID=-1;
+    public static final int kLeadMotorID=5;
+    public static final int kFollowMotorID=49;
+
+    public static final int kFeedbackID=48;
+    public static final FeedbackSensorSourceValue kFeedbackSensorSource= FeedbackSensorSourceValue.RemoteCANcoder;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.8;
     public static final double kReverseLimit=-0.8;
 
-    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
-    public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
+    public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
+    public static final NeutralModeValue kNeutral= NeutralModeValue.Coast;
     public static final MotorAlignmentValue kFollowInverted= MotorAlignmentValue.Opposed;
 
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
     // TODO: TUNE
-    public static final double kS = 0.25;
-    public static final double kV = 0.12;
-    public static final double kA = 0.01;
-    public static final double kP = 4.8;
+    public static final double kS = 0.3;
+    public static final double kV = 2.4;
+    public static final double kA = 0.0;
+    public static final double kP = 200;
     public static final double kI = 0;
-    public static final double kD = 0.1;
+    public static final double kD = 0.0;
 
-    public static final double kMotionMagicVelocity = 80;
-    public static final double kMotionMagicAcceleration = 160;
+    public static final double kMotionMagicVelocity = 6400;
+    public static final double kMotionMagicAcceleration = 3000;
     public static final double kMotionMagicJerk = 1600;
 
     // TODO: VERIFY
-    public static final double kPositionConversionFactor = 360/81;
+    public static final double kPositionConversionFactor = 1;
     // TODO: SET
     public static final double kOffset=0.0;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=2.0;
+    public static final double kTolerance=4;
   }
 
   public static class ShooterConstants {
-    public static final int kTopMotorID=-1;
-    public static final int kBottomMotorID=-1;
+    public static final int kTopMotorID=8;
+    public static final int kBottomMotorID=9;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.8;
@@ -72,19 +76,19 @@ public final class Constants {
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
     // TODO: TUNE
-    public static final double kS = 0.25;
-    public static final double kV = 0.12;
-    public static final double kA = 0.01;
-    public static final double kP = 4.8;
+    public static final double kS = .22;
+    public static final double kV = 0.185;
+    public static final double kA = 0.0;
+    public static final double kP = .5;
     public static final double kI = 0;
-    public static final double kD = 0.1;
+    public static final double kD = 0.0;
 
     public static final double kMotionMagicVelocity = 80;
     public static final double kMotionMagicAcceleration = 160;
     public static final double kMotionMagicJerk = 1600;
 
     // TODO: SET
-    public static final double kPositionConversionFactor = -1;
+    public static final double kPositionConversionFactor = 2.0;
     // TODO: SET
     public static final double kOffset=0.0;
 
