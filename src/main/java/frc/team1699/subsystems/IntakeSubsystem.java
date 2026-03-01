@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command setRaw(double topVoltage,double bottomVoltage) {
         return runOnce(() -> {
-            pauseControl();
+            // pauseControl();
 
             topMotor.set(topVoltage);
             bottomMotor.set(bottomVoltage);
@@ -50,17 +50,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command stopAll() {
         return runOnce(() -> {
-            pauseControl();
+            // pauseControl();
 
             topMotor.set(0);
             bottomMotor.set(0);
         });
     }
 
-    private void pauseControl() {
-        topMotor.setControl(IntakeConfigs.pauseMotion);
-        bottomMotor.setControl(IntakeConfigs.pauseMotion);
-    }
+    // private void pauseControl() {
+    //     topMotor.setControl(IntakeConfigs.pauseMotion);
+    //     bottomMotor.setControl(IntakeConfigs.pauseMotion);
+    // }
 
     private double getTopVelocity() {
         return topMotor.getVelocity().getValueAsDouble();
