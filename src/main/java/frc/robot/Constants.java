@@ -40,13 +40,21 @@ public final class Constants {
     // DOWN
 
     // NEED
-    public static final double kS0 = 5.481;
-    public static final double kV0 = -15.146;
-    public static final double kA0 = 2.1944;
+    // public static final double kS0 = 5.481;
+    // public static final double kV0 = -15.146;
+    // public static final double kA0 = 2.1944;
+    // public static final double kP0 = 0;
+    // public static final double kI0 = 0;
+    // public static final double kD0 = 0;
+    // public static final double kG = 11.274;
+
+    public static final double kS0 = 0.172;
+    public static final double kV0 = 1.77;
+    public static final double kA0 = 0.467;
     public static final double kP0 = 0;
     public static final double kI0 = 0;
     public static final double kD0 = 0;
-    public static final double kG = 11.274;
+    public static final double kG = 0.0232;
 
 
 
@@ -71,7 +79,7 @@ public final class Constants {
     public static final double kMotionMagicJerk = 0;
 
     // TODO: SET
-    public static final double kPositionConversionFactor = 20;
+    public static final double kPositionConversionFactor = 45;
     // TODO: SET
     // public static final double kOffset=-1;
 

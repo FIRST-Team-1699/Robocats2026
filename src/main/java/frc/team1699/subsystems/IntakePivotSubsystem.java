@@ -58,14 +58,13 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     private void configureMotors() {
+        encoder.getConfigurator().apply(IntakePivotConfigs.encoderConfig);
+        
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.motorConfigs);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
-
-
-        encoder.getConfigurator().apply(IntakePivotConfigs.encoderConfig);
     }
 
 

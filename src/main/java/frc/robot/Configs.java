@@ -58,8 +58,8 @@ public final class Configs {
             feedback.SensorToMechanismRatio = IntakePivotConstants.kPositionConversionFactor;
             feedback.RotorToSensorRatio = IntakePivotConstants.rotorToSensor;
             
-            // feedback.FeedbackRemoteSensorID= IntakePivotConstants.kFeedbackID;
-            // feedback.FeedbackSensorSource= IntakePivotConstants.kFeedbackSensorSource;
+            feedback.FeedbackRemoteSensorID= IntakePivotConstants.kFeedbackID;
+            feedback.FeedbackSensorSource= IntakePivotConstants.kFeedbackSensorSource;
 
             encoderConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
             encoderConfig.MagnetOffset = -.53;
