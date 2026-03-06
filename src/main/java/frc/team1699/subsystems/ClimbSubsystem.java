@@ -1,5 +1,6 @@
 package frc.team1699.subsystems;
 
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,10 +11,12 @@ import frc.robot.Constants.ClimbConstants;
 
 public class ClimbSubsystem extends SubsystemBase {
     private TalonFX leadMotor;
+    private CANcoder encoder;
     private ClimbPosition currentPosition;
     public ClimbSubsystem() {
         leadMotor= new TalonFX(ClimbConstants.kLeadMotorID);
 
+        currentPosition=ClimbPosition.STORED;
         configureMotors();
     }
 
@@ -29,7 +32,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public double getError() {
-        return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
+        return Math.abs(Math.abs(currentPosition.getRotations())-Math.abs(this.encoderPosition()));
     }
 
     public boolean isInTolerance() {
@@ -39,7 +42,7 @@ public class ClimbSubsystem extends SubsystemBase {
     public Command setPosition(ClimbPosition position) {
         return runOnce(() -> {
             this.currentPosition=position;
-            leadMotor.setControl(ClimbConfigs.motionRequest.withPosition(position.degrees));
+            leadMotor.setControl(ClimbConfigs.motionRequest.withPosition(position.rotations));
         });
     }
 
@@ -67,14 +70,14 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public enum ClimbPosition {
-        STORED(0),
-        EXTENDED(90);
-        private double degrees;
+        STORED(0.0),
+        EXTENDED(4.778320);
+        private double rotations;
         private ClimbPosition(double degrees) {
-            this.degrees=degrees;
+            this.rotations=degrees;
         }
-        public double getDegrees() {
-            return this.degrees;
+        public double getRotations() {
+            return this.rotations;
         }
     }
 }

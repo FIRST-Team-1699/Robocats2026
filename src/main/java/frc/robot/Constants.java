@@ -12,17 +12,17 @@ import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 public final class Constants {
   public static class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final int kOperatorontrollerPort = 0;
+    public static final int kOperatorontrollerPort = 1;
   }
   public static class ClimbConstants {
     // MOTOR CONFIGS
     // TODO: SET
-    public static final int kLeadMotorID=-1;
+    public static final int kLeadMotorID=6;
 
-    public static final double kForwardLimit=0.8;
-    public static final double kReverseLimit=-0.8;
+    public static final double kForwardLimit=0.6;
+    public static final double kReverseLimit=-0.6;
 
-    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
 
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
@@ -32,16 +32,17 @@ public final class Constants {
     public static final double kS = 0.25;
     public static final double kV = 0.12;
     public static final double kA = 0.01;
-    public static final double kP = 4.8;
+    public static final double kP = 9.6;
     public static final double kI = 0;
     public static final double kD = 0.1;
+    public static final double kG = 0.1;
 
     public static final double kMotionMagicVelocity = 80;
     public static final double kMotionMagicAcceleration = 160;
     public static final double kMotionMagicJerk = 1600;
 
     // TODO: SET
-    public static final double kPositionConversionFactor = -1;
+    public static final double kPositionConversionFactor = 11.4;
     // TODO: SET
     public static final double kOffset=0.0;
 
