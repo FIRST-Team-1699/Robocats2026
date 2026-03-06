@@ -69,7 +69,7 @@ public final class Constants {
     public static final InvertedValue kTopInverted= InvertedValue.Clockwise_Positive;
     public static final InvertedValue kBottomInverted= InvertedValue.Clockwise_Positive;
 
-    public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
+    public static final NeutralModeValue kNeutral= NeutralModeValue.Coast;
 
     // TODO: DETERMINE IF SETTING THIS VALUE WILL FIX FUTURE PROBLEM OR CREATE ONE
     // public static final GravityTypeValue kGravityCounter = GravityTypeValue.Elevator_Static;

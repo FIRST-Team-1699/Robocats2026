@@ -59,7 +59,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command setSpeed(ShootingSpeeds speed) {
         return runOnce(() -> {
             this.currentSpeed=speed;
-            System.out.println("E");
+
             topMotor.setControl(ShooterConfigs.motionRequest.withVelocity(speed.getTopSpeed()));
             bottomMotor.setControl(ShooterConfigs.motionRequest.withVelocity(speed.getBottomSpeed()));
         });
@@ -67,7 +67,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public Command setRaw(double topVoltage, double bottomVoltage) {
         return runOnce(() -> {
-            // pauseControl();
+            pauseControl();
 
             topMotor.set(topVoltage);
             bottomMotor.set(bottomVoltage);
@@ -84,8 +84,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void pauseControl() {
-        // topMotor.setControl(ShooterConfigs.pauseMotion);
-        // bottomMotor.setControl(ShooterConfigs.pauseMotion);
+        topMotor.setControl(ShooterConfigs.pauseMotion);
+        bottomMotor.setControl(ShooterConfigs.pauseMotion);
     }
 
     private boolean hasMotionControl() {
@@ -101,6 +101,12 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Has Motion Paused: ", !hasMotionControl());
 
         // SmartDashboard.putNumber("Position value: ", currentSpeed.topSpeed);
+
+        if(getTopError() < 5 && getBottomError() < 5) {
+            pauseControl();
+            topMotor.set(ShooterConfigs.flyMotion.calculate(topMotor.getVelocity().getValueAsDouble(), currentSpeed.topSpeed));
+            bottomMotor.set(ShooterConfigs.flyMotion.calculate(bottomMotor.getVelocity().getValueAsDouble(), currentSpeed.bottomSpeed));
+        }
     }
 
     public enum ShootingSpeeds {

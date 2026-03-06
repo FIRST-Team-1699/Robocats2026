@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
+import edu.wpi.first.math.controller.BangBangController;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterHoodConstants;
 
@@ -58,6 +59,7 @@ public final class Configs {
 
         public static final  MotionMagicVelocityVoltage motionRequest = new MotionMagicVelocityVoltage(0);
         public static final  EmptyControl pauseMotion = new EmptyControl();
+        public static final BangBangController flyMotion = new BangBangController();
 
         static {
             topMotorConfigs.Inverted = ShooterConstants.kTopInverted;
