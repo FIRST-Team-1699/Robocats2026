@@ -36,6 +36,7 @@ public class RobotContainer {
 
     operatorController.povUp()
       .onTrue(intakePivot.setPosition(PivotPositions.STORED));
+
     operatorController.povDown()
       .onTrue(intakePivot.setPosition(PivotPositions.GROUND_INTAKE));
 

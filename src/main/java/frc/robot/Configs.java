@@ -38,7 +38,7 @@ public final class Configs {
             talonConfigs.Slot0.kA = IntakePivotConstants.kA0;
             talonConfigs.Slot0.kP = IntakePivotConstants.kP0;
             talonConfigs.Slot0.kI = IntakePivotConstants.kI0;
-            talonConfigs.Slot0.kG = IntakePivotConstants.kG;
+            talonConfigs.Slot0.kG = IntakePivotConstants.kG0;
             
             talonConfigs.Slot0.GravityType = IntakePivotConstants.kGravityCounter;
             talonConfigs.Slot1.StaticFeedforwardSign = IntakeConstants.kFeedForward;
@@ -62,10 +62,11 @@ public final class Configs {
             feedback.FeedbackSensorSource= IntakePivotConstants.kFeedbackSensorSource;
 
             encoderConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
-            encoderConfig.MagnetOffset = -.53;
+            encoderConfig.MagnetOffset = IntakePivotConstants.kMagnetOffset;
+            encoderConfig.SensorDirection = IntakePivotConstants.kFeedbackDirection;
     
-            limits.ForwardSoftLimitThreshold = .0;
-            limits.ReverseSoftLimitThreshold = -.23;
+            limits.ForwardSoftLimitThreshold = 0.24;
+            limits.ReverseSoftLimitThreshold = -0.0005;
 
             // limits.ForwardSoftLimitThreshold = .4;
             // limits.ReverseSoftLimitThreshold = .4;

@@ -41,8 +41,8 @@ public class IntakePivotSubsystem extends SubsystemBase {
         currentPosition=PivotPositions.STORED;
         configureMotors();
 
-        // encoder.setPosition(encoder.getAbsolutePosition().getValue());
-        leadMotor.setPosition(encoder.getAbsolutePosition().getValue());
+        encoder.setPosition(encoder.getAbsolutePosition().getValue());
+        // leadMotor.setPosition(encoder.getAbsolutePosition().getValue());
     }
 
     // TODO: Check current limits
@@ -79,19 +79,19 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public double encoderPosition() {
-        return leadMotor.getPosition().getValueAsDouble() *360; //*360;
+        return leadMotor.getPosition().getValueAsDouble(); //*360;
     }
 
     public Command setPosition(PivotPositions position) {
         return runOnce(() -> {
             this.currentPosition=position;
-            if(currentPosition.degrees < encoderPosition()) {
-                leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-                leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees/360));
-                return;
-            }
-            leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
-            leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees/360)); ///360));
+            // if(currentPosition.degrees < encoderPosition()) {
+                // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+                // leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees));
+                // return;
+            // }
+            // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
+            leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees)); ///360));
         });
     }
 
@@ -145,9 +145,9 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public enum PivotPositions {
-        STORED(108), 
-        PLATEFORM_INTAKE(130), 
-        GROUND_INTAKE(185);
+        STORED(0.24), 
+        // PLATEFORM_INTAKE(130), 
+        GROUND_INTAKE(-0.01);
 
         private double degrees;
         private PivotPositions(double degrees) {
