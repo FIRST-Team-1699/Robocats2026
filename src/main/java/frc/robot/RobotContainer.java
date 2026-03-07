@@ -7,12 +7,15 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.lang.invoke.MethodHandles.Lookup.ClassOption;
+import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -21,19 +24,16 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
+import frc.team1699.commands.AimToWaypointCommand;
 import frc.team1699.subsystems.*;
-import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
-import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
-import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
-import frc.team1699.subsystems.IntakePivotSubsystem.PivotPositions;
-import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
-import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
-import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
-
+import frc.robot.swerve.Telemetry;
+import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
 
 public class RobotContainer {
-    // private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-    private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+    public static Optional<Alliance> alliance;
+
+    private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+    // private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
     // private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -60,7 +60,11 @@ public class RobotContainer {
     // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final ClimbSubsystem climb = new ClimbSubsystem();
 
+    public final VisionSubsystem vision = new VisionSubsystem();
+
     public RobotContainer() {
+        alliance=DriverStation.getAlliance();
+
         configureBindings();
     }
 
@@ -208,7 +212,8 @@ public class RobotContainer {
 
         // drivetrain.registerTelemetry(logger::telemeterize);
 
-
+        operatorController.a()
+            .onTrue(new AimToWaypointCommand(vision, drivetrain, TagWaypoint.CAMERA_TUNE));
     }
 
     // TODO: REPLACE WITH PATHPLANNER CODE
@@ -238,6 +243,9 @@ public class RobotContainer {
       /*
        final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
+ // Simple drive forward auton
+        // final var idle = new SwerveRequest.Idle();
+        // return Commands.sequence(
             // Reset our field centric heading to match the robot
             // facing away from our alliance station wall (0 deg).
             // drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
@@ -250,6 +258,23 @@ public class RobotContainer {
             // .withTimeout(5.0),
             // // Finally idle for the rest of auton
             // drivetrain.applyRequest(() -> idle)
+            // );
+        return Commands.sequence(
+            // drivetrain.sysIdQuasistatic(Direction.kReverse),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdQuasistatic(Direction.kForward),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kReverse), 
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kForward)
+
+            drivetrain.sysIdQuasistatic(Direction.kForward),
+            Commands.waitSeconds(1),
+            drivetrain.sysIdQuasistatic(Direction.kReverse),
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kForward), 
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kReverse)
         );
         */
     }
