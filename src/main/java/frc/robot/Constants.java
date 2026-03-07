@@ -14,7 +14,7 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
   }
   public static class IndexerConstants {
-    public static final int kLeadMotorID=-1;
+    public static final int kLeadMotorID=57;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.8;
@@ -39,7 +39,7 @@ public final class Constants {
     public static final double kMotionMagicJerk = 1600;
 
     // TODO: SET
-    public static final double kPositionConversionFactor = -1;
+    public static final double kPositionConversionFactor = 1;
     // TODO: SET
     public static final double kOffset=0.0;
 
@@ -48,7 +48,7 @@ public final class Constants {
   }
 
   public static class HopperConstants {
-    public static final int kLeadMotorID=-1;
+    public static final int kLeadMotorID=45;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.8;
@@ -73,7 +73,7 @@ public final class Constants {
     public static final double kMotionMagicJerk = 1600;
 
     // TODO: SET
-    public static final double kPositionConversionFactor = -1;
+    public static final double kPositionConversionFactor = 1;
     // TODO: SET
     public static final double kOffset=0.0;
 
@@ -83,7 +83,7 @@ public final class Constants {
 
   public static class BeamBreakConstants {
     public static final int kSensorID = 47;
-    public static final double kHasBallInRange = 100;
+    public static final double kHasBallInRange = 500;
     public static final double kTimeDelay= 24;
   }
 }

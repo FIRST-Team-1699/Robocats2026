@@ -43,7 +43,8 @@ public class IndexerSubsystem extends SubsystemBase {
     public Command setSpeed(IndexingSpeeds speed) {
         return runOnce(() -> {
             this.currentSpeed=speed;
-            leadMotor.setControl(IndexerConfigs.motionRequest.withVelocity(speed.getSpeed()));
+            leadMotor.set(speed.getSpeed());
+            // leadMotor.setControl(IndexerConfigs.motionRequest.withVelocity(speed.getSpeed()));
         });
     }
 
@@ -76,13 +77,18 @@ public class IndexerSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Indexer Speed Has Motion Paused: ", !hasMotionControl());
         SmartDashboard.putNumber("Distance from beambreak to ball: ", BeamBreak.getDistance());
         SmartDashboard.putBoolean("Is ball in Beambreak: ", BeamBreak.hasBall().getAsBoolean());
+
+        if(currentSpeed.getSpeed() != 0) {
+            leadMotor.set(currentSpeed.speed);
+        }
     }
 
     public enum IndexingSpeeds {
         STORED(0), 
         // TODO: TUNE
-        INTAKE(0.5),
-        OUTTAKE(-0.5);
+        INTAKE(0.2),
+        SHOOTING(0.4),
+        OUTTAKE(-0.1);
 
 
         private double speed;

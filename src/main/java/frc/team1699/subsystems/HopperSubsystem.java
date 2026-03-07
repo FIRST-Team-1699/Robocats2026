@@ -41,7 +41,8 @@ public class HopperSubsystem extends SubsystemBase {
     public Command setSpeed(HopperSpeeds speed) {
         return runOnce(() -> {
             this.currentSpeed=speed;
-            leadMotor.setControl(HopperConfigs.motionRequest.withVelocity(speed.getSpeed()));
+            // leadMotor.setControl(HopperConfigs.motionRequest.withVelocity(speed.getSpeed()));
+            leadMotor.set(currentSpeed.getSpeed());
         });
     }
 
@@ -66,13 +67,17 @@ public class HopperSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Hopper Speed: " , leadMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putBoolean("Hopper Speed Is In Tolerance: ", topInTolerance());
         SmartDashboard.putBoolean("Hopper Speed Has Motion Paused: ", !hasMotionControl());
+
+        if(currentSpeed.getSpeed() != 0) {
+            leadMotor.set(currentSpeed.speed);
+        }
     }
 
     public enum HopperSpeeds {
         STORED(0), 
         // TODO: TUNE
-        INTAKE(.1),
-        OUTTAKE(-.1);
+        INTAKE(.07),
+        OUTTAKE(-.05);
 
 
         private double speed;
