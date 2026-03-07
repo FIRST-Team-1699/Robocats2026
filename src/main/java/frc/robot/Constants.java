@@ -26,6 +26,7 @@ public final class Constants {
 
     public static final int kFeedbackID=48;
     public static final FeedbackSensorSourceValue kFeedbackSensorSource= FeedbackSensorSourceValue.RemoteCANcoder;
+    public static final SensorDirectionValue kEncoderDirection = SensorDirectionValue.Clockwise_Positive;
 
     // TODO: TUNE
     public static final double kForwardLimit=0.8;
@@ -39,24 +40,25 @@ public final class Constants {
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
     // TODO: TUNE
-    public static final double kS = 0.3;
-    public static final double kV = 2.4;
-    public static final double kA = 0.0;
-    public static final double kP = 200;
-    public static final double kI = 0;
-    public static final double kD = 0.0;
+    public static final double kS = 1.8;
+    public static final double kV = 1;
+    public static final double kA = 0.2;
+    public static final double kP = 3.5;
+    public static final double kI = 0.2;
+    public static final double kD = 1.0;
 
-    public static final double kMotionMagicVelocity = 6400;
-    public static final double kMotionMagicAcceleration = 3000;
-    public static final double kMotionMagicJerk = 1600;
+    public static final double kMotionMagicVelocity = 40;
+    public static final double kMotionMagicAcceleration = 8;
+    public static final double kMotionMagicJerk = 0;
 
     // TODO: VERIFY
-    public static final double kPositionConversionFactor = 1;
+    public static final double kPositionConversionFactor = 0.25;
     // TODO: SET
-    public static final double kOffset=0.0;
+    public static final double kMagnetOffset=0.0833-.078;
+    // public static final double kRotorOffset=-0.277588;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=4;
+    public static final double kTolerance=0.05;
   }
 
   public static class ShooterConstants {
@@ -77,10 +79,10 @@ public final class Constants {
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
     // TODO: TUNE
-    public static final double kS = .22;
-    public static final double kV = 0.185;
-    public static final double kA = 0.0;
-    public static final double kP = .5;
+    public static final double kS = 0.037131;
+    public static final double kV = 0.23239;
+    public static final double kA = 0.041348;
+    public static final double kP = 0.35148;
     public static final double kI = 0;
     public static final double kD = 0.0;
 
