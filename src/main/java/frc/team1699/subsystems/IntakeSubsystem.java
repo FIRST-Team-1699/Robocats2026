@@ -34,8 +34,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command setSpeed(IntakeSpeeds speed) {
         return runOnce(() -> {
             currentSpeed=speed;
-            topMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.topSpeed));
-            bottomMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.bottomSpeed));
+            // topMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.topSpeed));
+            // bottomMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.bottomSpeed));
+            topMotor.set(currentSpeed.topSpeed);
+            bottomMotor.set(currentSpeed.bottomSpeed);
         });
     }
 
@@ -97,13 +99,18 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Is Intake Motion Paused: ", !hasMotionControl());
         SmartDashboard.putBoolean("Is Intake Top In Tolerance: ", isTopInTolerance());
         SmartDashboard.putBoolean("Is Intake Bottom In Tolerance: ", isBottomInTolerance());
+
+        if(currentSpeed.topSpeed != 0 || currentSpeed.bottomSpeed !=0) {
+            topMotor.set(currentSpeed.topSpeed);
+            bottomMotor.set(currentSpeed.bottomSpeed);
+        }
     }
 
     public enum IntakeSpeeds {
         STORED(0,0), 
         // TODO: TUNE
-        INTAKE(5,5), 
-        OUTTAKE(-5,-5);
+        INTAKE(-.5,.5), 
+        OUTTAKE(0.1,-0.1);
 
         private double topSpeed, bottomSpeed;
         private IntakeSpeeds(double topSpeed, double bottomSpeed) {

@@ -76,7 +76,7 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
-
+    /* 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
@@ -100,7 +100,9 @@ public class Robot extends LoggedRobot {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
         }
     }
-
+  
+    */
+  }
     @Override
     public void autonomousPeriodic() {}
 

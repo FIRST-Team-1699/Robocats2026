@@ -10,6 +10,7 @@ import java.lang.invoke.MethodHandles.Lookup.ClassOption;
 import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,10 +18,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.commands.AimToWaypointCommand;
 import frc.team1699.subsystems.*;
@@ -69,14 +71,14 @@ public class RobotContainer {
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+        // drivetrain.setDefaultCommand(
+        //     // Drivetrain will execute this command periodically
+        //     drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(-driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+        //             .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+        //             .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        //     )
+        // );
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
@@ -123,10 +125,57 @@ public class RobotContainer {
       .onTrue(intake.setSpeed(IntakeSpeeds.OUTTAKE))
       .onFalse(intake.setSpeed(IntakeSpeeds.STORED));
       */
+    // operatorController.povUp()
+    //   .onTrue(shootHood.setRaw(0.1))
+    //   .onFalse(shootHood.setRaw(0));
+    // operatorController.povDown()
+    //   .onTrue(shootHood.setRaw(-0.1))
+    //   .onFalse(shootHood.setRaw(0));
+
     operatorController.povUp()
-       .onTrue(shootHood.setPosition(HoodPositions.MAX));
+      .onTrue(shootHood.setPosition(HoodPositions.MAX));
     operatorController.povDown()
-       .onTrue(shootHood.setPosition(HoodPositions.MIN));
+      .onTrue(shootHood.setPosition(HoodPositions.MIN));
+
+    operatorController.a()
+      .onTrue(shootHood.setPosition(HoodPositions.AIMED));
+    operatorController.b()
+      .onTrue(shootHood.setPosition(HoodPositions.MIN));
+
+    operatorController.rightTrigger()
+        .onTrue(
+          intakePivot.setPosition(PivotPositions.GROUND_INTAKE)
+            .alongWith(intake.setSpeed(IntakeSpeeds.INTAKE))
+        )
+        .onFalse(
+          intake.setSpeed(IntakeSpeeds.STORED)
+        );
+      operatorController.rightBumper()
+        .onTrue(
+          shoot.setSpeed(ShootingSpeeds.INTERPOLATED)
+            .andThen(hopper.setSpeed(HopperSpeeds.INTAKE))
+            .andThen(new WaitUntilCommand(shoot.isTotalInTollerance()))
+            .andThen(indexer.setSpeed(IndexingSpeeds.INTAKE))
+        )
+        .onFalse(
+          shoot.setSpeed(ShootingSpeeds.STORED)
+            .alongWith(indexer.setSpeed(IndexingSpeeds.STORED))         
+
+        );
+
+    // driverController.a()
+    //   .onTrue(
+    //     shootHood.setPosition(HoodPositions.CLIMB)
+    //       .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
+    // );
+
+    // driverController.b()
+    //   .onTrue(
+    //     shootHood.setPosition(HoodPositions.STORED)
+    //       .alongWith(climb.setPosition(ClimbPosition.STORED))
+    // );
+
+
 /*
     operatorController.leftBumper()
       .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
@@ -135,33 +184,33 @@ public class RobotContainer {
       .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
       .onFalse(shoot.stopAll());
  */     
-        operatorController.leftBumper()
-            .onTrue(indexer.indexUntilFull());
+        // operatorController.leftBumper()
+        //     .onTrue(indexer.indexUntilFull());
         // operatorController.rightBumper()
         //     .onTrue(indexer.setSpeed(IndexingSpeeds.STORED));
 
         // operatorController.leftBumper()
         //     .onTrue(hopper.setSpeed(HopperSpeeds.INTAKE))
         //     .onFalse(hopper.setSpeed(HopperSpeeds.STORED));
-        operatorController.rightBumper()
-            .onTrue(hopper.setSpeed(HopperSpeeds.OUTTAKE))
-            .onFalse(hopper.setSpeed(HopperSpeeds.STORED));  
-        driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        driverController.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))
-        ));
+        // operatorController.rightBumper()
+        //     .onTrue(hopper.setSpeed(HopperSpeeds.OUTTAKE))
+        //     .onFalse(hopper.setSpeed(HopperSpeeds.STORED));  
+        // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverController.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))
+        // ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        // Reset the field-centric heading on left bumper press.
-        driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        // // Reset the field-centric heading on left bumper press.
+        // driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
+        // drivetrain.registerTelemetry(logger::telemeterize);
 
         operatorController.a()
             .onTrue(new AimToWaypointCommand(vision, drivetrain, TagWaypoint.CAMERA_TUNE));
@@ -169,19 +218,27 @@ public class RobotContainer {
 
     // TODO: REPLACE WITH PATHPLANNER CODE
     public Command getAutonomousCommand() {
-        return null;
+        // return null;
         //return shoot.runOnce(() -> System.out.println("Running auto..."));
-      /*
-      return Commands.sequence(
-      intakePivot.sysIDQuasistatic(Direction.kReverse),
+    //   return Commands.sequence(
+    //   intakePivot.sysIDQuasistatic(Direction.kReverse),
+    //   Commands.waitSeconds(3),
+    //   intakePivot.sysIDQuasistatic(Direction.kForward),
+    //   Commands.waitSeconds(3),
+    //   intakePivot.sysIDDynamic(Direction.kReverse), 
+    //   Commands.waitSeconds(3),
+    //   intakePivot.sysIDDynamic(Direction.kForward)     
+    // );
+
+    return Commands.sequence(
+      shootHood.sysIDQuasistatic(Direction.kReverse),
       Commands.waitSeconds(3),
-      intakePivot.sysIDQuasistatic(Direction.kForward),
+      shootHood.sysIDQuasistatic(Direction.kForward),
       Commands.waitSeconds(3),
-      intakePivot.sysIDDynamic(Direction.kReverse), 
+      shootHood.sysIDDynamic(Direction.kReverse), 
       Commands.waitSeconds(3),
-      intakePivot.sysIDDynamic(Direction.kForward)     
+      shootHood.sysIDDynamic(Direction.kForward)     
     );
-    */
       
       /*
        final var idle = new SwerveRequest.Idle();
