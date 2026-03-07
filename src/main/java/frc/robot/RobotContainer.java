@@ -99,13 +99,21 @@ public class RobotContainer {
             // drivetrain.applyRequest(() -> idle)
             // );
         return Commands.sequence(
-            drivetrain.sysIdQuasistatic(Direction.kReverse),
-            Commands.waitSeconds(5),
+            // drivetrain.sysIdQuasistatic(Direction.kReverse),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdQuasistatic(Direction.kForward),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kReverse), 
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kForward)
+
             drivetrain.sysIdQuasistatic(Direction.kForward),
-            Commands.waitSeconds(5),
-            drivetrain.sysIdDynamic(Direction.kReverse), 
-            Commands.waitSeconds(5),
-            drivetrain.sysIdDynamic(Direction.kForward) 
+            Commands.waitSeconds(1),
+            drivetrain.sysIdQuasistatic(Direction.kReverse),
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kForward), 
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kReverse)
         );
     }
 }

@@ -18,6 +18,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -57,9 +59,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         new SysIdRoutine.Config(
             null,        // Use default ramp rate (1 V/s)
             Volts.of(4), // Reduce dynamic step voltage to 4 V to prevent brownout
-            null,        // Use default timeout (10 s)
+            Second.of(3.5),        // Use default timeout (10 s)
             // Log state with SignalLogger class
-            state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
+            (state) -> Logger.recordOutput("DriveMotor/SysIDState",state.toString())
         ),
         new SysIdRoutine.Mechanism(
             output -> setControl(m_translationCharacterization.withVolts(output)),
@@ -245,11 +247,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
         Logger.recordOutput("DriveMotor/Velocity", this.getModules()[0].getDriveMotor().getVelocity().getValueAsDouble());
         Logger.recordOutput("DriveMotor/Voltage", this.getModules()[0].getDriveMotor().getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("DriveMotor/Position", this.getModules()[0].getDriveMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("DriveMotor/Position", this.getModules()[0].getPosition(false).distanceMeters);
 
-        Logger.recordOutput("RotateMotor/Velocity", this.getModules()[0].getSteerMotor().getVelocity().getValueAsDouble());
-        Logger.recordOutput("RotateMotor/Voltage", this.getModules()[0].getSteerMotor().getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("RotateMotor/Position", this.getModules()[0].getSteerMotor().getMotorVoltage().getValueAsDouble());
+        // Logger.recordOutput("RotateMotor/Velocity", this.getModules()[0].getSteerMotor().getVelocity().getValueAsDouble());
+        // Logger.recordOutput("RotateMotor/Voltage", this.getModules()[0].getSteerMotor().getMotorVoltage().getValueAsDouble());
+        // Logger.recordOutput("RotateMotor/Position", this.getModules()[0].getPosition(false).angle.);
     }
 
     private void startSimThread() {
