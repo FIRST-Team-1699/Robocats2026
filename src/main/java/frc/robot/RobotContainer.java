@@ -7,11 +7,14 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.lang.invoke.MethodHandles.Lookup.ClassOption;
+import java.util.Optional;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -19,11 +22,14 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.OIConstants;
 import frc.robot.swerve.*;
+import frc.team1699.commands.AimToWaypointCommand;
 import frc.team1699.subsystems.*;
 import frc.robot.swerve.Telemetry;
-
+import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
 
 public class RobotContainer {
+    public static Optional<Alliance> alliance;
+
     private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
@@ -52,7 +58,11 @@ public class RobotContainer {
     // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final ClimbSubsystem climb = new ClimbSubsystem();
 
+    public final VisionSubsystem vision = new VisionSubsystem();
+
     public RobotContainer() {
+        alliance=DriverStation.getAlliance();
+
         configureBindings();
     }
 
@@ -153,7 +163,8 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-
+        operatorController.a()
+            .onTrue(new AimToWaypointCommand(vision, drivetrain, TagWaypoint.CAMERA_TUNE));
     }
 
     // TODO: REPLACE WITH PATHPLANNER CODE
