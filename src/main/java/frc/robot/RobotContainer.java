@@ -31,7 +31,7 @@ public class RobotContainer {
     public static Optional<Alliance> alliance;
 
     private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-    private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+    // private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
     // private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -186,6 +186,9 @@ public class RobotContainer {
       /*
        final var idle = new SwerveRequest.Idle();
         return Commands.sequence(
+ // Simple drive forward auton
+        // final var idle = new SwerveRequest.Idle();
+        // return Commands.sequence(
             // Reset our field centric heading to match the robot
             // facing away from our alliance station wall (0 deg).
             // drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
@@ -198,6 +201,23 @@ public class RobotContainer {
             // .withTimeout(5.0),
             // // Finally idle for the rest of auton
             // drivetrain.applyRequest(() -> idle)
+            // );
+        return Commands.sequence(
+            // drivetrain.sysIdQuasistatic(Direction.kReverse),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdQuasistatic(Direction.kForward),
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kReverse), 
+            // Commands.waitSeconds(1),
+            // drivetrain.sysIdDynamic(Direction.kForward)
+
+            drivetrain.sysIdQuasistatic(Direction.kForward),
+            Commands.waitSeconds(1),
+            drivetrain.sysIdQuasistatic(Direction.kReverse),
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kForward), 
+            Commands.waitSeconds(1),
+            drivetrain.sysIdDynamic(Direction.kReverse)
         );
         */
     }
