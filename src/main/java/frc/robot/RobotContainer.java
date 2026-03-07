@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.invoke.MethodHandles.Lookup.ClassOption;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -47,7 +49,8 @@ public class RobotContainer {
     private final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final ClimbSubsystem climb = new ClimbSubsystem();
 
     public RobotContainer() {
         configureBindings();
@@ -88,6 +91,14 @@ public class RobotContainer {
         // driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // drivetrain.registerTelemetry(logger::telemeterize);
+      /*
+              operatorController.povUp()
+            .onTrue(climb.setPosition(ClimbPosition.EXTENDED));
+
+        operatorController.povDown()
+            .onTrue(climb.setPosition(ClimbPosition.STORED));
+            */
+  
       /*
           operatorController.povUp()
       .onTrue(intakePivot.setPosition(PivotPositions.STORED));
@@ -160,5 +171,23 @@ public class RobotContainer {
       intakePivot.sysIDDynamic(Direction.kForward)     
     );
     */
+      
+      /*
+       final var idle = new SwerveRequest.Idle();
+        return Commands.sequence(
+            // Reset our field centric heading to match the robot
+            // facing away from our alliance station wall (0 deg).
+            // drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+            // // Then slowly drive forward (away from us) for 5 seconds.
+            // drivetrain.applyRequest(() ->
+            //     drive.withVelocityX(0.5)
+            //         .withVelocityY(0)
+            //         .withRotationalRate(0)
+            // )
+            // .withTimeout(5.0),
+            // // Finally idle for the rest of auton
+            // drivetrain.applyRequest(() -> idle)
+        );
+        */
     }
 }
