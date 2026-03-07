@@ -20,6 +20,7 @@ import frc.robot.swerve.*;
 import frc.team1699.subsystems.*;
 import frc.robot.swerve.Telemetry;
 
+
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
@@ -41,6 +42,8 @@ public class RobotContainer {
     public final IndexerSubsystem indexer = new IndexerSubsystem();
     public final HopperSubsystem hopper = new HopperSubsystem();
     private final Telemetry logger = new Telemetry(MaxSpeed);
+    private final ShooterHoodSubsystem shootHood = new ShooterHoodSubsystem();
+    private final ShooterSubsystem shoot = new ShooterSubsystem();
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -83,7 +86,18 @@ public class RobotContainer {
         // driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // drivetrain.registerTelemetry(logger::telemeterize);
-
+    operatorController.povUp()
+       .onTrue(shootHood.setPosition(HoodPositions.MAX));
+    operatorController.povDown()
+       .onTrue(shootHood.setPosition(HoodPositions.MIN));
+/*
+    operatorController.leftBumper()
+      .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
+      .onFalse(shoot.stopAll());
+    operatorController.rightBumper()
+      .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
+      .onFalse(shoot.stopAll());
+ */     
         operatorController.leftBumper()
             .onTrue(indexer.indexUntilFull());
         // operatorController.rightBumper()
@@ -118,21 +132,6 @@ public class RobotContainer {
     // TODO: REPLACE WITH PATHPLANNER CODE
     public Command getAutonomousCommand() {
         return null;
-        // Simple drive forward auton
-        // final var idle = new SwerveRequest.Idle();
-        // return Commands.sequence(
-        //     // Reset our field centric heading to match the robot
-        //     // facing away from our alliance station wall (0 deg).
-        //     drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-        //     // Then slowly drive forward (away from us) for 5 seconds.
-        //     drivetrain.applyRequest(() ->
-        //         drive.withVelocityX(0.5)
-        //             .withVelocityY(0)
-        //             .withRotationalRate(0)
-        //     )
-        //     .withTimeout(5.0),
-        //     // Finally idle for the rest of auton
-        //     drivetrain.applyRequest(() -> idle)
-        // );
+        //return shoot.runOnce(() -> System.out.println("Running auto..."));
     }
 }
