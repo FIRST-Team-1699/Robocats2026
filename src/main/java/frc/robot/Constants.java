@@ -33,7 +33,7 @@ public final class Constants {
     public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
     public static final SensorDirectionValue kFeedbackDirection = SensorDirectionValue.Clockwise_Positive;
 
-    public static final double kMagnetOffset = 2.535; //-.535
+    public static final double kMagnetOffset = 2.472; //-.535
 
     public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
     public static final MotorAlignmentValue kFollowInverted= MotorAlignmentValue.Opposed;
@@ -65,7 +65,7 @@ public final class Constants {
     public static final double kS0 = 0.2421875;
     public static final double kV0 = 3;
     public static final double kA0 = 2;
-    public static final double kP0 = 20;
+    public static final double kP0 = 80;
     public static final double kI0 = 0;
     public static final double kD0 = 4;
     public static final double kG0 = 0.5;
@@ -88,7 +88,7 @@ public final class Constants {
     public static final double kI1 = 0;
     public static final double kD1 = 0.0;
 
-    public static final double kMotionMagicVelocity = 160;
+    public static final double kMotionMagicVelocity = 2560;
     public static final double kMotionMagicAcceleration = 20;
     public static final double kMotionMagicJerk = 4;
 

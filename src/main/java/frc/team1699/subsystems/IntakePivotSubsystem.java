@@ -145,7 +145,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public enum PivotPositions {
-        STORED(0.24), 
+        STORED(0.23), 
         // PLATEFORM_INTAKE(130), 
         GROUND_INTAKE(-0.01);
 
