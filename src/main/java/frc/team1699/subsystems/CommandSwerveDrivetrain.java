@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -239,6 +241,15 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+
+
+        Logger.recordOutput("DriveMotor/Velocity", this.getModules()[0].getDriveMotor().getVelocity().getValueAsDouble());
+        Logger.recordOutput("DriveMotor/Voltage", this.getModules()[0].getDriveMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("DriveMotor/Position", this.getModules()[0].getDriveMotor().getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("RotateMotor/Velocity", this.getModules()[0].getSteerMotor().getVelocity().getValueAsDouble());
+        Logger.recordOutput("RotateMotor/Voltage", this.getModules()[0].getSteerMotor().getMotorVoltage().getValueAsDouble());
+        Logger.recordOutput("RotateMotor/Position", this.getModules()[0].getSteerMotor().getMotorVoltage().getValueAsDouble());
     }
 
     private void startSimThread() {

@@ -21,7 +21,7 @@ import frc.team1699.subsystems.*;
 
 public class RobotContainer {
     private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-    private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
+    // private final CommandXboxController operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
@@ -100,11 +100,11 @@ public class RobotContainer {
             // );
         return Commands.sequence(
             drivetrain.sysIdQuasistatic(Direction.kReverse),
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(5),
             drivetrain.sysIdQuasistatic(Direction.kForward),
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(5),
             drivetrain.sysIdDynamic(Direction.kReverse), 
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(5),
             drivetrain.sysIdDynamic(Direction.kForward) 
         );
     }
