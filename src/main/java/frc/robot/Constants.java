@@ -168,7 +168,7 @@ public final class Constants {
     // EVERYTHING ELSE
     public static final double kTolerance=2.0;
   }
-
+/*
   public static class IntakeConstants {
     public static final int kTopMotorID=55;
     public static final int kBottomMotorID=56;
@@ -202,7 +202,7 @@ public final class Constants {
 
     // EVERYTHING ELSE
     public static final double kTolerance=3.0;
-  }
+  } */
 
   public static class HopperConstants {
     public static final int kLeadMotorID=45;

@@ -12,8 +12,8 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
 import edu.wpi.first.math.controller.BangBangController;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.Constants.ShooterHoodConstants;
+import frc.robot.Constants.*;
+
 
 public final class Configs {
     public static class ShooterHoodConfigs { 
@@ -105,12 +105,12 @@ public final class Configs {
 
             talonConfigs.Slot0.StaticFeedforwardSign = IndexerConstants.kFeedForward;
 
-            talonConfigs.Slot0.kS = IndexerConstants.kS;
-            talonConfigs.Slot0.kV = IndexerConstants.kV;
-            talonConfigs.Slot0.kA = IndexerConstants.kA;
-            talonConfigs.Slot0.kP = IndexerConstants.kP;
-            talonConfigs.Slot0.kI = IndexerConstants.kI;
-            talonConfigs.Slot0.kD = IndexerConstants.kD;
+            talonConfigs.Slot0.kS = IndexerConstants.kS0;
+            talonConfigs.Slot0.kV = IndexerConstants.kV0;
+            talonConfigs.Slot0.kA = IndexerConstants.kA0;
+            talonConfigs.Slot0.kP = IndexerConstants.kP0;
+            talonConfigs.Slot0.kI = IndexerConstants.kI0;
+            talonConfigs.Slot0.kD = IndexerConstants.kD0;
 
             talonConfigs.MotionMagic.MotionMagicCruiseVelocity = IndexerConstants.kMotionMagicVelocity;
             talonConfigs.MotionMagic.MotionMagicAcceleration = IndexerConstants.kMotionMagicAcceleration;
@@ -137,12 +137,12 @@ public final class Configs {
 
             talonConfigs.Slot0.StaticFeedforwardSign = IndexerConstants.kFeedForward;
 
-            talonConfigs.Slot0.kS = IndexerConstants.kS;
-            talonConfigs.Slot0.kV = IndexerConstants.kV;
-            talonConfigs.Slot0.kA = IndexerConstants.kA;
-            talonConfigs.Slot0.kP = IndexerConstants.kP;
-            talonConfigs.Slot0.kI = IndexerConstants.kI;
-            talonConfigs.Slot0.kD = IndexerConstants.kD;
+            talonConfigs.Slot0.kS = IndexerConstants.kS0;
+            talonConfigs.Slot0.kV = IndexerConstants.kV0;
+            talonConfigs.Slot0.kA = IndexerConstants.kA0;
+            talonConfigs.Slot0.kP = IndexerConstants.kP0;
+            talonConfigs.Slot0.kI = IndexerConstants.kI0;
+            talonConfigs.Slot0.kD = IndexerConstants.kD0;
 
             talonConfigs.MotionMagic.MotionMagicCruiseVelocity = IndexerConstants.kMotionMagicVelocity;
             talonConfigs.MotionMagic.MotionMagicAcceleration = IndexerConstants.kMotionMagicAcceleration;

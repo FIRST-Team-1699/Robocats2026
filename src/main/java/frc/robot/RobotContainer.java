@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.subsystems.*;
+import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 import frc.robot.swerve.Telemetry;
 
 
@@ -40,7 +42,7 @@ public class RobotContainer {
 
     // private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    // public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final IndexerSubsystem indexer = new IndexerSubsystem();
     public final HopperSubsystem hopper = new HopperSubsystem();
     private final Telemetry logger = new Telemetry(MaxSpeed);
