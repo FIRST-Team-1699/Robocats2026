@@ -44,6 +44,8 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
     private final ShooterHoodSubsystem shootHood = new ShooterHoodSubsystem();
     private final ShooterSubsystem shoot = new ShooterSubsystem();
+    private final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
+    private final IntakeSubsystem intake = new IntakeSubsystem();
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -86,6 +88,20 @@ public class RobotContainer {
         // driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         // drivetrain.registerTelemetry(logger::telemeterize);
+      /*
+          operatorController.povUp()
+      .onTrue(intakePivot.setPosition(PivotPositions.STORED));
+
+    operatorController.povDown()
+      .onTrue(intakePivot.setPosition(PivotPositions.GROUND_INTAKE));
+
+    operatorController.leftBumper()
+      .onTrue(intake.setSpeed(IntakeSpeeds.INTAKE))
+      .onFalse(intake.setSpeed(IntakeSpeeds.STORED));
+    operatorController.rightBumper()
+      .onTrue(intake.setSpeed(IntakeSpeeds.OUTTAKE))
+      .onFalse(intake.setSpeed(IntakeSpeeds.STORED));
+      */
     operatorController.povUp()
        .onTrue(shootHood.setPosition(HoodPositions.MAX));
     operatorController.povDown()
@@ -133,5 +149,16 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return null;
         //return shoot.runOnce(() -> System.out.println("Running auto..."));
+      /*
+      return Commands.sequence(
+      intakePivot.sysIDQuasistatic(Direction.kReverse),
+      Commands.waitSeconds(3),
+      intakePivot.sysIDQuasistatic(Direction.kForward),
+      Commands.waitSeconds(3),
+      intakePivot.sysIDDynamic(Direction.kReverse), 
+      Commands.waitSeconds(3),
+      intakePivot.sysIDDynamic(Direction.kForward)     
+    );
+    */
     }
 }
