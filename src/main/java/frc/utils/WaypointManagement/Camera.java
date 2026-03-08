@@ -26,7 +26,7 @@ public class Camera {
         this.offsets = offsets;
         this.enabled = false;
 
-        this.setPipelineIndex(1);
+        this.setPipelineIndex(0);
     }
 
     public void setPipelineIndex(int index) {

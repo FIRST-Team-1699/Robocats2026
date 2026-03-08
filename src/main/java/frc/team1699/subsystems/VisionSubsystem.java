@@ -16,41 +16,43 @@ import frc.utils.WaypointManagement.*;
 public class VisionSubsystem extends SubsystemBase {
     public static TagWaypoint currentWaypoint;
     public static double currentAmbiguity;
-    private boolean isLeft;
+    private boolean isLeft =false;
     private int targetTagId;
 
-    private Camera cam2, cam1;
+    private Camera rightCam, leftCam;
     private CameraHandler camHandler;
     private boolean hasTag;
     private double yaw, x, y, z, xWaypointOffset, yWaypointOffset, distanceToTag; // yawCameraOffset;
 
     public VisionSubsystem () {
-        cam1 = new Camera(
-            VisionConstants.kCamOneName,
+        leftCam = new Camera(
+            VisionConstants.kLeftCam,
             new Transform3d(
                 new Translation3d(
-                    VisionConstants.cam1XOffset,
-                    VisionConstants.cam1YOffset,
+                    VisionConstants.leftCamXOffset,
+                    VisionConstants.leftCamYOffset,
                     0
                 ),
                 new Rotation3d()
             )
         );
-        cam2 = new Camera(
-            VisionConstants.kCamTwoName,
+        rightCam = new Camera(
+            VisionConstants.kRightCam,
             new Transform3d(
                 new Translation3d(
-                    VisionConstants.cam2XOffset,
-                    VisionConstants.cam2YOffset,
+                    VisionConstants.rightCamXOffset,
+                    VisionConstants.rightCamYOffset,
                     0
                 ),
                 new Rotation3d()
             )
         );
-        camHandler= new CameraHandler(cam1,cam2);
+        // camHandler= new CameraHandler(leftCam,rightCam);
+        camHandler= new CameraHandler(rightCam);
 
         PortForwarder.add(5800, "photonvision.local:5800", 5800);
-        currentWaypoint=TagWaypoint.CAMERA_TUNE;
+        currentWaypoint=TagWaypoint.RED_HUB;
+        disableStickyCam();
     }
 
     public double getYaw() {
@@ -78,7 +80,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void setYawOnWaypoint() {
-        double tempDegrees = (Math.atan((this.x)/(this.y))*180/Math.PI);
+        double tempDegrees = (Math.atan2((this.x),(this.y))*180/Math.PI);
         this.yaw= (tempDegrees <0.0 ? tempDegrees + 90 : tempDegrees -90 );
     }
 
@@ -96,9 +98,15 @@ public class VisionSubsystem extends SubsystemBase {
         return Math.abs(this.getYaw()) < VisionConstants.kTolerance;
     }
 
-    PhotonTrackedTarget bestTag;
+    PhotonTrackedTarget bestTag=null;
+    double cooldown =0, itteration=0;
     @Override
     public void periodic() {
+        if(itteration< cooldown) {
+            itteration++;
+            return;
+        }
+        itteration=0;
         if (currentWaypoint==TagWaypoint.NONE) {
             return;
         }
@@ -119,9 +127,9 @@ public class VisionSubsystem extends SubsystemBase {
 
             this.xWaypointOffset=currentWaypoint.waypoint.getOffset(this.targetTagId).getX();
             // TODO: FIX LOGIC SOMEWHERE HERE
-            this.yWaypointOffset= isLeft ?
-                currentWaypoint.waypoint.getOffset(this.targetTagId).getY() :
-                -currentWaypoint.waypoint.getOffset(this.targetTagId).getY();
+            this.yWaypointOffset= //isLeft ?
+                currentWaypoint.waypoint.getOffset(this.targetTagId).getY(); //:
+                // -currentWaypoint.waypoint.getOffset(this.targetTagId).getY();
 
             this.y+=yWaypointOffset;
             this.x+=xWaypointOffset;
@@ -129,20 +137,31 @@ public class VisionSubsystem extends SubsystemBase {
 
             setYawOnWaypoint();
             setDistanceToTag();
-            SmartDashboard.putNumber("X: ", this.x);
-            SmartDashboard.putNumber("Y: ", this.y);
-            SmartDashboard.putNumber("Recorded Yaw: ", bestTag.getYaw());
-            SmartDashboard.putNumber("Actual Yaw: ", this.yaw);
-            SmartDashboard.putBoolean("is Left", isLeft);
-            SmartDashboard.putBoolean("is In Tolerance", isInTolerance());
+            updateSmartDashboard();
             return;
         } 
+        
+        updateSmartDashboard();
         currentAmbiguity=1;
         this.hasTag=false;
     }
 
     public void disableStickyCam() {
         camHandler.disableStickyCam();
+    }
+
+    private void updateSmartDashboard() {
+        SmartDashboard.putNumber("X: ", this.x);
+        SmartDashboard.putNumber("Y: ", this.y);
+        if(bestTag!= null) {
+            SmartDashboard.putNumber("Actual Yaw: ", bestTag.getYaw());
+            SmartDashboard.putString("Current Cam: ", camHandler.getCurrentCamName());
+            SmartDashboard.putNumber("Tag: ", bestTag.getFiducialId());
+        }
+        SmartDashboard.putNumber("Calculated Yaw: ", this.yaw);
+        SmartDashboard.putBoolean("is Left", isLeft);
+        SmartDashboard.putBoolean("is In Tolerance", isInTolerance());
+        SmartDashboard.putNumber("Current Distance to Waypoint: ", getDistanceToTag());
     }
 
 

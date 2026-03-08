@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
+import frc.team1699.commands.SetInterpolatedCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
@@ -29,6 +30,8 @@ import frc.team1699.subsystems.IntakePivotSubsystem.PivotPositions;
 import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
+import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
+import frc.team1699.commands.*;
 
 
 public class RobotContainer {
@@ -48,14 +51,15 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final IndexerSubsystem indexer = new IndexerSubsystem();
-    public final HopperSubsystem hopper = new HopperSubsystem();
+    private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    private final IndexerSubsystem indexer = new IndexerSubsystem();
+    private final HopperSubsystem hopper = new HopperSubsystem();
     private final ShooterHoodSubsystem shootHood = new ShooterHoodSubsystem();
     private final ShooterSubsystem shoot = new ShooterSubsystem();
     private final IntakePivotSubsystem intakePivot = new IntakePivotSubsystem();
     private final IntakeSubsystem intake = new IntakeSubsystem();
-    public final ClimbSubsystem climb = new ClimbSubsystem();
+    private final ClimbSubsystem climb = new ClimbSubsystem();
+    private final VisionSubsystem vision = new VisionSubsystem();
 
     public RobotContainer() {
         configureBindings();
@@ -77,8 +81,10 @@ public class RobotContainer {
                   ) // Drive left with negative X (left)
                     
                   .withRotationalRate(
-                    (Math.abs(driverController.getRightX()) > .1 ?
-                    -driverController.getRightX() : 0) * MaxAngularRate
+                    (
+                      Math.abs(driverController.getRightX()) > .1 ?
+                        -driverController.getRightX() : 0
+                    ) * MaxAngularRate
                   ) // Drive counterclockwise with negative X (left)
             )
         );
@@ -90,7 +96,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverController.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))
         ));
@@ -141,7 +147,7 @@ public class RobotContainer {
       .onTrue(shootHood.setPosition(HoodPositions.MIN));
 
     operatorController.a()
-      .onTrue(shootHood.setPosition(HoodPositions.AIMED));
+      .onTrue(shootHood.setPosition(HoodPositions.INTERPOLATED));
     operatorController.b()
       .onTrue(shootHood.setPosition(HoodPositions.MIN));
 
@@ -155,16 +161,24 @@ public class RobotContainer {
         );
       operatorController.rightBumper()
         .onTrue(
-          shoot.setSpeed(ShootingSpeeds.INTERPOLATED)
-            .andThen(hopper.setSpeed(HopperSpeeds.INTAKE))
+          new SetInterpolatedCommand(vision)
+            .andThen(shoot.setSpeed(ShootingSpeeds.INTERPOLATED))
+              .alongWith(shootHood.setPosition(HoodPositions.INTERPOLATED))
+              .alongWith(hopper.setSpeed(HopperSpeeds.INTAKE))
             .andThen(new WaitUntilCommand(shoot.isTotalInTollerance()))
+            .andThen(new WaitUntilCommand(() -> shootHood.isInTolerance()))
             .andThen(indexer.setSpeed(IndexingSpeeds.INTAKE))
         )
         .onFalse(
           shoot.setSpeed(ShootingSpeeds.STORED)
-            .alongWith(indexer.setSpeed(IndexingSpeeds.STORED))         
+            .alongWith(indexer.setSpeed(IndexingSpeeds.STORED)) 
+            .alongWith(hopper.setSpeed(HopperSpeeds.STORED))        
 
         );
+
+      driverController.a()
+        .whileTrue(new AimToWaypointCommand(vision, drivetrain, TagWaypoint.RED_HUB));
+
 
     // driverController.a()
     //   .onTrue(
@@ -198,7 +212,7 @@ public class RobotContainer {
         // operatorController.rightBumper()
         //     .onTrue(hopper.setSpeed(HopperSpeeds.OUTTAKE))
         //     .onFalse(hopper.setSpeed(HopperSpeeds.STORED));  
-        driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         driverController.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))
         ));

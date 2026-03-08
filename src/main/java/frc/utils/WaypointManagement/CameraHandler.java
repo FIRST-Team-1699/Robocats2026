@@ -69,4 +69,8 @@ public class CameraHandler {
     public double getYOffset() {
         return this.yOffset;
     }
+
+    public String getCurrentCamName() {
+        return this.targetCam.getCam().getName();
+    }
 }

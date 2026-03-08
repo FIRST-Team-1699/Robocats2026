@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants.*;
 
 
@@ -260,7 +261,7 @@ public final class Configs {
             feedback.SensorToMechanismRatio = IntakeConstants.kPositionConversionFactor;
         }
     }
-      public static class ClimbConfigs {
+    public static class ClimbConfigs {
         public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
         public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
 
@@ -291,6 +292,37 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  ClimbConstants.kMotionMagicJerk;
 
             feedback.SensorToMechanismRatio = ClimbConstants.kPositionConversionFactor;
+        }
+    }
+
+    public static class VisionConfigs {
+        public static final InterpolatingDoubleTreeMap speedTopMap =
+            new InterpolatingDoubleTreeMap();
+
+        public static final InterpolatingDoubleTreeMap speedBottomMap =
+            new InterpolatingDoubleTreeMap(); 
+
+        public static final InterpolatingDoubleTreeMap shootPivotMap = 
+            new InterpolatingDoubleTreeMap();
+
+        static {
+            // speedTopMap.put(2.06, -35.0);
+            // speedTopMap.put(2.55, -37.0);
+            speedTopMap.put(3.0, -37.0);
+            speedTopMap.put(2.15, -35.0);
+            speedTopMap.put(1.37, -28.0);
+
+            // speedBottomMap.put(2.06, -30.0);
+            // speedBottomMap.put(2.55, -30.0);
+            speedBottomMap.put(3.0, -30.0);
+            speedBottomMap.put(2.15, -30.0);
+            speedBottomMap.put(1.37, -23.0);
+
+            // shootPivotMap.put(2.06, .35);
+            // shootPivotMap.put(2.55, .3);
+            shootPivotMap.put(3.0, .15);
+            shootPivotMap.put(2.15, .2);
+            shootPivotMap.put(1.37, .39);
         }
     }
 }

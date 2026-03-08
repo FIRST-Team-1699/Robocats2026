@@ -155,7 +155,8 @@ public class ShooterSubsystem extends SubsystemBase {
         OUTTAKE(-50,-50),
         // TODO: SET
         CLOSE(-1,-1), 
-        FAR(-1,-1), 
+        AIMING(-30,-25), 
+        AIMING_TWO(-28,-23),
         INTERPOLATED(-35,-35);
 
 

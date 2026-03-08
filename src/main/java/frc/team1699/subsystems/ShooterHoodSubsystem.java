@@ -116,12 +116,13 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public enum HoodPositions {
         STORED(0.01), 
-        AIMING(-1), 
+        AIMING(0.5), 
+        AIMING_TWO(.39),
         CLIMB(-1),
 
         MIN(0.01),
         MAX(0.616),
-        AIMED(0.0833);
+        INTERPOLATED(.1);
 
         private double degrees;
         private HoodPositions(double degrees) {
