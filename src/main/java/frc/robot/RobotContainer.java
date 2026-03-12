@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
-import frc.team1699.commands.SetInterpolatedCommand;
+import frc.team1699.commands.ShootCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
@@ -142,14 +142,14 @@ public class RobotContainer {
     //   .onFalse(shootHood.setRaw(0));
 
     operatorController.povUp()
-      .onTrue(shootHood.setPosition(HoodPositions.MAX));
+      .onTrue(shootHood.setPositionCommand(HoodPositions.MAX));
     operatorController.povDown()
-      .onTrue(shootHood.setPosition(HoodPositions.MIN));
+      .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
 
     operatorController.a()
-      .onTrue(shootHood.setPosition(HoodPositions.INTERPOLATED));
+      .onTrue(shootHood.setPositionCommand(HoodPositions.INTERPOLATED));
     operatorController.b()
-      .onTrue(shootHood.setPosition(HoodPositions.MIN));
+      .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
 
     operatorController.rightTrigger()
         .onTrue(
@@ -161,19 +161,7 @@ public class RobotContainer {
         );
       operatorController.rightBumper()
         .onTrue(
-          new SetInterpolatedCommand(vision)
-            .andThen(shoot.setSpeed(ShootingSpeeds.INTERPOLATED))
-              .alongWith(shootHood.setPosition(HoodPositions.INTERPOLATED))
-              .alongWith(hopper.setSpeed(HopperSpeeds.INTAKE))
-            .andThen(new WaitUntilCommand(shoot.isTotalInTollerance()))
-            .andThen(new WaitUntilCommand(() -> shootHood.isInTolerance()))
-            .andThen(indexer.setSpeed(IndexingSpeeds.INTAKE))
-        )
-        .onFalse(
-          shoot.setSpeed(ShootingSpeeds.STORED)
-            .alongWith(indexer.setSpeed(IndexingSpeeds.STORED)) 
-            .alongWith(hopper.setSpeed(HopperSpeeds.STORED))        
-
+          new ShootCommand(shoot, shootHood, indexer, hopper, vision)
         );
 
       driverController.a()

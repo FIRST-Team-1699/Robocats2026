@@ -38,12 +38,15 @@ public class HopperSubsystem extends SubsystemBase {
         return getError() < HopperConstants.kTolerance;
     }
 
-    public Command setSpeed(HopperSpeeds speed) {
+    public Command setSpeedCommand(HopperSpeeds speed) {
         return runOnce(() -> {
-            this.currentSpeed=speed;
-            // leadMotor.setControl(HopperConfigs.motionRequest.withVelocity(speed.getSpeed()));
-            leadMotor.set(currentSpeed.getSpeed());
+            setSpeed(speed);
         });
+    }
+
+    public void setSpeed(HopperSpeeds speed) {
+        this.currentSpeed=speed;
+        leadMotor.set(currentSpeed.getSpeed());
     }
 
     public Command setRaw(double voltage) {

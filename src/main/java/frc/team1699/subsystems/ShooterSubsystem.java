@@ -79,13 +79,17 @@ public class ShooterSubsystem extends SubsystemBase {
         return () -> bottomInTolerance() && topInTolerance();
     }
 
-    public Command setSpeed(ShootingSpeeds speed) {
+    public Command setSpeedCommand(ShootingSpeeds speed) {
         return runOnce(() -> {
-            this.currentSpeed=speed;
-
-            topMotor.setControl(ShooterConfigs.motionRequest.withVelocity(currentSpeed.getTopSpeed()));
-            bottomMotor.setControl(ShooterConfigs.motionRequest.withVelocity(currentSpeed.getBottomSpeed()));
+            setSpeed(speed);
         });
+    }
+
+    public void setSpeed(ShootingSpeeds speed) {
+        this.currentSpeed=speed;
+
+        topMotor.setControl(ShooterConfigs.motionRequest.withVelocity(currentSpeed.getTopSpeed()));
+        bottomMotor.setControl(ShooterConfigs.motionRequest.withVelocity(currentSpeed.getBottomSpeed()));
     }
 
     public Command setRaw(double topVoltage, double bottomVoltage) {

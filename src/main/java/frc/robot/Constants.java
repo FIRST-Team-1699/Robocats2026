@@ -15,16 +15,22 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Angle;
 
 public final class Constants {
   public static class OIConstants {
     public static final int kDriverControllerPort = 0;
-    // public static final int kOperatorControllerPort = 1;
+    public static final int kOperatorControllerPort = 1;
   }
 
   public static class ShooterHoodConstants {
@@ -277,8 +283,8 @@ public final class Constants {
 
   }
   public static class VisionConstants {
-    public static final String kCamOneName = "Cool_Cam1";
-    public static final String kCamTwoName = "Cool_Cam2";
+    public static final String kLeftCamName = "Left_Cam";
+    public static final String kRightCamName = "Right_Cam";
 
     public static final Transform3d kRightCamOffset = 
       new Transform3d(
@@ -312,5 +318,10 @@ public final class Constants {
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
+    // TODO: DEBUG FOR NOISE
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
+    public static final Pose2d kRedHubPose = new Pose2d(0, 0, new Rotation2d());
   }
 }

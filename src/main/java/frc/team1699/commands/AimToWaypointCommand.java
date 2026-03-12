@@ -16,8 +16,6 @@ import frc.robot.RobotContainer;
 import frc.team1699.subsystems.CommandSwerveDrivetrain;
 import frc.team1699.subsystems.VisionSubsystem;
 import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
-import frc.utils.vision.Waypoint;
-
 
 
 
@@ -46,19 +44,18 @@ public class AimToWaypointCommand extends Command {
     @Override
     public void initialize() {
         vision.setWaypoint(point);
-        vision.disableStickyCam();
+        // vision.disableStickyCam();
     }
 
 
     @Override
     public void execute() {
         // System.out.println(Math.toRadians(vision.getYaw()));
-        // rotationalOutput = MathUtil.clamp(
-        //    rotationalController.calculate(
-        //     Math.toRadians(vision.getYaw()), 0
-        //     ), -1.5, 1.5
-        // );
-        System.out.println(-Math.toRadians(vision.getYaw()));
+        rotationalOutput = MathUtil.clamp(
+           rotationalController.calculate(
+            Math.toRadians(vision.getYaw()), 0
+            ), -1.5, 1.5
+        );
         drivetrain.setControl(
             new SwerveRequest.RobotCentric()
                 .withRotationalRate(-Math.toRadians(vision.getYaw()))

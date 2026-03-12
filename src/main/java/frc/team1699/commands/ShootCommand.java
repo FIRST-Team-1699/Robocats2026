@@ -1,24 +1,75 @@
-// package frc.team1699.commands;
+package frc.team1699.commands;
 
-// import edu.wpi.first.wpilibj2.command.Command;
-// import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-// import frc.team1699.subsystems.IndexerSubsystem;
-// import frc.team1699.subsystems.ShooterSubsystem;
-// import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Configs.ShooterHoodConfigs;
+import frc.robot.Configs.VisionConfigs;
+import frc.team1699.subsystems.HopperSubsystem;
+import frc.team1699.subsystems.IndexerSubsystem;
+import frc.team1699.subsystems.ShooterHoodSubsystem;
+import frc.team1699.subsystems.ShooterSubsystem;
+import frc.team1699.subsystems.VisionSubsystem;
+import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
+import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
+import frc.team1699.subsystems.IntakePivotSubsystem.PivotPositions;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
+import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 
-// public class ShootCommand extends Command {
-//     private final IndexerSubsystem indexer;
-//     private final ShooterSubsystem shooter;
-//     public ShootCommand(ShooterSubsystem shooter, IndexerSubsystem indexer) {
-//         this.shooter = shooter;
-//         this.indexer = indexer;
-//         addRequirements(shooter, indexer);
-//     }
+public class ShootCommand extends Command {
+    private final ShooterSubsystem shoot;
+    private final ShooterHoodSubsystem shootHood;
+    private final IndexerSubsystem indexer;
+    private final HopperSubsystem hopper;
+    private final VisionSubsystem vision;
 
-//     @Override
-//     public void initialize() {
-//         shooter.setSpeed(ShootingSpeeds.INTERPOLATED)
-//             .andThen(new WaitUntilCommand(shooter.isTotalInTollerance()))
-//             .andThen(ind);
-//     }
-// }
+    public ShootCommand(
+        ShooterSubsystem shoot, 
+        ShooterHoodSubsystem shootHood,
+        IndexerSubsystem indexer, 
+        HopperSubsystem hopper,
+        VisionSubsystem vision
+    ) {
+        this.shoot = shoot;
+        this.shootHood = shootHood;
+        this.indexer = indexer;
+        this.hopper = hopper;
+        this.vision = vision;
+
+        addRequirements(shoot, shootHood, indexer, hopper, vision);
+    }
+
+    @Override
+    public void initialize() {}
+
+    @Override
+    public void execute() {
+        ShooterHoodSubsystem.HoodPositions.INTERPOLATED.setDegrees(
+            VisionConfigs.shootPivotMap.get(vision.getDistanceToScore())
+        );
+        ShooterSubsystem.ShootingSpeeds.INTERPOLATED.setSpeeds(
+            VisionConfigs.speedTopMap.get(vision.getDistanceToScore()),
+            VisionConfigs.speedBottomMap.get(vision.getDistanceToScore())
+        );
+
+        shootHood.setPosition(HoodPositions.INTERPOLATED);
+        shoot.setSpeed(ShootingSpeeds.INTERPOLATED);
+        hopper.setSpeed(HopperSpeeds.INTAKE);
+        if(shoot.isTotalInTollerance().getAsBoolean()) {
+            indexer.setSpeed(IndexingSpeeds.INTAKE);
+        } else {
+            indexer.setSpeed(IndexingSpeeds.STORED);
+        }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
+    @Override
+    public void end(boolean isFinished) {
+        shoot.setSpeed(ShootingSpeeds.STORED);
+        indexer.setSpeed(IndexingSpeeds.STORED);
+        hopper.setSpeed(HopperSpeeds.STORED);
+    }
+}

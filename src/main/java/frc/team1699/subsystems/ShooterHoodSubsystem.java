@@ -68,11 +68,15 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         return leadMotor.getPosition().getValueAsDouble();
     }
 
-    public Command setPosition(HoodPositions position) {
+    public Command setPositionCommand(HoodPositions position) {
         return runOnce(() -> {
-            this.currentPosition=position;
-            leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(position.degrees));
+            setPosition(position);
         });
+    }
+
+    public void setPosition(HoodPositions position) {
+        this.currentPosition=position;
+        leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(position.degrees));
     }
 
     public Command setRaw(double speed) {
@@ -116,7 +120,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public enum HoodPositions {
         STORED(0.01), 
-        AIMING(-1), 
+        INTERPOLATED(-1), 
         CLIMB(-1),
 
         MIN(0.01),
