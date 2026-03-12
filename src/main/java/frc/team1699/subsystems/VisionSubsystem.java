@@ -1,5 +1,7 @@
 package frc.team1699.subsystems;
 
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -18,7 +20,7 @@ public class VisionSubsystem extends SubsystemBase {
     private Camera[] cams;
     private boolean hasTag;
     private double distanceToScore, yaw;
-    private Pose3d estimatedPose;
+    private Pose3d estimatedPose = new Pose3d();
     private EstimateConsumer estimateConsumer;
 
     @FunctionalInterface
@@ -39,7 +41,7 @@ public class VisionSubsystem extends SubsystemBase {
         cams= new Camera[]{rightCam,leftCam};
 
         PortForwarder.add(5800, "photonvision.local:5800", 5800);
-        currentWaypoint = TagWaypoint.NONE;
+        currentWaypoint = TagWaypoint.RED_HUB;
     }
 
     public double getYaw() {
@@ -67,20 +69,15 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void setYawOnWaypoint() {
-        // double tempDegrees = (Math.atan((this.x)/(this.y))*180/Math.PI);
-        // this.yaw= (tempDegrees <0.0 ? tempDegrees + 90 : tempDegrees -90 );
-        yaw = Math.atan2(
-            Math.abs(getY()-currentWaypoint.pose.getY()),
-            Math.abs(getX()-currentWaypoint.pose.getX())
+        yaw = Math.toDegrees(
+            PhotonUtils.getYawToPose(estimatedPose.toPose2d(), currentWaypoint.pose).getRadians()
         );
+
     }
 
 
     public void setDistanceToScore() {
-        distanceToScore = Math.sqrt(
-            Math.pow(Math.abs(getX()-currentWaypoint.pose.getX()),2)
-            + Math.pow(Math.abs(getY()-currentWaypoint.pose.getY()),2)
-        );
+        distanceToScore = PhotonUtils.getDistanceToPose(estimatedPose.toPose2d(), currentWaypoint.pose);
     }
 
     public void setWaypoint(TagWaypoint waypoint) {
@@ -110,15 +107,16 @@ public class VisionSubsystem extends SubsystemBase {
                     var estStdDevs = cam.getEstimationStdDevs();
 
                     estimateConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
-                });
+                }
+            );
         }
 
         SmartDashboard.putNumber("Current X Position on left Cam: ", estimatedPose.toPose2d().getX());
         SmartDashboard.putNumber("Current Y Position on left Cam: ", estimatedPose.toPose2d().getY());
         SmartDashboard.putNumber("Current Yaw Position on left Cam: ", estimatedPose.getRotation().getZ());
 
-        SmartDashboard.putNumber("Current Yaw to waypoint", yaw);
-        SmartDashboard.putNumber("Current Distance to waypoint", yaw);
+        SmartDashboard.putNumber("Current Yaw to score", yaw);
+        SmartDashboard.putNumber("Current Distance to score", distanceToScore);
     }
 
 
