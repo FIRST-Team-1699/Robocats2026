@@ -3,6 +3,7 @@ package frc.team1699.commands;
 
 
 
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 
@@ -15,14 +16,14 @@ import frc.robot.RobotContainer;
 import frc.team1699.subsystems.CommandSwerveDrivetrain;
 import frc.team1699.subsystems.VisionSubsystem;
 import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
-import frc.utils.WaypointManagement.Waypoint;
+import frc.utils.vision.Waypoint;
 
 
 
 
 public class AimToWaypointCommand extends Command {
     private TagWaypoint point;
-    private final PIDController rotationalController = new PIDController(.1, 0, 0.01);
+    private final PIDController rotationalController = new PIDController(1, 0, 0.01);
 
     private double rotationalOutput;
     private VisionSubsystem vision;
@@ -42,27 +43,28 @@ public class AimToWaypointCommand extends Command {
         );
     }
 
-
-
-
     @Override
     public void initialize() {
         vision.setWaypoint(point);
+        vision.disableStickyCam();
     }
 
 
-
-
-   @Override
-   public void execute() {
-       rotationalOutput = MathUtil.clamp(
-           rotationalController.calculate(Math.toRadians(vision.getYaw()), 0), -1.5, 1.5
-       );
-       drivetrain.setControl(
-           new SwerveRequest.RobotCentric()
-               .withRotationalRate(rotationalOutput)
-       );
-   }
+    @Override
+    public void execute() {
+        // System.out.println(Math.toRadians(vision.getYaw()));
+        // rotationalOutput = MathUtil.clamp(
+        //    rotationalController.calculate(
+        //     Math.toRadians(vision.getYaw()), 0
+        //     ), -1.5, 1.5
+        // );
+        System.out.println(-Math.toRadians(vision.getYaw()));
+        drivetrain.setControl(
+            new SwerveRequest.RobotCentric()
+                .withRotationalRate(-Math.toRadians(vision.getYaw()))
+                .withDriveRequestType(DriveRequestType.OpenLoopVoltage)
+        );
+    }
 
 
 
@@ -70,6 +72,7 @@ public class AimToWaypointCommand extends Command {
    @Override
    public boolean isFinished() {
        return vision.isInTolerance();
+        // return false;
    }
 
 

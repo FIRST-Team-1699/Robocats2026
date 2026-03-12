@@ -1,17 +1,27 @@
 package frc.team1699.subsystems;
 
+import static edu.wpi.first.units.Units.Degree;
+import static edu.wpi.first.units.Units.Degrees;
+
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
-import frc.utils.WaypointManagement.*;
+import frc.utils.vision.*;
 
 public class VisionSubsystem extends SubsystemBase {
     public static TagWaypoint currentWaypoint;
@@ -25,29 +35,16 @@ public class VisionSubsystem extends SubsystemBase {
     private double yaw, x, y, z, xWaypointOffset, yWaypointOffset, distanceToTag; // yawCameraOffset;
 
     public VisionSubsystem () {
-        cam1 = new Camera(
-            VisionConstants.kCamOneName,
-            new Transform3d(
-                new Translation3d(
-                    VisionConstants.cam1XOffset,
-                    VisionConstants.cam1YOffset,
-                    0
-                ),
-                new Rotation3d()
-            )
+        leftCam = new Camera(
+            VisionConstants.kLeftCam,
+            VisionConstants.kLeftCamOffset
         );
-        cam2 = new Camera(
-            VisionConstants.kCamTwoName,
-            new Transform3d(
-                new Translation3d(
-                    VisionConstants.cam2XOffset,
-                    VisionConstants.cam2YOffset,
-                    0
-                ),
-                new Rotation3d()
-            )
+        rightCam = new Camera(
+            VisionConstants.kRightCam,
+            VisionConstants.kRighTCamOffset
         );
-        camHandler= new CameraHandler(cam1,cam2);
+        // camHandler= new CameraHandler(leftCam,rightCam);
+        camHandler= new CameraHandler(rightCam);
 
         PortForwarder.add(5800, "photonvision.local:5800", 5800);
         currentWaypoint=TagWaypoint.CAMERA_TUNE;
@@ -84,8 +81,13 @@ public class VisionSubsystem extends SubsystemBase {
 
 
     public void setDistanceToTag() {
-        double tempDistance = Math.pow(this.x, 2.0) + Math.pow(this.y, 2.0);
-        this.distanceToTag = Math.sqrt(tempDistance);
+        distanceToTag= PhotonUtils.calculateDistanceToTargetMeters(
+            camHandler.getXOffset(), 
+            // TODO: MEASURE HEIGHT FROM GROUND
+            -1, 
+            camHandler.getPitch(), 
+            bestTag.getPitch()
+        );
     }
 
     public void setWaypoint(TagWaypoint waypoint) {
@@ -108,23 +110,23 @@ public class VisionSubsystem extends SubsystemBase {
 
             this.hasTag=true;
             // TODO: DECIDE IF SWITCHING TO TAG -> CAM
-            this.x=bestTag.getBestCameraToTarget().getX() + this.camHandler.getXOffset();
-            this.y=bestTag.getBestCameraToTarget().getY() + this.camHandler.getYOffset();
-            this.z=bestTag.getBestCameraToTarget().getZ();
+            // this.x=bestTag.getBestCameraToTarget().getX() + this.camHandler.getXOffset();
+            // this.y=bestTag.getBestCameraToTarget().getY() + this.camHandler.getYOffset();
+            // this.z=bestTag.getBestCameraToTarget().getZ();
 
-            // TODO: Verify with old code
-            this.isLeft=
-                this.bestTag.getBestCameraToTarget().inverse().getY() 
-                    - Math.cos(bestTag.getYaw())*this.camHandler.getYOffset() > 0;
+            // // TODO: Verify with old code
+            // this.isLeft=
+            //     this.bestTag.getBestCameraToTarget().inverse().getY() 
+            //         - Math.cos(bestTag.getYaw())*this.camHandler.getYOffset() > 0;
 
             this.xWaypointOffset=currentWaypoint.waypoint.getOffset(this.targetTagId).getX();
             // TODO: FIX LOGIC SOMEWHERE HERE
-            this.yWaypointOffset= isLeft ?
-                currentWaypoint.waypoint.getOffset(this.targetTagId).getY() :
-                -currentWaypoint.waypoint.getOffset(this.targetTagId).getY();
+            this.yWaypointOffset= //isLeft ?
+                currentWaypoint.waypoint.getOffset(this.targetTagId).getY(); //:
+                // -currentWaypoint.waypoint.getOffset(this.targetTagId).getY();
 
-            this.y+=yWaypointOffset;
-            this.x+=xWaypointOffset;
+            // this.y+=yWaypointOffset;
+            // this.x+=xWaypointOffset;
 
 
             setYawOnWaypoint();
@@ -139,6 +141,7 @@ public class VisionSubsystem extends SubsystemBase {
         } 
         currentAmbiguity=1;
         this.hasTag=false;
+        disableStickyCam();
     }
 
     public void disableStickyCam() {

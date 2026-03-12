@@ -1,4 +1,4 @@
-package frc.utils.WaypointManagement;
+package frc.utils.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,7 +18,6 @@ public class AprilTagPoint {
      */
     public AprilTagPoint(int id, Pose2d offsetToWaypoint) {
         this.id=id;
-        new Pose2d(1,2,new Rotation2d());
         this.offsetToWaypoint=new Pose2d(offsetToWaypoint.getX(),offsetToWaypoint.getY(), new Rotation2d());
     }
 

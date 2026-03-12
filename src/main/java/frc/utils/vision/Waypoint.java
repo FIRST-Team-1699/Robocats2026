@@ -1,4 +1,4 @@
-package frc.utils.WaypointManagement;
+package frc.utils.vision;
 
 import java.util.HashMap;
 

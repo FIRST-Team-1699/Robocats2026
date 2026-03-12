@@ -1,12 +1,14 @@
-package frc.utils.WaypointManagement;
+package frc.utils.vision;
 
 import java.util.List;
 
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.units.measure.Angle;
 import frc.team1699.subsystems.VisionSubsystem;
 
 public class Camera {
@@ -26,7 +28,7 @@ public class Camera {
         this.offsets = offsets;
         this.enabled = false;
 
-        this.setPipelineIndex(1);
+        this.setPipelineIndex(0);
     }
 
     public void setPipelineIndex(int index) {
@@ -78,11 +80,7 @@ public class Camera {
         return this.currentTag;
     }
 
-    public double getXOffset() {
-        return this.offsets.getX();
-    }
-
-    public double getYOffset() {
-        return this.offsets.getY();
+    public Transform3d getOffsets() {
+        return this.offsets;
     }
 }
