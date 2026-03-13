@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -83,6 +84,8 @@ public class RobotContainer {
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
   public RobotContainer() {
+    NamedCommands.registerCommand("Aim to Hub", toggleAimToHub());
+
     configureBindings();
 
     RobotPose.setPoseSupplier(drivetrain::getState);
@@ -183,7 +186,7 @@ public class RobotContainer {
             new ShootCommand(shoot, shootHood, indexer, hopper));
 
     operatorController.leftBumper()
-        .onTrue(Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub));
+        .onTrue(toggleAimToHub());
 
     // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
     operatorController.rightBumper()
@@ -207,8 +210,12 @@ public class RobotContainer {
 
   }
 
+  public Command toggleAimToHub() {
+        return Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub);
+  }
+
   // TODO: REPLACE WITH PATHPLANNER CODE
-  public Command getAutonomousCommand() {
+//   public Command getAutonomousCommand() {
     // return null;
     // return shoot.runOnce(() -> System.out.println("Running auto..."));
     // return Commands.sequence(
@@ -221,14 +228,14 @@ public class RobotContainer {
     // intakePivot.sysIDDynamic(Direction.kForward)
     // );
 
-    return Commands.sequence(
-        shootHood.sysIDQuasistatic(Direction.kReverse),
-        Commands.waitSeconds(3),
-        shootHood.sysIDQuasistatic(Direction.kForward),
-        Commands.waitSeconds(3),
-        shootHood.sysIDDynamic(Direction.kReverse),
-        Commands.waitSeconds(3),
-        shootHood.sysIDDynamic(Direction.kForward));
+    // return Commands.sequence(
+    //     shootHood.sysIDQuasistatic(Direction.kReverse),
+    //     Commands.waitSeconds(3),
+    //     shootHood.sysIDQuasistatic(Direction.kForward),
+    //     Commands.waitSeconds(3),
+    //     shootHood.sysIDDynamic(Direction.kReverse),
+    //     Commands.waitSeconds(3),
+    //     shootHood.sysIDDynamic(Direction.kForward));
 
     /*
      * final var idle = new SwerveRequest.Idle();
@@ -247,5 +254,5 @@ public class RobotContainer {
      * // drivetrain.applyRequest(() -> idle)
      * );
      */
-  }
+//   }
 }
