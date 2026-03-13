@@ -6,19 +6,14 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.lang.invoke.MethodHandles.Lookup.ClassOption;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -28,16 +23,11 @@ import frc.team1699.commands.ShootCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
-import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
-import frc.team1699.subsystems.IntakePivotSubsystem.PivotPositions;
+import frc.team1699.subsystems.IntakePivotSubsystem.IntakePositions;
 import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
-import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
-import frc.team1699.subsystems.VisionSubsystem.TagWaypoint;
 import frc.utils.vision.AllianceFlip;
 import frc.utils.vision.RobotPose;
-import frc.team1699.commands.*;
-import frc.robot.swerve.TunerConstants;
 
 public class RobotContainer {
   public static boolean isAimingAtHub=false;
@@ -109,7 +99,7 @@ public class RobotContainer {
               .withTargetDirection(AllianceFlip.flip(RobotPose.getHeadingTowardsHub()))
               .withVelocityX(-driverController.getLeftY()* MaxSpeed)
               .withVelocityY(-driverController.getLeftX() * MaxSpeed) : // Drive left with negative X (left)
-              driveJoysticks
+            driveJoysticks
               .withVelocityX(-driverController.getLeftY()* MaxSpeed)
               .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
               .withRotationalRate(-driverController.getRightX()* MaxAngularRate) // Drive counterclockwise with negative X (left)
@@ -122,51 +112,43 @@ public class RobotContainer {
     RobotModeTriggers.disabled().whileTrue(
         drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-    // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    driverController.b().whileTrue(drivetrain.applyRequest(
-        () -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
-
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
     // Reset the field-centric heading on left bumper press.
-    driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+    driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-    operatorController.leftTrigger().whileTrue(Commands.runOnce(() -> Logger.recordOutput("PIDOutput", driveFacingHub.HeadingController.getLastAppliedOutput())));
+    driverController.leftTrigger()
+        .onTrue(
+            shootHood.setPositionCommand(HoodPositions.CLIMB)
+                .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
+    );
+
+    driverController.rightTrigger()
+        .onTrue(
+            shootHood.setPositionCommand(HoodPositions.STORED)
+                .alongWith(climb.setPosition(ClimbPosition.STORED))
+    );
+
+    // operatorController.leftTrigger().whileTrue(Commands.runOnce(() -> Logger.recordOutput("PIDOutput", driveFacingHub.HeadingController.getLastAppliedOutput())));
+    operatorController.leftTrigger()
+        .onTrue(
+            intake.setSpeedCommand(IntakeSpeeds.INTAKE)
+                .alongWith(indexer.indexUntilFull())
+        )
+        .onFalse(
+            intake.setSpeedCommand(IntakeSpeeds.STORED)
+        );
+
+    operatorController.rightTrigger()
+        .onTrue(
+            intake.setSpeedCommand(IntakeSpeeds.OUTTAKE)
+                .alongWith(indexer.indexUntilFull())
+        )
+        .onFalse(
+            intake.setSpeedCommand(IntakeSpeeds.STORED)
+        );
+
+    
 
     drivetrain.registerTelemetry(logger::telemeterize);
-    /*
-     * operatorController.povUp()
-     * .onTrue(climb.setPosition(ClimbPosition.EXTENDED));
-     * 
-     * operatorController.povDown()
-     * .onTrue(climb.setPosition(ClimbPosition.STORED));
-     */
-
-    /*
-     * operatorController.povUp()
-     * .onTrue(intakePivot.setPosition(PivotPositions.STORED));
-     * 
-     * operatorController.povDown()
-     * .onTrue(intakePivot.setPosition(PivotPositions.GROUND_INTAKE));
-     * 
-     * operatorController.leftBumper()
-     * .onTrue(intake.setSpeed(IntakeSpeeds.INTAKE))
-     * .onFalse(intake.setSpeed(IntakeSpeeds.STORED));
-     * operatorController.rightBumper()
-     * .onTrue(intake.setSpeed(IntakeSpeeds.OUTTAKE))
-     * .onFalse(intake.setSpeed(IntakeSpeeds.STORED));
-     */
-    // operatorController.povUp()
-    // .onTrue(shootHood.setRaw(0.1))
-    // .onFalse(shootHood.setRaw(0));
-    // operatorController.povDown()
-    // .onTrue(shootHood.setRaw(-0.1))
-    // .onFalse(shootHood.setRaw(0));
 
     operatorController.povUp()
         .onTrue(shootHood.setPositionCommand(HoodPositions.MAX));
@@ -174,59 +156,40 @@ public class RobotContainer {
         .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
 
     operatorController.a()
-        .onTrue(shootHood.setPositionCommand(HoodPositions.INTERPOLATED));
+        .onTrue(
+            intakePivot.getCurrentPosition().equals(IntakePositions.GROUND_INTAKE) ?
+                intakePivot.setPositionCommand(IntakePositions.STORED) : 
+                intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
+        );
+
+
     operatorController.b()
-        .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
+        .whileTrue(
+            hopper.setSpeedCommand(HopperSpeeds.INTAKE)
+        )
+        .onFalse(
+            hopper.setSpeedCommand(HopperSpeeds.STORED)
+        );
 
     operatorController.rightTrigger()
         .onTrue(
-            intakePivot.setPosition(PivotPositions.GROUND_INTAKE)
-                .alongWith(intake.setSpeed(IntakeSpeeds.INTAKE)))
+            intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
+                .alongWith(intake.setSpeedCommand(IntakeSpeeds.INTAKE)))
         .onFalse(
-            intake.setSpeed(IntakeSpeeds.STORED));
-    operatorController.rightBumper()
-        .onTrue(
-            new ShootCommand(shoot, shootHood, indexer, hopper, vision));
+            intake.setSpeedCommand(IntakeSpeeds.STORED));
 
-    // driverController.a()
-    //     .whileTrue(new AimToWaypointCommand(vision, drivetrain, TagWaypoint.RED_HUB));
-    
+    operatorController.x()
+        .onTrue(
+            new ShootCommand(shoot, shootHood, indexer, hopper));
 
     operatorController.leftBumper()
-      .onTrue(Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub));
+        .onTrue(Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub));
 
-    // driverController.a()
-    // .onTrue(
-    // shootHood.setPosition(HoodPositions.CLIMB)
-    // .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
-    // );
+    // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
+    operatorController.rightBumper()
+        .onTrue(
+            new ShootCommand(shoot, shootHood, indexer, hopper));
 
-    // driverController.b()
-    // .onTrue(
-    // shootHood.setPosition(HoodPositions.STORED)
-    // .alongWith(climb.setPosition(ClimbPosition.STORED))
-    // );
-
-    /*
-     * operatorController.leftBumper()
-     * .onTrue(shoot.setSpeed(ShootingSpeeds.INTAKE))
-     * .onFalse(shoot.stopAll());
-     * operatorController.rightBumper()
-     * .onTrue(shoot.setSpeed(ShootingSpeeds.OUTTAKE))
-     * .onFalse(shoot.stopAll());
-     */
-    // operatorController.leftBumper()
-    // .onTrue(indexer.indexUntilFull());
-    // operatorController.rightBumper()
-    // .onTrue(indexer.setSpeed(IndexingSpeeds.STORED));
-
-    // operatorController.leftBumper()
-    // .onTrue(hopper.setSpeed(HopperSpeeds.INTAKE))
-    // .onFalse(hopper.setSpeed(HopperSpeeds.STORED));
-    // operatorController.rightBumper()
-    // .onTrue(hopper.setSpeed(HopperSpeeds.OUTTAKE))
-    // .onFalse(hopper.setSpeed(HopperSpeeds.STORED));
-    // driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
     driverController.b().whileTrue(drivetrain.applyRequest(
         () -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
 

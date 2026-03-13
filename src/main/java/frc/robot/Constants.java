@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -113,12 +114,12 @@ public final class Constants {
 
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
-    public static final double kS0 = 0.2421875;
-    public static final double kV0 = 3;
-    public static final double kA0 = 2;
-    public static final double kP0 = 80;
-    public static final double kI0 = 0;
-    public static final double kD0 = 4;
+    public static final double kS = 0.2421875;
+    public static final double kV = 3;
+    public static final double kA = 2;
+    public static final double kP = 80;
+    public static final double kI = 0;
+    public static final double kD = 4;
     public static final double kG0 = 0.5;
 
     public static final double kS1 = 0;
@@ -194,13 +195,13 @@ public final class Constants {
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
-    public static final double kS0 = 0.2421875;
-    public static final double kV0 = 3;
-    public static final double kA0 = 2;
-    public static final double kP0 = 80;
-    public static final double kI0 = 0;
+    public static final double kS = 0.2421875;
+    public static final double kV = 3;
+    public static final double kA = 2;
+    public static final double kP = 80;
+    public static final double kI = 0;
     public static final double kD0 = 4;
-    public static final double kG0 = 0.5;
+    public static final double kG = 0.5;
 
     public static final double kS1 = 0;
     public static final double kV1 = 0.0;
@@ -284,9 +285,24 @@ public final class Constants {
 
   }
   public static class VisionConstants {
+    // Maps Distance as key, velocity (rotations/sec) of top to value
+    public static final InterpolatingDoubleTreeMap speedTopMap =
+        new InterpolatingDoubleTreeMap();
+
+    // Maps Distance as key, velocity (rotations/sec) of bottom to value
+    public static final InterpolatingDoubleTreeMap speedBottomMap =
+        new InterpolatingDoubleTreeMap(); 
+
+    // Maps Distance as key, position (rotations) of top to value
+    public static final InterpolatingDoubleTreeMap shootPivotMap = 
+        new InterpolatingDoubleTreeMap();
+
+    // Photon Vision Constants
     public static final String kLeftCamName = "Left_Cam";
     public static final String kRightCamName = "Right_Cam";
 
+    // Position of camera relative to the center of the bot. Used for PhotonPoseEstimator
+    // in Camera.java
     public static final Transform3d kRightCamOffset = 
       new Transform3d(
         new Translation3d(
@@ -300,6 +316,7 @@ public final class Constants {
             Angle.ofRelativeUnits(0, Degree)
         )
     );
+
     public static final Transform3d kLeftCamOffset = 
       new Transform3d(
         new Translation3d(
@@ -317,10 +334,25 @@ public final class Constants {
     public static final double ambiguityTolerance=0.40;
     public static final Rotation2d kHeadingTolerance=Rotation2d.fromDegrees(5);
     public static final AprilTagFieldLayout kTagLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
+    // TODO: Update values to score to hub
+    static {
+        speedTopMap.put(3.0, -37.0);
+        speedTopMap.put(2.15, -35.0);
+        speedTopMap.put(1.37, -28.0);
+
+        speedBottomMap.put(3.0, -30.0);
+        speedBottomMap.put(2.15, -30.0);
+        speedBottomMap.put(1.37, -23.0);
+
+        shootPivotMap.put(3.0, .15);
+        shootPivotMap.put(2.15, .2);
+        shootPivotMap.put(1.37, .39);
+    }
   }
 }

@@ -9,13 +9,10 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Configs.VisionConfigs;
 import frc.robot.Constants.VisionConstants;
-import frc.utils.vision.AllianceFlip;
-import frc.utils.vision.FieldConstants;
 
 public class RobotPose {
     private static Supplier<SwerveDriveState> stateSupplier;
@@ -26,11 +23,6 @@ public class RobotPose {
 
     private static Alliance lastAlliance;
 
-    // Key is distance in meters, value is speed in rotations / second
-    // private static final InterpolatingDoubleTreeMap flywheelMap;
-    // Key is distance in meters, value is angle in degrees
-    // private static final InterpolatingDoubleTreeMap hoodMap;
-
     static {
         pose = Pose2d.kZero;
         headingToHub = Rotation2d.kZero;
@@ -38,12 +30,6 @@ public class RobotPose {
         hubTranslation = AllianceFlip.flip(FieldConstants.Hub.innerCenterPoint.toTranslation2d());
 
         DriverStation.getAlliance().ifPresentOrElse(alliance -> lastAlliance = alliance, () -> lastAlliance = null);
-
-    //     flywheelMap = new InterpolatingDoubleTreeMap();
-    //     flywheelMap.put(-1.0, 0.0);
-
-    //     hoodMap = new InterpolatingDoubleTreeMap();
-    //     hoodMap.put(-1.0, 0.0);
     }
 
     public static void setPoseSupplier(Supplier<SwerveDriveState> supplier) {
@@ -84,15 +70,15 @@ public class RobotPose {
     }
 
     public static double getFlywheelTopSpeed() {
-        return VisionConfigs.speedTopMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.speedTopMap.get(hubTranslation.getDistance(pose.getTranslation()));
     }
 
     public static double getFlywheelBottomSpeed() {
-        return VisionConfigs.speedBottomMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.speedBottomMap.get(hubTranslation.getDistance(pose.getTranslation()));
     }
 
     public static double getHoodAngle() {
-        return VisionConfigs.shootPivotMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.shootPivotMap.get(hubTranslation.getDistance(pose.getTranslation()));
     }
 
     public static boolean facingHub() {
@@ -101,5 +87,20 @@ public class RobotPose {
 
     public static double distanceToHub() {
         return hubTranslation.getDistance(pose.getTranslation());
+    }
+
+    public enum Waypoints {
+        NONE(),
+        HUB(AllianceFlip.flip(FieldConstants.Hub.innerCenterPoint.toTranslation2d())),
+        SHUFFLE_LEFT(),
+        SHUFFLE_RIGHT();
+
+        public final Translation2d translation;
+        Waypoints() {
+            this.translation=new Translation2d();
+        }
+        Waypoints(Translation2d translation) {
+            this.translation = translation;
+        }
     }
 }

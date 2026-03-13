@@ -31,7 +31,7 @@ public class IntakeSubsystem extends SubsystemBase {
         bottomMotor.getConfigurator().apply(IntakeConfigs.feedback);
     }
 
-    public Command setSpeed(IntakeSpeeds speed) {
+    public Command setSpeedCommand(IntakeSpeeds speed) {
         return runOnce(() -> {
             currentSpeed=speed;
             // topMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.topSpeed));

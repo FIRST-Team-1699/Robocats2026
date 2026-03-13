@@ -18,12 +18,10 @@ import frc.utils.vision.*;
 
 
 public class VisionSubsystem extends SubsystemBase {
-    public static TagWaypoint currentWaypoint;
     public static double currentAmbiguity;
     private Camera leftCam, rightCam;
     private Camera[] cams;
     private boolean hasTag;
-    private double distanceToScore, yawToTarget;
     private Pose3d estimatedPose = new Pose3d();
     private EstimateConsumer estimateConsumer;
 
@@ -45,104 +43,33 @@ public class VisionSubsystem extends SubsystemBase {
         cams= new Camera[]{rightCam,leftCam};
 
         PortForwarder.add(5800, "photonvision.local:5800", 5800);
-        currentWaypoint = TagWaypoint.RED_HUB;
     }
 
-    public double getYawToTarget() {
-        return this.estimatedPose.getRotation().getZ();
-    }
-
-    public double getX() {
-        return this.estimatedPose.getX();
-    }
-
-    public double getY() {
-        return this.estimatedPose.getY();
-    }
-
-    public double getZ() {
-        return this.estimatedPose.getZ();
+    public Pose3d getPoseOfBot() {
+        return this.estimatedPose;
     }
 
     public boolean getHasTag() {
         return this.hasTag;
     }
 
-    public double getDistanceToScore() {
-        return this.distanceToScore;
-    }
-
-    public void setYawOnWaypoint() {
-        yawToTarget = Math.toDegrees(
-            PhotonUtils.getYawToPose(
-                estimatedPose.toPose2d(), 
-                new Pose2d(
-                    currentWaypoint.translation, 
-                    new Rotation2d()
-                )
-            ).getRadians()
-        );
-
-    }
-
-
-    public void setDistanceToScore() {
-        distanceToScore = PhotonUtils.getDistanceToPose(estimatedPose.toPose2d(),
-            new Pose2d(
-                currentWaypoint.translation, 
-                new Rotation2d()
-            )
-        );
-    }
-
-    public void setWaypoint(TagWaypoint waypoint) {
-        currentWaypoint = waypoint;
-    }
-
-    public boolean isInTolerance() {
-        return Math.abs(this.getYawToTarget()) < VisionConstants.kHeadingTolerance.getDegrees();
-    }
-
-    // private int cooldown=3;
-    // private int currentItteration=0;
-
     @Override
     public void periodic() {
-        if (currentWaypoint==TagWaypoint.NONE) {
-            return;
-        }
         for(Camera cam : cams) {
             cam.updateVisionEstimate();
-            cam.getVisionEstimate().ifPresent(
+            cam.getVisionEstimate().ifPresentOrElse(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
+                    hasTag=true;
                     estimatedPose = est.estimatedPose;
                     var estStdDevs = cam.getEstimationStdDevs();
 
                     estimateConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                },
+                () -> {
+                    hasTag=false;
                 }
             );
-        }
-
-        SmartDashboard.putNumber("Current X Position on left Cam: ", estimatedPose.toPose2d().getX());
-        SmartDashboard.putNumber("Current Y Position on left Cam: ", estimatedPose.toPose2d().getY());
-        SmartDashboard.putNumber("Current Yaw Position on left Cam: ", estimatedPose.getRotation().getZ());
-
-        SmartDashboard.putNumber("Current Yaw to score", yawToTarget);
-        SmartDashboard.putNumber("Current Distance to score", distanceToScore);
-    }
-
-
-    public enum TagWaypoint {
-        NONE(),
-        RED_HUB(AllianceFlip.flip(FieldConstants.Hub.innerCenterPoint.toTranslation2d()));
-
-        public Translation2d translation;
-        TagWaypoint(Translation2d translation) {
-            this.translation = translation;
-        }
-        TagWaypoint() {
-            this.translation =new Translation2d();
         }
     }
 }

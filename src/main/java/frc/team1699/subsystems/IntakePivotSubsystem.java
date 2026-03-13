@@ -1,8 +1,6 @@
 package frc.team1699.subsystems;
 
-import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volt;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
@@ -19,7 +17,7 @@ import frc.robot.Constants.IntakePivotConstants;
 
 public class IntakePivotSubsystem extends SubsystemBase {
 
-    private PivotPositions currentPosition;
+    private IntakePositions currentPosition;
     private TalonFX leadMotor;
     private CANcoder encoder;
     private SysIdRoutine routine;
@@ -38,7 +36,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
         leadMotor= new TalonFX(IntakePivotConstants.kLeadMotorID);
         encoder = new CANcoder(IntakePivotConstants.kFeedbackID);
 
-        currentPosition=PivotPositions.STORED;
+        currentPosition=IntakePositions.STORED;
         configureMotors();
 
         encoder.setPosition(encoder.getAbsolutePosition().getValue());
@@ -58,41 +56,44 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     private void configureMotors() {
-        encoder.getConfigurator().apply(IntakePivotConfigs.encoderConfig);
+        // TODO: verify encoder/ limit removal after testing
+        // encoder.getConfigurator().apply(IntakePivotConfigs.encoderConfig);
         
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.motorConfigs);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
+        // leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
     }
 
 
     
 
     public double getError() {
-        return Math.abs(Math.abs(currentPosition.degrees)-Math.abs(encoderPosition()));
+        return Math.abs(Math.abs(currentPosition.degrees)-Math.abs(getEncoderPosition()));
     }
 
     public boolean isInTolerance() {
         return getError() < IntakePivotConstants.kTolerance;
     }
 
-    public double encoderPosition() {
+    public double getEncoderPosition() {
         return leadMotor.getPosition().getValueAsDouble(); //*360;
     }
 
-    public Command setPosition(PivotPositions position) {
+    public IntakePositions getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public Command setPositionCommand(IntakePositions position) {
         return runOnce(() -> {
-            this.currentPosition=position;
-            // if(currentPosition.degrees < encoderPosition()) {
-                // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-                // leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees));
-                // return;
-            // }
-            // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
-            leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees)); ///360));
+            setPosition(position);
         });
+    }
+
+    public void setPosition(IntakePositions position) {
+        this.currentPosition=position;
+        leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees)); 
     }
 
     public void voltageDrive(double volts) {
@@ -124,7 +125,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
         //     pauseControl();
         // }
 
-        SmartDashboard.putNumber("Intake Pivot Position: ", encoderPosition());
+        SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
         SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
         SmartDashboard.putNumber("Error: ", getError());
         SmartDashboard.putBoolean("Is Intake Pivot In Tolerance: ", isInTolerance());
@@ -144,13 +145,13 @@ public class IntakePivotSubsystem extends SubsystemBase {
         // Logger.recordOutput("Intake/ Position: ", leadMotor.getPosition().getValueAsDouble());        
     }
 
-    public enum PivotPositions {
+    public enum IntakePositions {
         STORED(0.23), 
         // PLATEFORM_INTAKE(130), 
         GROUND_INTAKE(-0.01);
 
         private double degrees;
-        private PivotPositions(double degrees) {
+        private IntakePositions(double degrees) {
             this.degrees=degrees;
         }
 
