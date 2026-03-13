@@ -5,6 +5,8 @@ import org.photonvision.PhotonUtils;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.net.PortForwarder;
@@ -13,13 +15,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 import frc.utils.vision.*;
 
+
+
 public class VisionSubsystem extends SubsystemBase {
     public static TagWaypoint currentWaypoint;
     public static double currentAmbiguity;
     private Camera leftCam, rightCam;
     private Camera[] cams;
     private boolean hasTag;
-    private double distanceToScore, yaw;
+    private double distanceToScore, yawToTarget;
     private Pose3d estimatedPose = new Pose3d();
     private EstimateConsumer estimateConsumer;
 
@@ -44,7 +48,7 @@ public class VisionSubsystem extends SubsystemBase {
         currentWaypoint = TagWaypoint.RED_HUB;
     }
 
-    public double getYaw() {
+    public double getYawToTarget() {
         return this.estimatedPose.getRotation().getZ();
     }
 
@@ -69,15 +73,26 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public void setYawOnWaypoint() {
-        yaw = Math.toDegrees(
-            PhotonUtils.getYawToPose(estimatedPose.toPose2d(), currentWaypoint.pose).getRadians()
+        yawToTarget = Math.toDegrees(
+            PhotonUtils.getYawToPose(
+                estimatedPose.toPose2d(), 
+                new Pose2d(
+                    currentWaypoint.translation, 
+                    new Rotation2d()
+                )
+            ).getRadians()
         );
 
     }
 
 
     public void setDistanceToScore() {
-        distanceToScore = PhotonUtils.getDistanceToPose(estimatedPose.toPose2d(), currentWaypoint.pose);
+        distanceToScore = PhotonUtils.getDistanceToPose(estimatedPose.toPose2d(),
+            new Pose2d(
+                currentWaypoint.translation, 
+                new Rotation2d()
+            )
+        );
     }
 
     public void setWaypoint(TagWaypoint waypoint) {
@@ -85,19 +100,17 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public boolean isInTolerance() {
-        return Math.abs(this.getYaw()) < VisionConstants.kTolerance;
+        return Math.abs(this.getYawToTarget()) < VisionConstants.kHeadingTolerance.getDegrees();
     }
 
-    private int cooldown=3;
-    private int currentItteration=0;
+    // private int cooldown=3;
+    // private int currentItteration=0;
 
     @Override
     public void periodic() {
-        if (currentWaypoint==TagWaypoint.NONE || cooldown< currentItteration ) {
-            currentItteration++;
+        if (currentWaypoint==TagWaypoint.NONE) {
             return;
         }
-        currentItteration=0;
         for(Camera cam : cams) {
             cam.updateVisionEstimate();
             cam.getVisionEstimate().ifPresent(
@@ -115,21 +128,21 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Current Y Position on left Cam: ", estimatedPose.toPose2d().getY());
         SmartDashboard.putNumber("Current Yaw Position on left Cam: ", estimatedPose.getRotation().getZ());
 
-        SmartDashboard.putNumber("Current Yaw to score", yaw);
+        SmartDashboard.putNumber("Current Yaw to score", yawToTarget);
         SmartDashboard.putNumber("Current Distance to score", distanceToScore);
     }
 
 
     public enum TagWaypoint {
         NONE(),
-        RED_HUB(VisionConstants.kRedHubPose);
+        RED_HUB(AllianceFlip.flip(FieldConstants.Hub.innerCenterPoint.toTranslation2d()));
 
-        public Pose2d pose;
-        TagWaypoint(Pose2d pose) {
-            this.pose = pose;
+        public Translation2d translation;
+        TagWaypoint(Translation2d translation) {
+            this.translation = translation;
         }
         TagWaypoint() {
-            this.pose =new Pose2d();
+            this.translation =new Translation2d();
         }
     }
 }

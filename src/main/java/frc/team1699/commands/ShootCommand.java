@@ -14,6 +14,7 @@ import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
 import frc.team1699.subsystems.IntakePivotSubsystem.PivotPositions;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
+import frc.utils.vision.RobotPose;
 
 public class ShootCommand extends Command {
     private final ShooterSubsystem shoot;
@@ -44,11 +45,11 @@ public class ShootCommand extends Command {
     @Override
     public void execute() {
         ShooterHoodSubsystem.HoodPositions.INTERPOLATED.setDegrees(
-            VisionConfigs.shootPivotMap.get(vision.getDistanceToScore())
+            RobotPose.getHoodAngle()
         );
         ShooterSubsystem.ShootingSpeeds.INTERPOLATED.setSpeeds(
-            VisionConfigs.speedTopMap.get(vision.getDistanceToScore()),
-            VisionConfigs.speedBottomMap.get(vision.getDistanceToScore())
+            RobotPose.getFlywheelTopSpeed(),
+            RobotPose.getFlywheelBottomSpeed()
         );
 
         shootHood.setPosition(HoodPositions.INTERPOLATED);

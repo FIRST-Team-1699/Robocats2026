@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 
 public final class Constants {
@@ -290,8 +291,8 @@ public final class Constants {
       new Transform3d(
         new Translation3d(
             0,
-            .3,
-            0
+            -Units.inchesToMeters(11.5),
+            Units.inchesToMeters(20.5)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
@@ -303,8 +304,8 @@ public final class Constants {
       new Transform3d(
         new Translation3d(
             0,
-            -.3,
-            0
+            Units.inchesToMeters(11.5),
+            Units.inchesToMeters(20.625)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
@@ -314,14 +315,12 @@ public final class Constants {
     );
 
     public static final double ambiguityTolerance=0.40;
-    public static final double kTolerance=0.4;
+    public static final Rotation2d kHeadingTolerance=Rotation2d.fromDegrees(5);
     public static final AprilTagFieldLayout kTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // TODO: DEBUG FOR NOISE
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-
-    public static final Pose2d kRedHubPose = new Pose2d(0, 0, new Rotation2d());
   }
 }
