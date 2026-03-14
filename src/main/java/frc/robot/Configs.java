@@ -8,6 +8,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.EmptyControl;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.VoltageOut;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants.*;
@@ -26,7 +28,8 @@ public final class Configs {
 
         // Motion profiles are declared here to allow for static modification and clarity
         public static final  MotionMagicVoltage motionRequest = new MotionMagicVoltage(0);
-        public static final  EmptyControl pauseMotion = new EmptyControl();
+        public static final VoltageOut voltage = new VoltageOut(1);
+        public static final  NeutralOut pauseMotion = new NeutralOut();
 
         static {
             // MotorOutputConfigs: configurations that are hard coded for the Shooter Hood Motors
@@ -191,7 +194,7 @@ public final class Configs {
         // public static final SoftwareLimitSwitchConfigs limits = new SoftwareLimitSwitchConfigs();
 
         public static final MotionMagicVoltage motionRequest = new MotionMagicVoltage(0);
-        public static final EmptyControl pauseMotion = new EmptyControl();
+        public static final NeutralOut pauseMotion = new NeutralOut();
         // public static final MagnetSensorConfigs encoderConfig = new MagnetSensorConfigs();
 
         static {
@@ -215,7 +218,7 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  IntakePivotConstants.kMotionMagicJerk;
 
             feedback.SensorToMechanismRatio = IntakePivotConstants.kPositionConversionFactor;
-            feedback.RotorToSensorRatio = IntakePivotConstants.rotorToSensor;
+            // feedback.RotorToSensorRatio = IntakePivotConstants.rotorToSensor;
 
             // TODO: Verify removal after testing
             // encoderConfig.AbsoluteSensorDiscontinuityPoint = 0.5;

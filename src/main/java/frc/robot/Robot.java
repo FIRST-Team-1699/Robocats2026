@@ -53,7 +53,7 @@ public class Robot extends LoggedRobot {
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
-    autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
+    // autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -76,8 +76,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     // schedule the autonomous command (example)
-    if (autoCommand != null) {
-      CommandScheduler.getInstance().schedule(autoCommand);
+    if (robotContainer.getAutonomousCommand() != null) {
+      // CommandScheduler.getInstance().schedule(autoCommand);
+      CommandScheduler.getInstance().schedule(robotContainer.getAutonomousCommand());
     }
   }
     @Override

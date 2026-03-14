@@ -160,9 +160,7 @@ public class RobotContainer {
 
     operatorController.a()
         .onTrue(
-            intakePivot.getCurrentPosition().equals(IntakePositions.GROUND_INTAKE) ?
-                intakePivot.setPositionCommand(IntakePositions.STORED) : 
-                intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
+            intakePivot.togglePivotCommand()
         );
 
 
@@ -176,21 +174,19 @@ public class RobotContainer {
 
     operatorController.rightTrigger()
         .onTrue(
-            intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
-                .alongWith(intake.setSpeedCommand(IntakeSpeeds.INTAKE)))
-        .onFalse(
-            intake.setSpeedCommand(IntakeSpeeds.STORED));
+                intake.toggleSpeedCommand());
 
     operatorController.x()
-        .onTrue(
+        .whileTrue(
             new ShootCommand(shoot, shootHood, indexer, hopper));
 
     operatorController.leftBumper()
-        .onTrue(toggleAimToHub());
+        .onTrue(toggleAimToHub())
+        .onFalse(toggleAimToHub());
 
     // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
     operatorController.rightBumper()
-        .onTrue(
+        .whileTrue(
             new ShootCommand(shoot, shootHood, indexer, hopper));
 
     driverController.b().whileTrue(drivetrain.applyRequest(
@@ -198,10 +194,10 @@ public class RobotContainer {
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
-    driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-    driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-    driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-    driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    // driverController.back().and(driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    // driverController.back().and(driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+    // driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
     // Reset the field-centric heading on left bumper press.
     driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -212,6 +208,10 @@ public class RobotContainer {
 
   public Command toggleAimToHub() {
         return Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub);
+  }
+
+  public Command getAutonomousCommand() {
+    return intakePivot.voltage(1);
   }
 
   // TODO: REPLACE WITH PATHPLANNER CODE

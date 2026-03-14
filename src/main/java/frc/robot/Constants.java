@@ -177,6 +177,7 @@ public final class Constants {
   public static class IntakePivotConstants {
     // MOTOR CONFIGS
     public static final int kLeadMotorID=46;
+    public static final int kFollowerMotorID=53;
 
     public static final int kFeedbackID=7;
     public static final FeedbackSensorSourceValue kFeedbackSensorSource= FeedbackSensorSourceValue.RemoteCANcoder;
@@ -184,10 +185,10 @@ public final class Constants {
     public static final double kForwardLimit=0.7;
     public static final double kReverseLimit=-0.7;
 
-    public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
-    public static final SensorDirectionValue kFeedbackDirection = SensorDirectionValue.Clockwise_Positive;
+    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
+    // public static final SensorDirectionValue kFeedbackDirection = SensorDirectionValue.Clockwise_Positive;
 
-    public static final double kMagnetOffset = 2.472; //-.535
+    // public static final double kMagnetOffset = 2.472; //-.535
 
     public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
     public static final MotorAlignmentValue kFollowInverted= MotorAlignmentValue.Opposed;
@@ -195,31 +196,31 @@ public final class Constants {
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
-    public static final double kS = 0.2421875;
-    public static final double kV = 3;
-    public static final double kA = 2;
-    public static final double kP = 80;
+    public static final double kS = 0;
+    public static final double kV = 10;
+    public static final double kA = 0;
+    public static final double kP = 0;
     public static final double kI = 0;
-    public static final double kD0 = 4;
-    public static final double kG = 0.5;
+    public static final double kD = 0;
+    public static final double kG = 1;
 
-    public static final double kS1 = 0;
-    public static final double kV1 = 0.0;
-    public static final double kA1 = 0.0;
-    public static final double kP1 = 0.0;
-    public static final double kI1 = 0;
-    public static final double kD1 = 0.0;
+    // public static final double kS1 = 0;
+    // public static final double kV1 = 0.0;
+    // public static final double kA1 = 0.0;
+    // public static final double kP1 = 0.0;
+    // public static final double kI1 = 0;
+    // public static final double kD1 = 0.0;
 
     public static final double kMotionMagicVelocity = 2560;
     public static final double kMotionMagicAcceleration = 20;
     public static final double kMotionMagicJerk = 4;
 
-    public static final double kPositionConversionFactor = 1;
+    public static final double kPositionConversionFactor = 18;
 
-    public static final double rotorToSensor=45;
+    public static final double rotorToSensor=1;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=2.0;
+    public static final double kTolerance=0.025;
   }
 
   public static class IntakeConstants {
