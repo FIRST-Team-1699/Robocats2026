@@ -10,6 +10,7 @@ import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants.*;
@@ -189,7 +190,9 @@ public final class Configs {
         // See ShooterHoodConfigs for documentation
 
         public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
-        public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
+        public static final MotorOutputConfigs breakMotorOutput = new MotorOutputConfigs();
+        public static MotorOutputConfigs coastMotorOutput = new MotorOutputConfigs();
+
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
         // public static final SoftwareLimitSwitchConfigs limits = new SoftwareLimitSwitchConfigs();
 
@@ -198,10 +201,13 @@ public final class Configs {
         // public static final MagnetSensorConfigs encoderConfig = new MagnetSensorConfigs();
 
         static {
-            motorConfigs.Inverted = IntakePivotConstants.kInverted;
-            motorConfigs.PeakForwardDutyCycle = IntakePivotConstants.kForwardLimit;
-            motorConfigs.PeakReverseDutyCycle = IntakePivotConstants.kReverseLimit;
-            motorConfigs.NeutralMode = IntakePivotConstants.kNeutral;
+            breakMotorOutput.Inverted = IntakePivotConstants.kInverted;
+            breakMotorOutput.PeakForwardDutyCycle = IntakePivotConstants.kForwardLimit;
+            breakMotorOutput.PeakReverseDutyCycle = IntakePivotConstants.kReverseLimit;
+            breakMotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+            coastMotorOutput = breakMotorOutput.clone();
+            coastMotorOutput.NeutralMode = NeutralModeValue.Coast;
 
             talonConfigs.Slot0.GravityType = IntakePivotConstants.kGravityCounter;
             talonConfigs.Slot0.StaticFeedforwardSign = IntakePivotConstants.kFeedForward;
@@ -218,21 +224,8 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  IntakePivotConstants.kMotionMagicJerk;
 
             feedback.SensorToMechanismRatio = IntakePivotConstants.kPositionConversionFactor;
-            // feedback.RotorToSensorRatio = IntakePivotConstants.rotorToSensor;
 
-            // TODO: Verify removal after testing
-            // encoderConfig.AbsoluteSensorDiscontinuityPoint = 0.5;
-            // encoderConfig.MagnetOffset = IntakePivotConstants.kMagnetOffset;
-            // encoderConfig.SensorDirection = IntakePivotConstants.kFeedbackDirection;
-    
-            // limits.ForwardSoftLimitThreshold = 0.24;
-            // limits.ReverseSoftLimitThreshold = -0.0005;
 
-            // limits.ForwardSoftLimitThreshold = .4;
-            // limits.ReverseSoftLimitThreshold = .4;
-
-            // limits.ForwardSoftLimitEnable = true;
-            // limits.ReverseSoftLimitEnable = true;
         }
     }
     public static class IntakeConfigs {

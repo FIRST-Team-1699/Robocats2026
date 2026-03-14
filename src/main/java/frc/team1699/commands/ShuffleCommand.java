@@ -16,13 +16,13 @@ import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import frc.utils.vision.RobotPose;
 
-public class ShootCommand extends Command {
+public class ShuffleCommand extends Command {
     private final ShooterSubsystem shoot;
     private final ShooterHoodSubsystem shootHood;
     private final IndexerSubsystem indexer;
     private final HopperSubsystem hopper;
 
-    public ShootCommand(
+    public ShuffleCommand(
         ShooterSubsystem shoot, 
         ShooterHoodSubsystem shootHood,
         IndexerSubsystem indexer, 
@@ -41,16 +41,8 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        ShooterHoodSubsystem.HoodPositions.INTERPOLATED.setDegrees(
-            RobotPose.getHoodAngle()
-        );
-        ShooterSubsystem.ShootingSpeeds.INTERPOLATED.setSpeeds(
-            RobotPose.getFlywheelTopSpeed(),
-            RobotPose.getFlywheelBottomSpeed()
-        );
-
-        shootHood.setPosition(HoodPositions.INTERPOLATED);
-        shoot.setSpeed(ShootingSpeeds.INTERPOLATED);
+        shootHood.setPosition(HoodPositions.SHUFFLE);
+        shoot.setSpeed(ShootingSpeeds.SHUFFLE);
         hopper.setSpeed(HopperSpeeds.INTAKE);
         if(shoot.isTotalInTollerance().getAsBoolean()) {
             indexer.setSpeed(IndexingSpeeds.INTAKE);

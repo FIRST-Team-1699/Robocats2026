@@ -125,7 +125,8 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
         MIN(0.01),
         MAX(0.616),
-        AIMED(0.0833);
+        AIMED(0.0833),
+        SHUFFLE(0.3);
 
         private double degrees;
         private HoodPositions(double degrees) {

@@ -157,6 +157,7 @@ public class ShooterSubsystem extends SubsystemBase {
         STORED(0,0), 
         INTAKE(50,50),
         OUTTAKE(-50,-50),
+        SHUFFLE(-5,-5),
         // TODO: SET
         CLOSE(-1,-1), 
         FAR(-1,-1), 

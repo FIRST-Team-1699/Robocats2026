@@ -20,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
+import frc.team1699.commands.AgitateCommand;
 import frc.team1699.commands.ShootCommand;
+import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
@@ -165,20 +167,21 @@ public class RobotContainer {
 
 
     operatorController.b()
-        .whileTrue(
-            hopper.setSpeedCommand(HopperSpeeds.INTAKE)
-        )
-        .onFalse(
-            hopper.setSpeedCommand(HopperSpeeds.STORED)
+        .onTrue(
+            new AgitateCommand(intakePivot)
         );
 
     operatorController.rightTrigger()
         .onTrue(
-                intake.toggleSpeedCommand());
+            intake.toggleSpeedCommand());
 
     operatorController.x()
         .whileTrue(
             new ShootCommand(shoot, shootHood, indexer, hopper));
+
+    operatorController.y()
+        .whileTrue(
+            new ShuffleCommand(shoot, shootHood, indexer, hopper));
 
     operatorController.leftBumper()
         .onTrue(toggleAimToHub())

@@ -1,7 +1,5 @@
 package frc.team1699.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.IntakeConfigs;
 import frc.robot.Constants.IntakeConstants;
-import frc.team1699.subsystems.IntakePivotSubsystem.IntakePositions;
 
 public class IntakeSubsystem extends SubsystemBase {
     private TalonFX topMotor, bottomMotor;
@@ -46,7 +43,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command toggleSpeedCommand() {
-        return new ConditionalCommand(setSpeedCommand(IntakeSpeeds.INTAKE), setSpeedCommand(IntakeSpeeds.STORED), this::isInStored);
+        return new ConditionalCommand(
+            setSpeedCommand(IntakeSpeeds.INTAKE), 
+            setSpeedCommand(IntakeSpeeds.STORED), 
+            this::isInStored
+        );
     }
 
     public boolean isInStored() {

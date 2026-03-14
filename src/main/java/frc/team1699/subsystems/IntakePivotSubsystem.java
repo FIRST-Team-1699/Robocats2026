@@ -48,9 +48,6 @@ public class IntakePivotSubsystem extends SubsystemBase {
         configureMotors();
     }
 
-    // TODO: Check current limits
-
-
     public Command sysIDQuasistatic(SysIdRoutine.Direction direction) {
         return routine.quasistatic(direction);
     }
@@ -61,17 +58,15 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     private void configureMotors() {
-        // TODO: verify encoder/ limit removal after testing
-        
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.motorConfigs);
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
         // leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
 
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
-        followMotor.getConfigurator().apply(IntakePivotConfigs.motorConfigs);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         followMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
 
         followMotor.setControl(new Follower(leadMotor.getDeviceID(), IntakePivotConstants.kFollowInverted));
@@ -130,7 +125,11 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public Command togglePivotCommand() {
-        return new ConditionalCommand(setPositionCommand(IntakePositions.STORED), setPositionCommand(IntakePositions.GROUND_INTAKE), this::isInGroundIntake);
+        return new ConditionalCommand(
+            setPositionCommand(IntakePositions.STORED), 
+            setPositionCommand(IntakePositions.GROUND_INTAKE), 
+            this::isInGroundIntake
+        );
     }
 
     public boolean isInGroundIntake() {
@@ -143,11 +142,24 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(isInGroundIntake()
-            && isInTolerance() 
-        ) {
+
+        // TODO: TO TEST
+        if(isInTolerance()) {
             pauseControl();
+            if(isInGroundIntake()) {
+                leadMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
+                followMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
+            } else {
+                leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+                followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+            }
         }
+
+        // if(isInGroundIntake()
+        //     && isInTolerance() 
+        // ) {
+        //     pauseControl();
+        // }
 
         SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
         SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());

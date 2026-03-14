@@ -204,13 +204,6 @@ public final class Constants {
     public static final double kD = 0;
     public static final double kG = 1;
 
-    // public static final double kS1 = 0;
-    // public static final double kV1 = 0.0;
-    // public static final double kA1 = 0.0;
-    // public static final double kP1 = 0.0;
-    // public static final double kI1 = 0;
-    // public static final double kD1 = 0.0;
-
     public static final double kMotionMagicVelocity = 2560;
     public static final double kMotionMagicAcceleration = 20;
     public static final double kMotionMagicJerk = 4;
@@ -221,6 +214,7 @@ public final class Constants {
 
     // EVERYTHING ELSE
     public static final double kTolerance=0.025;
+    public static final double kCooldownTimer=1;
   }
 
   public static class IntakeConstants {
