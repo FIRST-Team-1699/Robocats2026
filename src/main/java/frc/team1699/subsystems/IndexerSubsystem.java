@@ -40,18 +40,21 @@ public class IndexerSubsystem extends SubsystemBase {
         return getError() < IndexerConstants.kTolerance;
     }
 
-    public Command setSpeed(IndexingSpeeds speed) {
+    public Command setSpeedCommand(IndexingSpeeds speed) {
         return runOnce(() -> {
-            this.currentSpeed=speed;
-            leadMotor.set(speed.getSpeed());
-            // leadMotor.setControl(IndexerConfigs.motionRequest.withVelocity(speed.getSpeed()));
+            setSpeed(speed);;
         });
     }
 
+    public void setSpeed(IndexingSpeeds speed) {
+        this.currentSpeed=speed;
+        leadMotor.set(speed.getSpeed());
+    }
+
     public Command indexUntilFull() {
-        return setSpeed(IndexingSpeeds.INTAKE)
+        return setSpeedCommand(IndexingSpeeds.INTAKE)
             .andThen(new WaitUntilCommand(BeamBreak.hasBall()))
-            .andThen(setSpeed(IndexingSpeeds.STORED));
+            .andThen(setSpeedCommand(IndexingSpeeds.STORED));
     }
 
     public Command setRaw(double voltage) {

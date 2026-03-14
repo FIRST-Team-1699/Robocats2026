@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs.IntakeConfigs;
 import frc.robot.Constants.IntakeConstants;
@@ -31,14 +32,26 @@ public class IntakeSubsystem extends SubsystemBase {
         bottomMotor.getConfigurator().apply(IntakeConfigs.feedback);
     }
 
-    public Command setSpeed(IntakeSpeeds speed) {
-        return runOnce(() -> {
-            currentSpeed=speed;
-            // topMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.topSpeed));
-            // bottomMotor.setControl(IntakeConfigs.motionRequest.withVelocity(speed.bottomSpeed));
-            topMotor.set(currentSpeed.topSpeed);
-            bottomMotor.set(currentSpeed.bottomSpeed);
-        });
+    public Command setSpeedCommand(IntakeSpeeds speed) {
+        return runOnce(()->setSpeed(speed));
+    }
+
+    public void setSpeed(IntakeSpeeds speed) {
+        currentSpeed=speed;
+        topMotor.set(currentSpeed.topSpeed);
+        bottomMotor.set(currentSpeed.bottomSpeed);
+    }
+
+    public Command toggleSpeedCommand() {
+        return new ConditionalCommand(
+            setSpeedCommand(IntakeSpeeds.INTAKE), 
+            setSpeedCommand(IntakeSpeeds.STORED), 
+            this::isInStored
+        );
+    }
+
+    public boolean isInStored() {
+        return currentSpeed==IntakeSpeeds.STORED;
     }
 
     public Command setRaw(double topVoltage,double bottomVoltage) {

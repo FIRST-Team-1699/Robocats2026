@@ -1,27 +1,33 @@
 package frc.team1699.subsystems;
 
-import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Volt;
 import static edu.wpi.first.units.Units.Volts;
+
+import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Configs.IntakePivotConfigs;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakePivotConstants;
+import frc.robot.Constants.ShooterHoodConstants;
 
 public class IntakePivotSubsystem extends SubsystemBase {
 
-    private PivotPositions currentPosition;
-    private TalonFX leadMotor;
-    private CANcoder encoder;
+    private IntakePositions currentPosition;
+    private TalonFX leadMotor, followMotor;
     private SysIdRoutine routine;
     
     public IntakePivotSubsystem() {
@@ -36,17 +42,11 @@ public class IntakePivotSubsystem extends SubsystemBase {
             new SysIdRoutine.Mechanism((volts) -> this.voltageDrive(volts.in(Volts)), null, this)
         );
         leadMotor= new TalonFX(IntakePivotConstants.kLeadMotorID);
-        encoder = new CANcoder(IntakePivotConstants.kFeedbackID);
+        followMotor= new TalonFX(IntakePivotConstants.kFollowerMotorID);
 
-        currentPosition=PivotPositions.STORED;
+        currentPosition=IntakePositions.STORED;
         configureMotors();
-
-        encoder.setPosition(encoder.getAbsolutePosition().getValue());
-        // leadMotor.setPosition(encoder.getAbsolutePosition().getValue());
     }
-
-    // TODO: Check current limits
-
 
     public Command sysIDQuasistatic(SysIdRoutine.Direction direction) {
         return routine.quasistatic(direction);
@@ -58,41 +58,48 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
 
     private void configureMotors() {
-        encoder.getConfigurator().apply(IntakePivotConfigs.encoderConfig);
-        
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.motorConfigs);
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
+        // leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
+
+        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
+
+        followMotor.setControl(new Follower(leadMotor.getDeviceID(), IntakePivotConstants.kFollowInverted));
     }
 
 
     
 
     public double getError() {
-        return Math.abs(Math.abs(currentPosition.degrees)-Math.abs(encoderPosition()));
+        return Math.abs(currentPosition.rotations-getEncoderPosition());
     }
 
     public boolean isInTolerance() {
         return getError() < IntakePivotConstants.kTolerance;
     }
 
-    public double encoderPosition() {
+    public double getEncoderPosition() {
         return leadMotor.getPosition().getValueAsDouble(); //*360;
     }
 
-    public Command setPosition(PivotPositions position) {
+    public IntakePositions getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public Command setPositionCommand(IntakePositions position) {
         return runOnce(() -> {
-            this.currentPosition=position;
-            // if(currentPosition.degrees < encoderPosition()) {
-                // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-                // leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees));
-                // return;
-            // }
-            // leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
-            leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.degrees)); ///360));
+            setPosition(position);
         });
+    }
+
+    public void setPosition(IntakePositions position) {
+        this.currentPosition=position;
+        leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.rotations)); 
     }
 
     public void voltageDrive(double volts) {
@@ -111,20 +118,50 @@ public class IntakePivotSubsystem extends SubsystemBase {
         leadMotor.setControl(IntakePivotConfigs.pauseMotion);
     }
 
+    public Command voltage(double volts) {
+        return runOnce(() -> {
+            leadMotor.setControl(new VoltageOut(volts));
+        });
+    }
+
+    public Command togglePivotCommand() {
+        return new ConditionalCommand(
+            setPositionCommand(IntakePositions.STORED), 
+            setPositionCommand(IntakePositions.GROUND_INTAKE), 
+            this::isInGroundIntake
+        );
+    }
+
+    public boolean isInGroundIntake() {
+        return getCurrentPosition()==IntakePositions.GROUND_INTAKE;
+    }
+
     private boolean hasMotionControl() {
         return leadMotor.getAppliedControl().equals(IntakePivotConfigs.motionRequest);
     }
 
     @Override
     public void periodic() {
-        // if(currentPosition.equals(PivotPositions.GROUND_INTAKE) 
+
+        // TODO: TO TEST
+        if(isInTolerance()) {
+            pauseControl();
+            if(isInGroundIntake()) {
+                leadMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
+                followMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
+            } else {
+                leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+                followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+            }
+        }
+
+        // if(isInGroundIntake()
         //     && isInTolerance() 
-        //     && hasMotionControl()
         // ) {
         //     pauseControl();
         // }
 
-        SmartDashboard.putNumber("Intake Pivot Position: ", encoderPosition());
+        SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
         SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
         SmartDashboard.putNumber("Error: ", getError());
         SmartDashboard.putBoolean("Is Intake Pivot In Tolerance: ", isInTolerance());
@@ -144,21 +181,21 @@ public class IntakePivotSubsystem extends SubsystemBase {
         // Logger.recordOutput("Intake/ Position: ", leadMotor.getPosition().getValueAsDouble());        
     }
 
-    public enum PivotPositions {
-        STORED(0.23), 
+    public enum IntakePositions {
+        STORED(0.22), 
         // PLATEFORM_INTAKE(130), 
-        GROUND_INTAKE(-0.01);
+        GROUND_INTAKE(0.01);
 
-        private double degrees;
-        private PivotPositions(double degrees) {
-            this.degrees=degrees;
+        private double rotations;
+        private IntakePositions(double degrees) {
+            this.rotations=degrees;
         }
 
         public void setPosition(double degrees) {
-            this.degrees=degrees;
+            this.rotations=degrees;
         }
         public double getPosition() {
-            return this.degrees;
+            return this.rotations;
         }
     }
 }
