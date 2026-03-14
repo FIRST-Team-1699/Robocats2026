@@ -197,7 +197,9 @@ public final class Configs {
         // public static final SoftwareLimitSwitchConfigs limits = new SoftwareLimitSwitchConfigs();
 
         public static final MotionMagicVoltage motionRequest = new MotionMagicVoltage(0);
-        public static final NeutralOut pauseMotion = new NeutralOut();
+        public static final MotionMagicVoltage slowMotionRequest = new MotionMagicVoltage(0);
+        public static final NeutralOut pausePassiveMotion = new NeutralOut();
+        public static final VoltageOut pauseActiveMotion = new VoltageOut(0.2);
         // public static final MagnetSensorConfigs encoderConfig = new MagnetSensorConfigs();
 
         static {
@@ -206,18 +208,32 @@ public final class Configs {
             breakMotorOutput.PeakReverseDutyCycle = IntakePivotConstants.kReverseLimit;
             breakMotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-            coastMotorOutput = breakMotorOutput.clone();
-            coastMotorOutput.NeutralMode = NeutralModeValue.Coast;
+            // coastMotorOutput = breakMotorOutput.clone();
+            // coastMotorOutput.NeutralMode = NeutralModeValue.Coast;
 
             talonConfigs.Slot0.GravityType = IntakePivotConstants.kGravityCounter;
             talonConfigs.Slot0.StaticFeedforwardSign = IntakePivotConstants.kFeedForward;
 
-            talonConfigs.Slot0.kS = IntakePivotConstants.kS;
-            talonConfigs.Slot0.kV = IntakePivotConstants.kV;
-            talonConfigs.Slot0.kA = IntakePivotConstants.kA;
-            talonConfigs.Slot0.kP = IntakePivotConstants.kP;
-            talonConfigs.Slot0.kI = IntakePivotConstants.kI;
-            talonConfigs.Slot0.kG = IntakePivotConstants.kG;
+            talonConfigs.Slot0.kS = IntakePivotConstants.kS0;
+            talonConfigs.Slot0.kV = IntakePivotConstants.kV0;
+            talonConfigs.Slot0.kA = IntakePivotConstants.kA0;
+            talonConfigs.Slot0.kP = IntakePivotConstants.kP0;
+            talonConfigs.Slot0.kI = IntakePivotConstants.kI0;
+            talonConfigs.Slot0.kG = IntakePivotConstants.kG0;
+
+            talonConfigs.Slot0.GravityArmPositionOffset = IntakePivotConstants.kGravityOffset;
+
+            talonConfigs.Slot1.GravityType = IntakePivotConstants.kGravityCounter;
+            talonConfigs.Slot1.StaticFeedforwardSign = IntakePivotConstants.kFeedForward;
+
+            talonConfigs.Slot1.kS = IntakePivotConstants.kS1;
+            talonConfigs.Slot1.kV = IntakePivotConstants.kV1;
+            talonConfigs.Slot1.kA = IntakePivotConstants.kA1;
+            talonConfigs.Slot1.kP = IntakePivotConstants.kP1;
+            talonConfigs.Slot1.kI = IntakePivotConstants.kI1;
+            talonConfigs.Slot1.kG = IntakePivotConstants.kG1;
+
+            talonConfigs.Slot1.GravityArmPositionOffset = IntakePivotConstants.kGravityOffset;
 
             talonConfigs.MotionMagic.MotionMagicCruiseVelocity = IntakePivotConstants.kMotionMagicVelocity;
             talonConfigs.MotionMagic.MotionMagicAcceleration = IntakePivotConstants.kMotionMagicAcceleration;
@@ -225,7 +241,8 @@ public final class Configs {
 
             feedback.SensorToMechanismRatio = IntakePivotConstants.kPositionConversionFactor;
 
-
+            motionRequest.Slot = 0;
+            slowMotionRequest.Slot = 1;
         }
     }
     public static class IntakeConfigs {
@@ -297,37 +314,6 @@ public final class Configs {
             talonConfigs.MotionMagic.MotionMagicJerk =  ClimbConstants.kMotionMagicJerk;
 
             feedback.SensorToMechanismRatio = ClimbConstants.kPositionConversionFactor;
-        }
-    }
-
-    public static class VisionConfigs {
-        public static final InterpolatingDoubleTreeMap speedTopMap =
-            new InterpolatingDoubleTreeMap();
-
-        public static final InterpolatingDoubleTreeMap speedBottomMap =
-            new InterpolatingDoubleTreeMap(); 
-
-        public static final InterpolatingDoubleTreeMap shootPivotMap = 
-            new InterpolatingDoubleTreeMap();
-
-        static {
-            // speedTopMap.put(2.06, -35.0);
-            // speedTopMap.put(2.55, -37.0);
-            speedTopMap.put(3.0, -37.0);
-            speedTopMap.put(2.15, -35.0);
-            speedTopMap.put(1.37, -28.0);
-
-            // speedBottomMap.put(2.06, -30.0);
-            // speedBottomMap.put(2.55, -30.0);
-            speedBottomMap.put(3.0, -30.0);
-            speedBottomMap.put(2.15, -30.0);
-            speedBottomMap.put(1.37, -23.0);
-
-            // shootPivotMap.put(2.06, .35);
-            // shootPivotMap.put(2.55, .3);
-            shootPivotMap.put(3.0, .15);
-            shootPivotMap.put(2.15, .2);
-            shootPivotMap.put(1.37, .39);
         }
     }
 }

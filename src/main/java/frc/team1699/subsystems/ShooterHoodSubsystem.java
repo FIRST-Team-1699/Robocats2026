@@ -17,6 +17,7 @@ import frc.robot.Configs.ShooterConfigs;
 import frc.robot.Configs.ShooterHoodConfigs;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterHoodConstants;
+import frc.utils.vision.RobotPose;
 
 public class ShooterHoodSubsystem extends SubsystemBase {
     private TalonFX leadMotor, followMotor;
@@ -76,7 +77,6 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public void setPosition(HoodPositions position) {
         this.currentPosition=position;
-        leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(position.degrees));
     }
 
     public Command setRaw(double speed) {
@@ -108,6 +108,12 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        HoodPositions.INTERPOLATED.setDegrees(
+            RobotPose.getHoodAngle()
+        );
+
+        leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
+
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
         SmartDashboard.putNumber("Shooter hypothetical: ", this.currentPosition.degrees);
         SmartDashboard.putBoolean("Shooter Pivot Is In Tolerance: ", isInTolerance());
@@ -120,9 +126,10 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public enum HoodPositions {
         STORED(0.01), 
-        AIMING(0.5), 
-        AIMING_TWO(.39),
+        AIMING(0.01), 
+        AIMING_TWO(0.0833),
         CLIMB(-1),
+        INTERPOLATED(-1),
 
         MIN(0.01),
         MAX(0.616),

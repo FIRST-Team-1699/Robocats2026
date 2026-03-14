@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.VisionConstants;
 
 public class RobotPose {
@@ -49,6 +50,8 @@ public class RobotPose {
 
         Logger.recordOutput("Localization/RobotPose/Pose", pose);
         Logger.recordOutput("Localization/RobotPose/HeadingToHub", headingToHub);
+
+        SmartDashboard.putNumber("Distance to Hub: ", getDistanceToHub());
     }
 
     private static void refreshPosesIfAllianceChanged() {
@@ -67,6 +70,10 @@ public class RobotPose {
 
     public static Rotation2d getHeadingTowardsHub() {
         return headingToHub;
+    }
+
+    public static double getDistanceToHub() {
+        return hubTranslation.getDistance(pose.getTranslation());
     }
 
     public static double getFlywheelTopSpeed() {

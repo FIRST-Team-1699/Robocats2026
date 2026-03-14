@@ -13,12 +13,14 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotContainer;
 import frc.robot.Configs.IntakePivotConfigs;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.IntakePivotConstants;
@@ -59,11 +61,14 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     private void configureMotors() {
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
         // leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
 
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
@@ -102,20 +107,22 @@ public class IntakePivotSubsystem extends SubsystemBase {
         leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.rotations)); 
     }
 
+    public void setPositionSlow(IntakePositions position) {
+        this.currentPosition=position;
+        leadMotor.setControl(IntakePivotConfigs.slowMotionRequest.withPosition(position.rotations)); 
+    }
+
+
     public void voltageDrive(double volts) {
         leadMotor.setVoltage(volts);
     }
 
-    // public Command setRaw(double speed) {
-    //     return runOnce(() -> {
-    //         pauseControl();
-            
-    //         leadMotor.set(speed);
-    //     });
-    // }
+    private void pauseActiveControl() {
+        leadMotor.setControl(IntakePivotConfigs.pauseActiveMotion);
+    }
 
-    private void pauseControl() {
-        leadMotor.setControl(IntakePivotConfigs.pauseMotion);
+    private void pausePassiveControl() {
+        leadMotor.setControl(IntakePivotConfigs.pausePassiveMotion);
     }
 
     public Command voltage(double volts) {
@@ -136,37 +143,49 @@ public class IntakePivotSubsystem extends SubsystemBase {
         return getCurrentPosition()==IntakePositions.GROUND_INTAKE;
     }
 
+    public boolean isInStored() {
+        return getCurrentPosition()==IntakePositions.STORED;
+    }
+
     private boolean hasMotionControl() {
         return leadMotor.getAppliedControl().equals(IntakePivotConfigs.motionRequest);
     }
 
+    public void setSlot0() {
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+    }
+
+    public void setSlot1() {
+        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
+    }
+
     @Override
     public void periodic() {
-
         // TODO: TO TEST
-        if(isInTolerance()) {
-            pauseControl();
+        if(isInTolerance() 
+            && currentPosition != IntakePositions.AGITATE
+        ) {
             if(isInGroundIntake()) {
-                leadMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
-                followMotor.getConfigurator().apply(IntakePivotConfigs.coastMotorOutput);
-            } else {
-                leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
-                followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
+                pauseActiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Coast);
+                followMotor.setNeutralMode(NeutralModeValue.Coast);
+            }
+            if(isInStored()) {
+                pausePassiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Brake);
+                followMotor.setNeutralMode(NeutralModeValue.Brake);
             }
         }
 
-        // if(isInGroundIntake()
-        //     && isInTolerance() 
-        // ) {
-        //     pauseControl();
-        // }
-
         SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
-        SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
-        SmartDashboard.putNumber("Error: ", getError());
+        // SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
+        SmartDashboard.putNumber("Inatke Error: ", getError());
         SmartDashboard.putBoolean("Is Intake Pivot In Tolerance: ", isInTolerance());
-        SmartDashboard.putNumber("Intake Stator Current Pivot PID Val: ", leadMotor.getStatorCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Intake Supply Current Pivot PID Val: ", leadMotor.getSupplyCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Intake Stator Current Pivot PID Val: ", leadMotor.getStatorCurrent().getValueAsDouble());
+        // SmartDashboard.putNumber("Intake Supply Current Pivot PID Val: ", leadMotor.getSupplyCurrent().getValueAsDouble());
+        SmartDashboard.putNumber("Wnated Intake ", currentPosition.rotations);
 
         SmartDashboard.putNumber("Intake Voltage Pivot PID Val: ", leadMotor.getMotorVoltage().getValueAsDouble());
 
@@ -182,9 +201,10 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public enum IntakePositions {
-        STORED(0.22), 
+        STORED(0.00), 
         // PLATEFORM_INTAKE(130), 
-        GROUND_INTAKE(0.01);
+        AGITATE(.15),
+        GROUND_INTAKE(0.22);
 
         private double rotations;
         private IntakePositions(double degrees) {

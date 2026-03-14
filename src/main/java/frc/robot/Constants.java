@@ -185,7 +185,7 @@ public final class Constants {
     public static final double kForwardLimit=0.7;
     public static final double kReverseLimit=-0.7;
 
-    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
     // public static final SensorDirectionValue kFeedbackDirection = SensorDirectionValue.Clockwise_Positive;
 
     // public static final double kMagnetOffset = 2.472; //-.535
@@ -196,24 +196,34 @@ public final class Constants {
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
 
-    public static final double kS = 0;
-    public static final double kV = 10;
-    public static final double kA = 0;
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kG = 1;
+    public static final double kS0 = 0;
+    public static final double kV0 = 25;
+    public static final double kA0 = 0;
+    public static final double kP0 = 0;
+    public static final double kI0 = 0;
+    public static final double kD0 = 0;
+    public static final double kG0 = 0.25;
+
+    public static final double kS1 = 0;
+    public static final double kV1 = 10;
+    public static final double kA1 = 0;
+    public static final double kP1 = 0;
+    public static final double kI1 = 0;
+    public static final double kD1 = 0;
+    public static final double kG1 = 0.25;
 
     public static final double kMotionMagicVelocity = 2560;
     public static final double kMotionMagicAcceleration = 20;
     public static final double kMotionMagicJerk = 4;
 
-    public static final double kPositionConversionFactor = 18;
+    public static final double kPositionConversionFactor = 50;
+    public static final double kGravityOffset = -.21
+    ;
 
     public static final double rotorToSensor=1;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=0.025;
+    public static final double kTolerance=0.02;
     public static final double kCooldownTimer=1;
   }
 
@@ -337,17 +347,39 @@ public final class Constants {
 
     // TODO: Update values to score to hub
     static {
-        speedTopMap.put(3.0, -37.0);
-        speedTopMap.put(2.15, -35.0);
-        speedTopMap.put(1.37, -28.0);
+        // speedTopMap.put(3.0, -37.0);
+        // speedTopMap.put(2.15, -35.0);
+        // speedTopMap.put(1.37, -28.0);
 
-        speedBottomMap.put(3.0, -30.0);
-        speedBottomMap.put(2.15, -30.0);
-        speedBottomMap.put(1.37, -23.0);
+        // speedBottomMap.put(3.0, -30.0);
+        // speedBottomMap.put(2.15, -30.0);
+        // speedBottomMap.put(1.37, -23.0);
 
-        shootPivotMap.put(3.0, .15);
-        shootPivotMap.put(2.15, .2);
-        shootPivotMap.put(1.37, .39);
+        // shootPivotMap.put(3.0, .15);
+        // shootPivotMap.put(2.15, .2);
+        // shootPivotMap.put(1.37, .39);
+
+        speedTopMap.put(.8, -30.0);
+        speedTopMap.put(1.6, -30.0);
+        speedTopMap.put(2.4, -31.0);
+        speedTopMap.put(3.2, -33.0);
+        speedTopMap.put(4.0, -36.0);
+        speedTopMap.put(4.8, -44.0);
+
+        speedBottomMap.put(.8, -25.0);
+        speedBottomMap.put(1.6, -25.0);
+        speedBottomMap.put(2.4, -26.0);
+        speedBottomMap.put(3.2, -28.0);
+        speedBottomMap.put(4.0, -31.0);
+        speedBottomMap.put(4.8, -37.0);
+
+        shootPivotMap.put(.8, .45);
+        shootPivotMap.put(1.6, .25);
+        shootPivotMap.put(2.4, .05);
+        shootPivotMap.put(3.2, 0.01);
+        shootPivotMap.put(4.0, 0.01);
+        shootPivotMap.put(4.8, 0.01);
+
     }
   }
 }

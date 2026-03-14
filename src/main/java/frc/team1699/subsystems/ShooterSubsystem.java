@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Configs.ShooterConfigs;
 import frc.robot.Constants.ShooterConstants;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
+import frc.utils.vision.RobotPose;
 
 public class ShooterSubsystem extends SubsystemBase {
     private ShootingSpeeds currentSpeed;
@@ -134,6 +136,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
    @Override
     public void periodic() {
+        ShooterSubsystem.ShootingSpeeds.INTERPOLATED.setSpeeds(
+            RobotPose.getFlywheelTopSpeed(),
+            RobotPose.getFlywheelBottomSpeed()
+        );        
+
         SmartDashboard.putNumber("Top Intake Speed: " , topMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Bottom Intake Speed: " , bottomMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putBoolean("Top Intake Is In Tolerance: ", topInTolerance());
@@ -160,7 +167,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SHUFFLE(-5,-5),
         // TODO: SET
         CLOSE(-1,-1), 
-        AIMING(-30,-25), 
+        AIMING(-44,-37), 
         AIMING_TWO(-28,-23),
         INTERPOLATED(-35,-35);
 

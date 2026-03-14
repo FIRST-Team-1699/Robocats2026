@@ -29,6 +29,7 @@ import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
 import frc.team1699.subsystems.IntakePivotSubsystem.IntakePositions;
 import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
+import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import frc.utils.vision.AllianceFlip;
 import frc.utils.vision.RobotPose;
 
@@ -54,7 +55,7 @@ public class RobotContainer {
       // .withDeadband(.1);
 
   private final SwerveRequest.FieldCentric driveJoysticks = drive
-      .withDeadband(MaxSpeed * 0.1)
+      .withDeadband(MaxSpeed * 0.12)
       // .withRotationalDeadband(MaxAngularRate * 0.1) //
       // Add a 10% deadband
       .withVelocityX(-driverController.getLeftY()* MaxSpeed)
@@ -62,7 +63,7 @@ public class RobotContainer {
       .withRotationalRate(-driverController.getRightX()* MaxAngularRate); // Drive counterclockwise with negative X (left)
 
   private final SwerveRequest.FieldCentricFacingAngle driveFacingHub = new SwerveRequest.FieldCentricFacingAngle()
-      .withDeadband(MaxSpeed * 0.1)
+      .withDeadband(MaxSpeed * 0.12)
       // Add a 10% deadband
       .withVelocityX(
           - driverController.getLeftY() * MaxSpeed)
@@ -102,8 +103,8 @@ public class RobotContainer {
           isAimingAtHub ? 
             driveFacingHub
               .withTargetDirection(AllianceFlip.flip(RobotPose.getHeadingTowardsHub()))
-              .withVelocityX(-driverController.getLeftY()* MaxSpeed)
-              .withVelocityY(-driverController.getLeftX() * MaxSpeed) : // Drive left with negative X (left)
+              .withVelocityX(-driverController.getLeftY()* MaxSpeed * .15)
+              .withVelocityY(-driverController.getLeftX() * MaxSpeed * .15) : // Drive left with negative X (left)
             driveJoysticks
               .withVelocityX(-driverController.getLeftY()* MaxSpeed)
               .withVelocityY(-driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
@@ -133,19 +134,18 @@ public class RobotContainer {
     );
 
     // operatorController.leftTrigger().whileTrue(Commands.runOnce(() -> Logger.recordOutput("PIDOutput", driveFacingHub.HeadingController.getLastAppliedOutput())));
-    operatorController.leftTrigger()
-        .onTrue(
-            intake.setSpeedCommand(IntakeSpeeds.INTAKE)
-                .alongWith(indexer.indexUntilFull())
-        )
-        .onFalse(
-            intake.setSpeedCommand(IntakeSpeeds.STORED)
-        );
+    // operatorController.leftTrigger()
+    //     .onTrue(
+    //         intake.setSpeedCommand(IntakeSpeeds.INTAKE)
+    //             // .alongWith(indexer.indexUntilFull())
+    //     )
+    //     .onFalse(
+    //         intake.setSpeedCommand(IntakeSpeeds.STORED)
+    //     );
 
     operatorController.rightTrigger()
         .onTrue(
             intake.setSpeedCommand(IntakeSpeeds.OUTTAKE)
-                .alongWith(indexer.indexUntilFull())
         )
         .onFalse(
             intake.setSpeedCommand(IntakeSpeeds.STORED)
@@ -168,20 +168,23 @@ public class RobotContainer {
 
     operatorController.b()
         .onTrue(
-            new AgitateCommand(intakePivot)
+            intakePivot.setPositionCommand(IntakePositions.AGITATE)
+        )
+        .onFalse(
+            intakePivot.setPositionCommand(IntakePositions.STORED)
         );
 
-    operatorController.rightTrigger()
+    operatorController.leftTrigger()
         .onTrue(
             intake.toggleSpeedCommand());
 
     operatorController.x()
         .whileTrue(
-            new ShootCommand(shoot, shootHood, indexer, hopper));
+            new ShootCommand(shoot, shootHood, indexer, hopper, intake));
 
-    operatorController.y()
-        .whileTrue(
-            new ShuffleCommand(shoot, shootHood, indexer, hopper));
+    // operatorController.y()
+    //     .whileTrue(
+    //         new ShuffleCommand(shoot, shootHood, indexer));
 
     operatorController.leftBumper()
         .onTrue(toggleAimToHub())
@@ -190,7 +193,7 @@ public class RobotContainer {
     // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
     operatorController.rightBumper()
         .whileTrue(
-            new ShootCommand(shoot, shootHood, indexer, hopper));
+            new ShootCommand(shoot, shootHood, indexer, hopper, intake));
 
     driverController.b().whileTrue(drivetrain.applyRequest(
         () -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
