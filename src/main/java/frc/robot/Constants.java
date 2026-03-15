@@ -282,7 +282,7 @@ public final class Constants {
     public static final double kMotionMagicAcceleration = 160;
     public static final double kMotionMagicJerk = 1600;
 
-    public static final double kPositionConversionFactor = 11.4;
+    public static final double kPositionConversionFactor = 57;
     public static final double kOffset=0.0;
 
     // EVERYTHING ELSE

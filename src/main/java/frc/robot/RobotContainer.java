@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.jar.Attributes.Name;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -14,7 +16,9 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -86,8 +90,18 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
+  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+
   public RobotContainer() {
     NamedCommands.registerCommand("Aim to Hub", toggleAimToHub());
+    NamedCommands.registerCommand("ShootCommand", autoShootCommand
+        .andThen(new WaitUntilCommand(5))
+        .andThen(() -> CommandScheduler.getInstance().cancel(autoShootCommand)));
+    NamedCommands.registerCommand("Extend Intake", intakePivot.togglePivotCommand()
+        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+    NamedCommands.registerCommand("Start Intake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
+    NamedCommands.registerCommand("Stop Intake", intake.setSpeedCommand(IntakeSpeeds.STORED));
+    NamedCommands.registerCommand("Wait 2s", new WaitUntilCommand(2));
 
     configureBindings();
 

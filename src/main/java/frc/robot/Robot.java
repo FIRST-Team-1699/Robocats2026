@@ -33,6 +33,12 @@ public class Robot extends LoggedRobot {
   private final SendableChooser<String> autoChooser;
 
   private final String doNothing = "doNothing";
+  private final String shootTop = "Shoot-Top";
+  private final String shootMiddle = "Shoot-Middle";
+  private final String shootBottom = "Shoot-Bottom";
+  private final String depo = "DEPO";
+  private final String hp = "HP";
+  private final String topNeutral = "Top-Neutral";
 
   private Optional<Alliance> lastAlliance;
   private String selectedAutoString;
@@ -48,12 +54,22 @@ public class Robot extends LoggedRobot {
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<>();
     autoChooser.addOption("Do Nothing:", doNothing);
+    autoChooser.addOption(shootTop, shootTop);
+    autoChooser.addOption(shootBottom, shootBottom);
+    autoChooser.addOption(shootMiddle, shootMiddle);
+    autoChooser.addOption(depo, depo);
+    autoChooser.addOption(hp, hp);
+    autoChooser.addOption(topNeutral, topNeutral);
 
     SmartDashboard.putData(autoChooser);
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
-    // autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
+
+    // Not the best practice, but will not throw error if doNothing is selected
+    try {
+      autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
+    } catch (Exception e) {}
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -76,9 +92,9 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     // schedule the autonomous command (example)
-    if (robotContainer.getAutonomousCommand() != null) {
+    if (autoCommand!= null) {
       // CommandScheduler.getInstance().schedule(autoCommand);
-      CommandScheduler.getInstance().schedule(robotContainer.getAutonomousCommand());
+      CommandScheduler.getInstance().schedule(autoCommand);
     }
   }
     @Override
