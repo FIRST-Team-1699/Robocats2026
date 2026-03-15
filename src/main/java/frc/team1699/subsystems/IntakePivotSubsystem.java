@@ -77,9 +77,6 @@ public class IntakePivotSubsystem extends SubsystemBase {
         followMotor.setControl(new Follower(leadMotor.getDeviceID(), IntakePivotConstants.kFollowInverted));
     }
 
-
-    
-
     public double getError() {
         return Math.abs(currentPosition.rotations-getEncoderPosition());
     }
@@ -103,8 +100,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public void setPosition(IntakePositions position) {
-        this.currentPosition=position;
-        leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.rotations)); 
+        this.currentPosition=position; 
     }
 
     public void setPositionSlow(IntakePositions position) {
@@ -147,8 +143,8 @@ public class IntakePivotSubsystem extends SubsystemBase {
         return getCurrentPosition()==IntakePositions.STORED;
     }
 
-    private boolean hasMotionControl() {
-        return leadMotor.getAppliedControl().equals(IntakePivotConfigs.motionRequest);
+    private boolean isInMotion() {
+        return leadMotor.getAppliedControl().toString() == IntakePivotConfigs.motionRequest.toString();
     }
 
     public void setSlot0() {
@@ -160,12 +156,12 @@ public class IntakePivotSubsystem extends SubsystemBase {
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
     }
-
     @Override
     public void periodic() {
         // TODO: TO TEST
         if(isInTolerance() 
             && currentPosition != IntakePositions.AGITATE
+            && isInMotion()
         ) {
             if(isInGroundIntake()) {
                 pauseActiveControl();
@@ -176,6 +172,10 @@ public class IntakePivotSubsystem extends SubsystemBase {
                 pausePassiveControl();
                 leadMotor.setNeutralMode(NeutralModeValue.Brake);
                 followMotor.setNeutralMode(NeutralModeValue.Brake);
+            }
+        } else {
+            if(!isInMotion()) {
+                leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(currentPosition.rotations));
             }
         }
 

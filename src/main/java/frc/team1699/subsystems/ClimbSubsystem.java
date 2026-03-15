@@ -71,7 +71,7 @@ public class ClimbSubsystem extends SubsystemBase {
 
     public enum ClimbPosition {
         STORED(0.0),
-        EXTENDED(4.778320);
+        EXTENDED(5.7);
         private double rotations;
         private ClimbPosition(double degrees) {
             this.rotations=degrees;

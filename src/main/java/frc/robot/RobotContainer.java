@@ -34,6 +34,7 @@ import frc.utils.vision.AllianceFlip;
 import frc.utils.vision.RobotPose;
 
 public class RobotContainer {
+  public static boolean isPivotUp = true;
   public static boolean isAimingAtHub=false;
 
   private final CommandXboxController driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -121,17 +122,17 @@ public class RobotContainer {
     // Reset the field-centric heading on left bumper press.
     driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-    driverController.leftTrigger()
-        .onTrue(
-            shootHood.setPositionCommand(HoodPositions.CLIMB)
-                .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
-    );
+    // driverController.leftTrigger()
+    //     .onTrue(
+    //         shootHood.setPositionCommand(HoodPositions.CLIMB)
+    //             .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
+    // );
 
-    driverController.rightTrigger()
-        .onTrue(
-            shootHood.setPositionCommand(HoodPositions.STORED)
-                .alongWith(climb.setPosition(ClimbPosition.STORED))
-    );
+    // driverController.rightTrigger()
+    //     .onTrue(
+    //         shootHood.setPositionCommand(HoodPositions.STORED)
+    //             .alongWith(climb.setPosition(ClimbPosition.STORED))
+    // );
 
     // operatorController.leftTrigger().whileTrue(Commands.runOnce(() -> Logger.recordOutput("PIDOutput", driveFacingHub.HeadingController.getLastAppliedOutput())));
     // operatorController.leftTrigger()
@@ -165,6 +166,16 @@ public class RobotContainer {
             intakePivot.togglePivotCommand()
         );
 
+    // operatorController.a()
+    //     .onTrue(
+    //         intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
+    //     );
+
+    // operatorController.b()
+    //     .onTrue(
+    //         intakePivot.setPositionCommand(IntakePositions.STORED)
+    //     );
+
 
     operatorController.b()
         .onTrue(
@@ -182,9 +193,9 @@ public class RobotContainer {
         .whileTrue(
             new ShootCommand(shoot, shootHood, indexer, hopper, intake));
 
-    // operatorController.y()
-    //     .whileTrue(
-    //         new ShuffleCommand(shoot, shootHood, indexer));
+    operatorController.y()
+        .whileTrue(
+            new ShuffleCommand(shoot, shootHood, indexer, hopper, intake));
 
     operatorController.leftBumper()
         .onTrue(toggleAimToHub())

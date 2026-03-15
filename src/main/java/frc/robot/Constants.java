@@ -44,8 +44,8 @@ public final class Constants {
     public static final FeedbackSensorSourceValue kFeedbackSensorSource= FeedbackSensorSourceValue.RemoteCANcoder;
     public static final SensorDirectionValue kEncoderDirection = SensorDirectionValue.Clockwise_Positive;
 
-    public static final double kForwardLimit=0.8;
-    public static final double kReverseLimit=-0.8;
+    public static final double kForwardLimit=0.9;
+    public static final double kReverseLimit=-0.9;
 
     public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutral= NeutralModeValue.Coast;
@@ -265,7 +265,7 @@ public final class Constants {
     public static final double kReverseLimit=-0.6;
 
     public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
-    public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
+    public static final NeutralModeValue kNeutral= NeutralModeValue.Coast;
 
     public static final GravityTypeValue kGravityCounter = GravityTypeValue.Arm_Cosine;
     public static final StaticFeedforwardSignValue kFeedForward = StaticFeedforwardSignValue.UseVelocitySign;
@@ -282,7 +282,7 @@ public final class Constants {
     public static final double kMotionMagicAcceleration = 160;
     public static final double kMotionMagicJerk = 1600;
 
-    public static final double kPositionConversionFactor = 11.4;
+    public static final double kPositionConversionFactor = 57;
     public static final double kOffset=0.0;
 
     // EVERYTHING ELSE

@@ -128,7 +128,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         STORED(0.01), 
         AIMING(0.01), 
         AIMING_TWO(0.0833),
-        CLIMB(-1),
+        CLIMB(0.6),
         INTERPOLATED(-1),
 
         MIN(0.01),
