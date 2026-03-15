@@ -43,8 +43,6 @@ public class Robot extends LoggedRobot {
   private Optional<Alliance> lastAlliance;
   private String selectedAutoString;
 
-  private Command m_autonomousCommand;
-
   private final RobotContainer robotContainer;
   private final HootAutoReplay timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -65,11 +63,9 @@ public class Robot extends LoggedRobot {
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
-
+    
     // Not the best practice, but will not throw error if doNothing is selected
-    try {
-      autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
-    } catch (Exception e) {}
+    autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -92,10 +88,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     // schedule the autonomous command (example)
-    if (autoCommand!= null) {
+    // if (autoCommand!= null) {
       // CommandScheduler.getInstance().schedule(autoCommand);
       CommandScheduler.getInstance().schedule(autoCommand);
-    }
+    // }
   }
     @Override
     public void autonomousPeriodic() {}
@@ -105,8 +101,8 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().cancel(m_autonomousCommand);
+        if (autoCommand != null) {
+            CommandScheduler.getInstance().cancel(autoCommand);
         }
     }
 

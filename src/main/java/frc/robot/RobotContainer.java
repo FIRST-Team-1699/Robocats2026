@@ -93,13 +93,13 @@ public class RobotContainer {
   private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
 
   public RobotContainer() {
-    NamedCommands.registerCommand("Aim to Hub", toggleAimToHub());
+    NamedCommands.registerCommand("AimToHub", toggleAimToHub());
     NamedCommands.registerCommand("ShootCommand", autoShootCommand
         .andThen(new WaitUntilCommand(5))
         .andThen(() -> CommandScheduler.getInstance().cancel(autoShootCommand)));
     NamedCommands.registerCommand("Extend Intake", intakePivot.togglePivotCommand()
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
-    NamedCommands.registerCommand("Start Intake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
+    NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("Stop Intake", intake.setSpeedCommand(IntakeSpeeds.STORED));
     NamedCommands.registerCommand("Wait 2s", new WaitUntilCommand(2));
 
