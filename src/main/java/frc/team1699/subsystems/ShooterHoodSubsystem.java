@@ -51,9 +51,15 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         leadMotor.getConfigurator().apply(ShooterHoodConfigs.feedback);
         leadMotor.getConfigurator().apply(ShooterHoodConfigs.limits);
 
+        followMotor.getConfigurator().apply(ShooterHoodConfigs.talonConfigs.Slot0);
+        followMotor.getConfigurator().apply(ShooterHoodConfigs.talonConfigs.MotionMagic);
+        followMotor.getConfigurator().apply(ShooterHoodConfigs.motorConfigs);
+        followMotor.getConfigurator().apply(ShooterHoodConfigs.feedback);
+        followMotor.getConfigurator().apply(ShooterHoodConfigs.limits);
+
         encoder.getConfigurator().apply(ShooterHoodConfigs.encoderConfigs);
 
-        followMotor.setControl(new Follower(ShooterHoodConstants.kLeadMotorID, ShooterHoodConstants.kFollowInverted));
+        followMotor.setControl(new Follower(leadMotor.getDeviceID(), ShooterHoodConstants.kFollowInverted));
     }
     
 
@@ -81,7 +87,6 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public Command setRaw(double speed) {
         return runOnce(() -> {
-            // pauseControl();
             leadMotor.set(speed);
         });
     }
@@ -126,14 +131,12 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
     public enum HoodPositions {
         STORED(0.01), 
-        AIMING(0.01), 
-        AIMING_TWO(0.0833),
-        CLIMB(-1),
-        INTERPOLATED(-1),
+        CLIMB(0.6),
+        INTERPOLATED(0.6),
 
         MIN(0.01),
         MAX(0.616),
-        AIMED(0.0833),
+        CLOSE(0.45),
         SHUFFLE(0.3);
 
         private double degrees;

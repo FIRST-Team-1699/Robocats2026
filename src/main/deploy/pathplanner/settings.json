@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "DEPO+HP paths",
+    "Bottom Neutral paths",
     "Simple paths",
-    "Top+Bottom Neutral paths"
+    "Top Neutral paths"
   ],
   "autoFolders": [
     "DEPO+HP autos",

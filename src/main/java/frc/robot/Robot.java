@@ -25,20 +25,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import frc.robot.Constants.AutoConstants;
 import frc.utils.vision.RobotPose;
 
 public class Robot extends LoggedRobot {
   private Command autoCommand;
 
   private final SendableChooser<String> autoChooser;
-
-  private final String doNothing = "doNothing";
-  private final String shootTop = "Shoot-Top";
-  private final String shootMiddle = "Shoot-Middle";
-  private final String shootBottom = "Shoot-Bottom";
-  private final String depo = "DEPO";
-  private final String hp = "HP";
-  private final String topNeutral = "Top-Neutral";
 
   private Optional<Alliance> lastAlliance;
   private String selectedAutoString;
@@ -51,21 +45,21 @@ public class Robot extends LoggedRobot {
   public Robot() {
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<>();
-    autoChooser.addOption("Do Nothing:", doNothing);
-    autoChooser.addOption(shootTop, shootTop);
-    autoChooser.addOption(shootBottom, shootBottom);
-    autoChooser.addOption(shootMiddle, shootMiddle);
-    autoChooser.addOption(depo, depo);
-    autoChooser.addOption(hp, hp);
-    autoChooser.addOption(topNeutral, topNeutral);
+    autoChooser.addOption(AutoConstants.doNothing, AutoConstants.doNothing);
+    autoChooser.addOption(AutoConstants.shootTop, AutoConstants.shootTop);
+    autoChooser.addOption(AutoConstants.shootBottom, AutoConstants.shootBottom);
+    autoChooser.addOption(AutoConstants.shootMiddle, AutoConstants.shootMiddle);
+    autoChooser.addOption(AutoConstants.shootMiddleMotion, AutoConstants.shootMiddleMotion);
+    autoChooser.addOption(AutoConstants.depo, AutoConstants.depo);
+    autoChooser.addOption(AutoConstants.hp, AutoConstants.hp);
+    autoChooser.addOption(AutoConstants.topNeutral, AutoConstants.topNeutral);
 
     SmartDashboard.putData(autoChooser);
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
     
-    // Not the best practice, but will not throw error if doNothing is selected
-    autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
+    autoCommand = robotContainer.getAutoCommand(selectedAutoString);
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -83,15 +77,20 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if(!DriverStation.getAlliance().equals(lastAlliance) 
+      || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
+      lastAlliance = DriverStation.getAlliance();
+      selectedAutoString = autoChooser.getSelected();
+      autoCommand = robotContainer.getAutoCommand(selectedAutoString);
+    }
+  }
 
   @Override
   public void autonomousInit() {
-    // schedule the autonomous command (example)
-    // if (autoCommand!= null) {
-      // CommandScheduler.getInstance().schedule(autoCommand);
+    if (autoCommand!= null) {
       CommandScheduler.getInstance().schedule(autoCommand);
-    // }
+    }
   }
     @Override
     public void autonomousPeriodic() {}
@@ -101,9 +100,10 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        if (autoCommand != null) {
-            CommandScheduler.getInstance().cancel(autoCommand);
-        }
+      if (autoCommand != null) {
+        CommandScheduler.getInstance().cancel(autoCommand);
+        RobotContainer.isAimingAtHub=false;
+      }
     }
 
     @Override

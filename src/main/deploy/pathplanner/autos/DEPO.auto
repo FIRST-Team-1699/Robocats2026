@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ToggleIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "DEPO #1"
@@ -13,13 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Extend Intake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Start Intake"
+            "name": "StartIntake"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Stop Intake"
+            "name": "StopIntake"
           }
         },
         {

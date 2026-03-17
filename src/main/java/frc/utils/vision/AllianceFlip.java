@@ -10,7 +10,7 @@ import frc.utils.vision.FieldConstants;
 public class AllianceFlip {
     public static boolean shouldFlip() {
         return DriverStation.getAlliance().isPresent()
-            && DriverStation.getAlliance().get().equals(Alliance.Red);
+            && DriverStation.getAlliance().get() == Alliance.Red;
     }
 
     public static Translation2d flip(Translation2d position) {

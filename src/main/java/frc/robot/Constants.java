@@ -217,13 +217,12 @@ public final class Constants {
     public static final double kMotionMagicJerk = 4;
 
     public static final double kPositionConversionFactor = 50;
-    public static final double kGravityOffset = -.21
-    ;
+    public static final double kGravityOffset = -.21;
 
     public static final double rotorToSensor=1;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=0.02;
+    public static final double kTolerance=0.04;
     public static final double kCooldownTimer=1;
   }
 
@@ -384,13 +383,23 @@ public final class Constants {
   }
 
     public static class AutoConstants {
-        // TRANSLATION PID
-        public static final double kTranslationP = 10;
-        public static final double kTranslationI = 0;
-        public static final double kTranslationD = 0;
-        // ROTATION PID
-        public static final double kRotationP = 7;
-        public static final double kRotationI = 0;
-        public static final double kRotationD = 0;
+      // TRANSLATION PID
+      public static final double kTranslationP = 10;
+      public static final double kTranslationI = 0;
+      public static final double kTranslationD = 0;
+      // ROTATION PID
+      public static final double kRotationP = 7;
+      public static final double kRotationI = 0;
+      public static final double kRotationD = 0;
+
+      // AUTO PATHS
+      public static final String doNothing = "Do-Nothing";
+      public static final String shootTop = "Shoot-Top";
+      public static final String shootMiddle = "Shoot-Middle";
+      public static final String shootMiddleMotion = "Shoot-Middle-Motion";
+      public static final String shootBottom = "Shoot-Bottom";
+      public static final String depo = "DEPO";
+      public static final String hp = "HP";
+      public static final String topNeutral = "Top-Neutral";
     }
 }

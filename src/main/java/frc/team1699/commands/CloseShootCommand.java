@@ -19,15 +19,14 @@ import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import frc.team1699.subsystems.IntakeSubsystem;
 import frc.utils.vision.RobotPose;
 
-public class ShootCommand extends Command {
+public class CloseShootCommand extends Command {
     private final ShooterSubsystem shoot;
     private final ShooterHoodSubsystem shootHood;
     private final IndexerSubsystem indexer;
     private final HopperSubsystem hopper;
-    // private final IntakePivotSubsystem intakePivot;
     private final IntakeSubsystem intake;
 
-    public ShootCommand(
+    public CloseShootCommand(
         ShooterSubsystem shoot, 
         ShooterHoodSubsystem shootHood,
         IndexerSubsystem indexer, 
@@ -40,7 +39,7 @@ public class ShootCommand extends Command {
         this.hopper = hopper;
         this.intake=intake;
 
-        addRequirements(shoot, shootHood, indexer, hopper,intake);
+        addRequirements(shoot, shootHood, indexer, hopper, intake);
     }
 
     @Override
@@ -50,8 +49,8 @@ public class ShootCommand extends Command {
 
     @Override
     public void execute() {
-        shoot.setSpeed(ShootingSpeeds.INTERPOLATED);
-        shootHood.setPosition(HoodPositions.INTERPOLATED);
+        shoot.setSpeed(ShootingSpeeds.CLOSE);
+        shootHood.setPosition(HoodPositions.CLOSE);
         hopper.setSpeed(HopperSpeeds.INTAKE);
         if(shoot.isTotalInTollerance().getAsBoolean()) {
             indexer.setSpeed(IndexingSpeeds.INTAKE);
@@ -72,7 +71,6 @@ public class ShootCommand extends Command {
 
         indexer.setSpeed(IndexingSpeeds.STORED);
         hopper.setSpeed(HopperSpeeds.STORED);
-
         intake.setSpeed(IntakeSpeeds.STORED);
     }
 }

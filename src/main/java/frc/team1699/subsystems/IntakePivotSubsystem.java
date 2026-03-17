@@ -8,6 +8,7 @@ import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -65,20 +66,15 @@ public class IntakePivotSubsystem extends SubsystemBase {
         leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         leadMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
-        // leadMotor.getConfigurator().apply(IntakePivotConfigs.limits);
 
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
+        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
         followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.MotionMagic);
         followMotor.getConfigurator().apply(IntakePivotConfigs.breakMotorOutput);
         followMotor.getConfigurator().apply(IntakePivotConfigs.feedback);
 
         followMotor.setControl(new Follower(leadMotor.getDeviceID(), IntakePivotConstants.kFollowInverted));
     }
-
-
-    
 
     public double getError() {
         return Math.abs(currentPosition.rotations-getEncoderPosition());
@@ -89,7 +85,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public double getEncoderPosition() {
-        return leadMotor.getPosition().getValueAsDouble(); //*360;
+        return leadMotor.getPosition().getValueAsDouble(); 
     }
 
     public IntakePositions getCurrentPosition() {
@@ -104,25 +100,27 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     public void setPosition(IntakePositions position) {
         this.currentPosition=position;
-        leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.rotations)); 
+        leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(position.rotations));
     }
-
-    public void setPositionSlow(IntakePositions position) {
-        this.currentPosition=position;
-        leadMotor.setControl(IntakePivotConfigs.slowMotionRequest.withPosition(position.rotations)); 
-    }
-
 
     public void voltageDrive(double volts) {
         leadMotor.setVoltage(volts);
     }
 
     private void pauseActiveControl() {
-        leadMotor.setControl(IntakePivotConfigs.pauseActiveMotion);
+        leadMotor.setControl(
+            isInGroundIntake() ?
+                IntakePivotConfigs.pauseActiveMotion:
+                IntakePivotConfigs.motionRequest.withPosition(currentPosition.rotations)
+        );
     }
 
     private void pausePassiveControl() {
-        leadMotor.setControl(IntakePivotConfigs.pausePassiveMotion);
+        leadMotor.setControl(
+            isInStored() ?
+                IntakePivotConfigs.pausePassiveMotion:
+                IntakePivotConfigs.motionRequest.withPosition(currentPosition.rotations)
+        );
     }
 
     public Command voltage(double volts) {
@@ -147,26 +145,14 @@ public class IntakePivotSubsystem extends SubsystemBase {
         return getCurrentPosition()==IntakePositions.STORED;
     }
 
-    private boolean hasMotionControl() {
-        return leadMotor.getAppliedControl().equals(IntakePivotConfigs.motionRequest);
-    }
-
-    public void setSlot0() {
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot0);
-    }
-
-    public void setSlot1() {
-        leadMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
-        followMotor.getConfigurator().apply(IntakePivotConfigs.talonConfigs.Slot1);
+    public boolean isInMotion() {
+        return this.leadMotor.getAppliedControl() == IntakePivotConfigs.motionRequest;
     }
 
     @Override
     public void periodic() {
-        // TODO: TO TEST
         if(isInTolerance() 
-            && currentPosition != IntakePositions.AGITATE
-        ) {
+            && isInMotion()) {
             if(isInGroundIntake()) {
                 pauseActiveControl();
                 leadMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -180,29 +166,18 @@ public class IntakePivotSubsystem extends SubsystemBase {
         }
 
         SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
-        // SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
         SmartDashboard.putNumber("Inatke Error: ", getError());
         SmartDashboard.putBoolean("Is Intake Pivot In Tolerance: ", isInTolerance());
-        // SmartDashboard.putNumber("Intake Stator Current Pivot PID Val: ", leadMotor.getStatorCurrent().getValueAsDouble());
-        // SmartDashboard.putNumber("Intake Supply Current Pivot PID Val: ", leadMotor.getSupplyCurrent().getValueAsDouble());
-        SmartDashboard.putNumber("Wnated Intake ", currentPosition.rotations);
 
         SmartDashboard.putNumber("Intake Voltage Pivot PID Val: ", leadMotor.getMotorVoltage().getValueAsDouble());
 
-        SmartDashboard.putString("Is Intake past Limit: ", leadMotor.getReverseLimit().getValue().toString());
-
         Logger.recordOutput("IntakeMotor/Velocity", leadMotor.getVelocity().getValueAsDouble());
         Logger.recordOutput("IntakeMotor/Voltage", leadMotor.getMotorVoltage().getValueAsDouble());
-        Logger.recordOutput("IntakeMotor/Position", leadMotor.getPosition().getValueAsDouble());
-
-        // Logger.recordOutput("Intake/ Velocity: ", leadMotor.getVelocity().getValueAsDouble());
-        // Logger.recordOutput("Intake/ Voltage: ", leadMotor.getMotorVoltage().getValueAsDouble());
-        // Logger.recordOutput("Intake/ Position: ", leadMotor.getPosition().getValueAsDouble());        
+        Logger.recordOutput("IntakeMotor/Position", leadMotor.getPosition().getValueAsDouble());    
     }
 
     public enum IntakePositions {
         STORED(0.00), 
-        // PLATEFORM_INTAKE(130), 
         AGITATE(.15),
         GROUND_INTAKE(0.22);
 

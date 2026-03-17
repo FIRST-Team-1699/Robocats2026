@@ -11,6 +11,7 @@ import java.util.jar.Attributes.Name;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -18,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -25,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.commands.AgitateCommand;
+import frc.team1699.commands.CloseShootCommand;
 import frc.team1699.commands.ShootCommand;
 import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
@@ -90,18 +93,24 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command shootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command agitateCommand = new AgitateCommand(intakePivot);
+  private Command closeShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", toggleAimToHub());
-    NamedCommands.registerCommand("ShootCommand", autoShootCommand
+    NamedCommands.registerCommand("ShootCommand", shootCommand
+        .alongWith(agitateCommand)
         .andThen(new WaitUntilCommand(5))
-        .andThen(() -> CommandScheduler.getInstance().cancel(autoShootCommand)));
-    NamedCommands.registerCommand("Extend Intake", intakePivot.togglePivotCommand()
+        .andThen(() -> CommandScheduler.getInstance().cancel(shootCommand))
+        .alongWith(
+            Commands.runOnce(() -> CommandScheduler.getInstance().cancel(agitateCommand))
+        ));
+    NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand()
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
-    NamedCommands.registerCommand("Stop Intake", intake.setSpeedCommand(IntakeSpeeds.STORED));
-    NamedCommands.registerCommand("Wait 2s", new WaitUntilCommand(2));
+    NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
+    NamedCommands.registerCommand("Wait2s", new WaitUntilCommand(2));
 
     configureBindings();
 
@@ -135,27 +144,19 @@ public class RobotContainer {
     // Reset the field-centric heading on left bumper press.
     driverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-    driverController.leftTrigger()
-        .onTrue(
-            shootHood.setPositionCommand(HoodPositions.CLIMB)
-                .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
-    );
+    // driverController.leftTrigger()
+    //     .onTrue(
+    //         shootHood.setPositionCommand(HoodPositions.CLIMB)
+    //             .alongWith(climb.setPosition(ClimbPosition.EXTENDED))
+    // );
 
-    driverController.rightTrigger()
-        .onTrue(
-            shootHood.setPositionCommand(HoodPositions.STORED)
-                .alongWith(climb.setPosition(ClimbPosition.STORED))
-    );
+    // driverController.rightTrigger()
+    //     .onTrue(
+    //         shootHood.setPositionCommand(HoodPositions.STORED)
+    //             .alongWith(climb.setPosition(ClimbPosition.STORED))
+    // );
 
     // operatorController.leftTrigger().whileTrue(Commands.runOnce(() -> Logger.recordOutput("PIDOutput", driveFacingHub.HeadingController.getLastAppliedOutput())));
-    // operatorController.leftTrigger()
-    //     .onTrue(
-    //         intake.setSpeedCommand(IntakeSpeeds.INTAKE)
-    //             // .alongWith(indexer.indexUntilFull())
-    //     )
-    //     .onFalse(
-    //         intake.setSpeedCommand(IntakeSpeeds.STORED)
-    //     );
 
     operatorController.rightTrigger()
         .onTrue(
@@ -169,24 +170,22 @@ public class RobotContainer {
 
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    operatorController.povUp()
-        .onTrue(shootHood.setPositionCommand(HoodPositions.MAX));
-    operatorController.povDown()
-        .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
-
     operatorController.a()
         .onTrue(
-            intakePivot.togglePivotCommand()
-        );
-
+            intakePivot.togglePivotCommand());
 
     operatorController.b()
         .onTrue(
-            intakePivot.setPositionCommand(IntakePositions.AGITATE)
-        )
-        .onFalse(
-            intakePivot.setPositionCommand(IntakePositions.STORED)
+            new AgitateCommand(intakePivot)
         );
+
+    // operatorController.b()
+    //     .onTrue(
+    //         intakePivot.setPositionCommand(IntakePositions.AGITATE)
+    //     )
+    //     .onFalse(
+    //         intakePivot.setPositionCommand(IntakePositions.STORED)
+    //     );
 
     operatorController.leftTrigger()
         .onTrue(
@@ -194,11 +193,11 @@ public class RobotContainer {
 
     operatorController.x()
         .whileTrue(
-            new ShootCommand(shoot, shootHood, indexer, hopper, intake));
+            new CloseShootCommand(shoot, shootHood, indexer, hopper, intake));
 
-    // operatorController.y()
-    //     .whileTrue(
-    //         new ShuffleCommand(shoot, shootHood, indexer));
+    operatorController.y()
+        .whileTrue(
+            new ShuffleCommand(shoot, shootHood, indexer, hopper, intake));
 
     operatorController.leftBumper()
         .onTrue(toggleAimToHub())
@@ -219,60 +218,20 @@ public class RobotContainer {
     // driverController.start().and(driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
     // driverController.start().and(driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-    // Reset the field-centric heading on left bumper press.
-    driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-
     drivetrain.registerTelemetry(logger::telemeterize);
-
   }
 
-  public Command toggleAimToHub() {
+    public Command toggleAimToHub() {
         return Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub);
-  }
+    }
 
-  public Command getAutonomousCommand() {
-    return intakePivot.voltage(1);
-  }
-
-  // TODO: REPLACE WITH PATHPLANNER CODE
-//   public Command getAutonomousCommand() {
-    // return null;
-    // return shoot.runOnce(() -> System.out.println("Running auto..."));
-    // return Commands.sequence(
-    // intakePivot.sysIDQuasistatic(Direction.kReverse),
-    // Commands.waitSeconds(3),
-    // intakePivot.sysIDQuasistatic(Direction.kForward),
-    // Commands.waitSeconds(3),
-    // intakePivot.sysIDDynamic(Direction.kReverse),
-    // Commands.waitSeconds(3),
-    // intakePivot.sysIDDynamic(Direction.kForward)
-    // );
-
-    // return Commands.sequence(
-    //     shootHood.sysIDQuasistatic(Direction.kReverse),
-    //     Commands.waitSeconds(3),
-    //     shootHood.sysIDQuasistatic(Direction.kForward),
-    //     Commands.waitSeconds(3),
-    //     shootHood.sysIDDynamic(Direction.kReverse),
-    //     Commands.waitSeconds(3),
-    //     shootHood.sysIDDynamic(Direction.kForward));
-
-    /*
-     * final var idle = new SwerveRequest.Idle();
-     * return Commands.sequence(
-     * // Reset our field centric heading to match the robot
-     * // facing away from our alliance station wall (0 deg).
-     * // drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-     * // // Then slowly drive forward (away from us) for 5 seconds.
-     * // drivetrain.applyRequest(() ->
-     * // drive.withVelocityX(0.5)
-     * // .withVelocityY(0)
-     * // .withRotationalRate(0)
-     * // )
-     * // .withTimeout(5.0),
-     * // // Finally idle for the rest of auton
-     * // drivetrain.applyRequest(() -> idle)
-     * );
-     */
-//   }
+    public Command getAutoCommand(String autoString) {
+        if(autoString.equals(AutoConstants.doNothing)) {
+            return new PrintCommand(autoString);
+        }
+        if(autoString.equals(AutoConstants.shootMiddle)) {
+            return closeShootCommand;
+        }
+        return AutoBuilder.buildAuto(autoString);
+    }
 }

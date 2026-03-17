@@ -6,6 +6,7 @@ import frc.robot.Configs.ShooterHoodConfigs;
 import frc.robot.Constants.VisionConstants;
 import frc.team1699.subsystems.HopperSubsystem;
 import frc.team1699.subsystems.IndexerSubsystem;
+import frc.team1699.subsystems.IntakeSubsystem;
 import frc.team1699.subsystems.ShooterHoodSubsystem;
 import frc.team1699.subsystems.ShooterSubsystem;
 import frc.team1699.subsystems.VisionSubsystem;
@@ -21,19 +22,22 @@ public class ShuffleCommand extends Command {
     private final ShooterHoodSubsystem shootHood;
     private final IndexerSubsystem indexer;
     private final HopperSubsystem hopper;
+    private final IntakeSubsystem intake;
 
     public ShuffleCommand(
         ShooterSubsystem shoot, 
         ShooterHoodSubsystem shootHood,
         IndexerSubsystem indexer, 
-        HopperSubsystem hopper
+        HopperSubsystem hopper,
+        IntakeSubsystem intake
     ) {
         this.shoot = shoot;
         this.shootHood = shootHood;
         this.indexer = indexer;
         this.hopper = hopper;
+        this.intake=intake;
 
-        addRequirements(shoot, shootHood, indexer, hopper);
+        addRequirements(shoot, shootHood, indexer, hopper, intake);
     }
 
     @Override

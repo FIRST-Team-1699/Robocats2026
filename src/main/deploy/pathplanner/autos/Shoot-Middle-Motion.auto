@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AimToHub"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Shoot-Middle #1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AimToHub"
           }
         },
         {

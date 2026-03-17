@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Extend Intake"
+            "name": "ToggleIntake"
           }
         },
         {
@@ -29,15 +29,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Top-Neutral #3"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Stop Intake"
+            "name": "StopIntake"
           }
         },
         {
@@ -67,19 +61,19 @@
         {
           "type": "path",
           "data": {
+            "pathName": "Top-Neutral #3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "Top-Neutral #4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Stop Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top-Neutral #5"
+            "name": "StopIntake"
           }
         },
         {

@@ -11,27 +11,21 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "HP #1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartIntake"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Wait2s"
+            "pathName": "Bottom-Neutral #1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HP #2"
+            "pathName": "Bottom-Neutral #2"
           }
         },
         {
@@ -41,9 +35,45 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "AimToHub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AimToHub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "HP #3"
+            "pathName": "Bottom-Neutral  #3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom-Neutral  #4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
           }
         },
         {
@@ -62,6 +92,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "DEPO+HP autos",
+  "folder": "Neutral autos",
   "choreoAuto": false
 }
