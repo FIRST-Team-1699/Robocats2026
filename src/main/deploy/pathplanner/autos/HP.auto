@@ -47,21 +47,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "AimToHub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCommand"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "AimToHub"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootCommand"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "DEPO+HP autos",
+  "folder": null,
   "choreoAuto": false
 }

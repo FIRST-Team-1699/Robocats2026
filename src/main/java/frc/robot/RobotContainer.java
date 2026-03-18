@@ -93,24 +93,17 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private Command shootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
-  private Command agitateCommand = new AgitateCommand(intakePivot);
-  private Command closeShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command shootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake,true);
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", toggleAimToHub());
     NamedCommands.registerCommand("ShootCommand", shootCommand
-        .alongWith(agitateCommand)
-        .andThen(new WaitUntilCommand(5))
-        .andThen(() -> CommandScheduler.getInstance().cancel(shootCommand))
-        .alongWith(
-            Commands.runOnce(() -> CommandScheduler.getInstance().cancel(agitateCommand))
-        ));
+        .alongWith(intakePivot.setPositionCommand(IntakePositions.AGITATE)));
     NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand()
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
-    NamedCommands.registerCommand("Wait2s", new WaitUntilCommand(2));
+    NamedCommands.registerCommand("Wait2s", new PrintCommand("e"));
 
     configureBindings();
 
@@ -174,18 +167,18 @@ public class RobotContainer {
         .onTrue(
             intakePivot.togglePivotCommand());
 
-    operatorController.b()
-        .onTrue(
-            new AgitateCommand(intakePivot)
-        );
-
     // operatorController.b()
     //     .onTrue(
-    //         intakePivot.setPositionCommand(IntakePositions.AGITATE)
-    //     )
-    //     .onFalse(
-    //         intakePivot.setPositionCommand(IntakePositions.STORED)
+    //         new AgitateCommand(intakePivot)
     //     );
+
+    operatorController.b()
+        .onTrue(
+            intakePivot.setPositionCommand(IntakePositions.AGITATE)
+        )
+        .onFalse(
+            intakePivot.setPositionCommand(IntakePositions.STORED)
+        );
 
     operatorController.leftTrigger()
         .onTrue(
@@ -226,11 +219,14 @@ public class RobotContainer {
     }
 
     public Command getAutoCommand(String autoString) {
-        if(autoString.equals(AutoConstants.doNothing)) {
+        // if(autoString==null) {
+        //     return null;
+        // }
+        if(autoString==AutoConstants.doNothing) {
             return new PrintCommand(autoString);
         }
-        if(autoString.equals(AutoConstants.shootMiddle)) {
-            return closeShootCommand;
+        if(autoString==AutoConstants.shootMiddle) {
+            return new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
         }
         return AutoBuilder.buildAuto(autoString);
     }

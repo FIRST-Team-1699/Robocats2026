@@ -32,7 +32,7 @@ import frc.utils.vision.RobotPose;
 public class Robot extends LoggedRobot {
   private Command autoCommand;
 
-  private final SendableChooser<String> autoChooser;
+  private SendableChooser<String> autoChooser;
 
   private Optional<Alliance> lastAlliance;
   private String selectedAutoString;
@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot {
 
   public Robot() {
     robotContainer = new RobotContainer();
-    autoChooser = new SendableChooser<>();
+    autoChooser = new SendableChooser<String>();
     autoChooser.addOption(AutoConstants.doNothing, AutoConstants.doNothing);
     autoChooser.addOption(AutoConstants.shootTop, AutoConstants.shootTop);
     autoChooser.addOption(AutoConstants.shootBottom, AutoConstants.shootBottom);
@@ -53,13 +53,14 @@ public class Robot extends LoggedRobot {
     autoChooser.addOption(AutoConstants.depo, AutoConstants.depo);
     autoChooser.addOption(AutoConstants.hp, AutoConstants.hp);
     autoChooser.addOption(AutoConstants.topNeutral, AutoConstants.topNeutral);
-
+    
+    autoChooser.setDefaultOption(AutoConstants.shootMiddle, AutoConstants.shootMiddle);
     SmartDashboard.putData(autoChooser);
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
-    
-    autoCommand = robotContainer.getAutoCommand(selectedAutoString);
+    autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
+    // autoCommand = robotContainer.getAutoCommand(autoChooser.getSelected());
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -78,11 +79,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if(!DriverStation.getAlliance().equals(lastAlliance) 
-      || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
+    if(!DriverStation.getAlliance().equals(lastAlliance) || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
       lastAlliance = DriverStation.getAlliance();
       selectedAutoString = autoChooser.getSelected();
-      autoCommand = robotContainer.getAutoCommand(selectedAutoString);
+      // autoCommand = robotContainer.getAutoCommand(selectedAutoString);
+      autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
     }
   }
 

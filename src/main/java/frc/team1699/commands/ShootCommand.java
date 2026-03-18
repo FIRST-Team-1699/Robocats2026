@@ -1,5 +1,6 @@
 package frc.team1699.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Configs.ShooterHoodConfigs;
@@ -20,12 +21,15 @@ import frc.team1699.subsystems.IntakeSubsystem;
 import frc.utils.vision.RobotPose;
 
 public class ShootCommand extends Command {
+    private boolean isInAuto= false;
     private final ShooterSubsystem shoot;
     private final ShooterHoodSubsystem shootHood;
     private final IndexerSubsystem indexer;
     private final HopperSubsystem hopper;
     // private final IntakePivotSubsystem intakePivot;
     private final IntakeSubsystem intake;
+
+    private final Timer time;
 
     public ShootCommand(
         ShooterSubsystem shoot, 
@@ -39,6 +43,26 @@ public class ShootCommand extends Command {
         this.indexer = indexer;
         this.hopper = hopper;
         this.intake=intake;
+        this.time=new Timer();
+
+        addRequirements(shoot, shootHood, indexer, hopper,intake);
+    }
+
+    public ShootCommand(
+        ShooterSubsystem shoot, 
+        ShooterHoodSubsystem shootHood,
+        IndexerSubsystem indexer, 
+        HopperSubsystem hopper,
+        IntakeSubsystem intake,
+        boolean isInAuto
+    ) {
+        this.shoot = shoot;
+        this.shootHood = shootHood;
+        this.indexer = indexer;
+        this.hopper = hopper;
+        this.intake=intake;
+        this.time=new Timer();
+        time.start();
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);
     }
@@ -62,7 +86,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return time.get()>3;
     }
 
     @Override
@@ -74,5 +98,7 @@ public class ShootCommand extends Command {
         hopper.setSpeed(HopperSpeeds.STORED);
 
         intake.setSpeed(IntakeSpeeds.STORED);
+        time.stop();
+        time.reset();
     }
 }
