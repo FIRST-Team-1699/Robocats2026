@@ -92,10 +92,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if(!DriverStation.getAlliance().equals(lastAlliance) || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
+    if(!DriverStation.getAlliance().equals(lastAlliance) 
+      || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
       lastAlliance = DriverStation.getAlliance();
       selectedAutoString = autoChooser.getSelected();
-      if(autoChooser.getSelected()==AutoConstants.doNothing) {
+      if(autoChooser.getSelected().equals(AutoConstants.doNothing)) {
         autoCommand= new PrintCommand("Doing Nothing...");
         return;
       }
