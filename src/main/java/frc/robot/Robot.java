@@ -30,6 +30,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.utils.vision.RobotPose;
 
 public class Robot extends LoggedRobot {
+  public static boolean isInAuto=false;
+
   private Command autoCommand;
 
   private SendableChooser<String> autoChooser;
@@ -45,22 +47,31 @@ public class Robot extends LoggedRobot {
   public Robot() {
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<String>();
+    // No auto
     autoChooser.addOption(AutoConstants.doNothing, AutoConstants.doNothing);
+
+    // Simple auto
+    autoChooser.addOption(AutoConstants.shoot, AutoConstants.shoot);
     autoChooser.addOption(AutoConstants.shootTop, AutoConstants.shootTop);
-    autoChooser.addOption(AutoConstants.shootBottom, AutoConstants.shootBottom);
     autoChooser.addOption(AutoConstants.shootMiddle, AutoConstants.shootMiddle);
-    autoChooser.addOption(AutoConstants.shootMiddleMotion, AutoConstants.shootMiddleMotion);
+    autoChooser.addOption(AutoConstants.shootBottom, AutoConstants.shootBottom);
+
+    // HP + DEPO
     autoChooser.addOption(AutoConstants.depo, AutoConstants.depo);
     autoChooser.addOption(AutoConstants.hp, AutoConstants.hp);
+
+    // Neutral zones
     autoChooser.addOption(AutoConstants.topNeutral, AutoConstants.topNeutral);
-    
-    autoChooser.setDefaultOption(AutoConstants.shootMiddle, AutoConstants.shootMiddle);
+    autoChooser.addOption(AutoConstants.bottomNeutral, AutoConstants.bottomNeutral);
+
+    // default
+    autoChooser.setDefaultOption(AutoConstants.shoot, AutoConstants.shoot);
+
     SmartDashboard.putData(autoChooser);
 
     lastAlliance = DriverStation.getAlliance();
     selectedAutoString = autoChooser.getSelected();
     autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
-    // autoCommand = robotContainer.getAutoCommand(autoChooser.getSelected());
     
     Logger.addDataReceiver(new NT4Publisher());
 
@@ -75,14 +86,19 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    isInAuto=false;
+  }
 
   @Override
   public void disabledPeriodic() {
     if(!DriverStation.getAlliance().equals(lastAlliance) || !autoChooser.getSelected().equalsIgnoreCase(selectedAutoString)) {
       lastAlliance = DriverStation.getAlliance();
       selectedAutoString = autoChooser.getSelected();
-      // autoCommand = robotContainer.getAutoCommand(selectedAutoString);
+      if(autoChooser.getSelected()==AutoConstants.doNothing) {
+        autoCommand= new PrintCommand("Doing Nothing...");
+        return;
+      }
       autoCommand = AutoBuilder.buildAuto(autoChooser.getSelected());
     }
   }
@@ -90,6 +106,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     if (autoCommand!= null) {
+      isInAuto=true;
       CommandScheduler.getInstance().schedule(autoCommand);
     }
   }
@@ -97,7 +114,9 @@ public class Robot extends LoggedRobot {
     public void autonomousPeriodic() {}
 
     @Override
-    public void autonomousExit() {}
+    public void autonomousExit() {
+      isInAuto=false;
+    }
 
     @Override
     public void teleopInit() {

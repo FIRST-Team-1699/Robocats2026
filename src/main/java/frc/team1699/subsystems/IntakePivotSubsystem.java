@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.RobotContainer;
 import frc.robot.Configs.IntakePivotConfigs;
@@ -139,6 +141,10 @@ public class IntakePivotSubsystem extends SubsystemBase {
         );
     }
 
+    public Command waitUntilInTolerance() {
+        return new WaitUntilCommand(() -> isInTolerance());
+    }
+
     public boolean isInGroundIntake() {
         return getCurrentPosition()==IntakePositions.GROUND_INTAKE;
     }
@@ -146,6 +152,11 @@ public class IntakePivotSubsystem extends SubsystemBase {
     public boolean isInStored() {
         return getCurrentPosition()==IntakePositions.STORED;
     }
+
+    public boolean isInAgitate() {
+        return getCurrentPosition()==IntakePositions.AGITATE;
+    }
+
 
     private boolean hasMotionControl() {
         return leadMotor.getAppliedControl() == IntakePivotConfigs.motionRequest;
@@ -163,7 +174,6 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // TODO: TO TEST
         if(isInTolerance() 
             && currentPosition != IntakePositions.AGITATE
             && hasMotionControl()
@@ -174,6 +184,12 @@ public class IntakePivotSubsystem extends SubsystemBase {
                 followMotor.setNeutralMode(NeutralModeValue.Coast);
             }
             if(isInStored()) {
+                pausePassiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Brake);
+                followMotor.setNeutralMode(NeutralModeValue.Brake);
+            }
+            // TODO: DEAD CODE. WILL IMPLEMENT AFTER COMP
+            if(isInAgitate()) {
                 pausePassiveControl();
                 leadMotor.setNeutralMode(NeutralModeValue.Brake);
                 followMotor.setNeutralMode(NeutralModeValue.Brake);

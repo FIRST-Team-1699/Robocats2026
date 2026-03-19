@@ -394,12 +394,17 @@ public final class Constants {
 
       // AUTO PATHS
       public static final String doNothing = "Do-Nothing";
+      public static final String shoot = "Shoot";
       public static final String shootTop = "Shoot-Top";
       public static final String shootMiddle = "Shoot-Middle";
-      public static final String shootMiddleMotion = "Shoot-Middle-Motion";
       public static final String shootBottom = "Shoot-Bottom";
       public static final String depo = "DEPO";
       public static final String hp = "HP";
       public static final String topNeutral = "Top-Neutral";
+      public static final String bottomNeutral = "Bottom-Neutral";
+
+      // Misc.
+      public static final double kShootTimerShort= 3.75;
+      public static final double kShootTimerLong= 6.5;
     }
 }

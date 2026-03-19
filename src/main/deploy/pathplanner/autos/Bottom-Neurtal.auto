@@ -49,12 +49,6 @@
         {
           "type": "named",
           "data": {
-            "name": "AimToHub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "StartIntake"
           }
         },

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.700884450784593,
-        "y": 0.6386019971469341
+        "x": 0.675,
+        "y": 0.652
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5289586305278164,
-        "y": 1.7254493580599146
+        "x": 1.5030741797432234,
+        "y": 1.7388473609129806
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
     "rotation": 45.83031548631384
   },
   "reversed": false,
-  "folder": "DEPO+HP paths",
+  "folder": "HP paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

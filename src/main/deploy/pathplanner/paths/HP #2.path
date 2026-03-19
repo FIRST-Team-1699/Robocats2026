@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.6750071326676175,
-        "y": 0.6515406562054205
+        "x": 0.675,
+        "y": 0.652
       },
       "prevControl": {
-        "x": 1.9041797432239653,
-        "y": 0.76798858773181
+        "x": 1.904172610556348,
+        "y": 0.7684479315263896
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "DEPO+HP paths",
+  "folder": "HP paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

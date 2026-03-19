@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -93,17 +94,23 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private Command shootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake,true);
+  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
 
   public RobotContainer() {
-    NamedCommands.registerCommand("AimToHub", toggleAimToHub());
-    NamedCommands.registerCommand("ShootCommand", shootCommand
-        .alongWith(intakePivot.setPositionCommand(IntakePositions.AGITATE)));
+    NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
+        .andThen(new WaitUntilCommand(() -> RobotPose.facingHub())));
+    NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
+        .alongWith(autoShootCommand)
+        .andThen(() -> isAimingAtHub=false)
+        .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
+        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+    NamedCommands.registerCommand("CloseShootCommand", autoCloseShootCommand);
     NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand()
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
-    NamedCommands.registerCommand("Wait2s", new PrintCommand("e"));
+    NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
 
     configureBindings();
 
@@ -214,20 +221,20 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
-    public Command toggleAimToHub() {
+    private Command toggleAimToHub() {
         return Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub);
     }
 
-    public Command getAutoCommand(String autoString) {
-        // if(autoString==null) {
-        //     return null;
-        // }
-        if(autoString==AutoConstants.doNothing) {
-            return new PrintCommand(autoString);
-        }
-        if(autoString==AutoConstants.shootMiddle) {
-            return new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
-        }
-        return AutoBuilder.buildAuto(autoString);
-    }
+    // public Command getAutoCommand(String autoString) {
+    //     // if(autoString==null) {
+    //     //     return null;
+    //     // }
+    //     if(autoString==AutoConstants.doNothing) {
+    //         return new PrintCommand(autoString);
+    //     }
+    //     if(autoString==AutoConstants.shootMiddle) {
+    //         return new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
+    //     }
+    //     return AutoBuilder.buildAuto(autoString);
+    // }
 }

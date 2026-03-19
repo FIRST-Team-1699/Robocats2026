@@ -3,14 +3,16 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "DEPO+HP paths",
     "Bottom Neutral paths",
+    "DEPO paths",
+    "HP paths",
     "Simple paths",
     "Top Neutral paths"
   ],
   "autoFolders": [
-    "DEPO+HP autos",
+    "DEPO auto",
     "Neutral autos",
+    "HP auto",
     "Simple autos"
   ],
   "defaultMaxVel": 3.0,

@@ -47,28 +47,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "AimToHub"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootCommand"
-                }
-              }
-            ]
+            "name": "AimToHub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCommand"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "HP auto",
   "choreoAuto": false
 }

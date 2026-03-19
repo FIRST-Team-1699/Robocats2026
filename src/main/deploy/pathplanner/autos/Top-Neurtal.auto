@@ -7,13 +7,13 @@
         {
           "type": "named",
           "data": {
-            "name": "StartIntake"
+            "name": "ToggleIntake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ToggleIntake"
+            "name": "StartIntake"
           }
         },
         {
@@ -44,12 +44,6 @@
           "type": "named",
           "data": {
             "name": "ShootCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AimToHub"
           }
         },
         {

@@ -56,6 +56,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "DEPO+HP autos",
+  "folder": "DEPO auto",
   "choreoAuto": false
 }
