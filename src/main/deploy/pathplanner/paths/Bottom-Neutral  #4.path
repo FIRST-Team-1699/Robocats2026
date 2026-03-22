@@ -20,24 +20,24 @@
         "y": 0.6234380886130133
       },
       "prevControl": {
-        "x": 5.195197078339041,
-        "y": 0.6266292273116436
+        "x": 5.194920572928421,
+        "y": 0.6417446293404362
       },
       "nextControl": {
-        "x": 2.3254912229786426,
-        "y": 0.6110479435233558
+        "x": 2.6028673323823104,
+        "y": 0.5609700427960062
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2368616262482157,
-        "y": 2.398259629101284
+        "x": 3.2886162624821687,
+        "y": 1.6736947218259637
       },
       "prevControl": {
-        "x": 2.5352421874999997,
-        "y": 1.6879644156678082
+        "x": 2.8875178316690437,
+        "y": 1.2079029957203988
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,11 +47,11 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5147584727112676,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 1.2678807218309849,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 58.00000000000001
+    "rotation": 62.70042778866725
   },
   "reversed": false,
   "folder": "Bottom Neutral paths",

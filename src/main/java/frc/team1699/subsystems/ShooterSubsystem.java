@@ -167,6 +167,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SHUFFLE(-35,-35),
         // TODO: SET
         CLOSE(-30,-25), 
+        FAR(-36,-31),
         INTERPOLATED(-35,-35);
 
 

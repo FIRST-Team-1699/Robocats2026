@@ -66,7 +66,9 @@ public final class Constants {
     public static final double kMotionMagicJerk = 0;
 
     public static final double kPositionConversionFactor = 0.25;
-    public static final double kMagnetOffset=0.0833-.078;
+    // public static final double kMagnetOffset=0.0833-.078+1.41;
+    // public static final double kMagnetOffset=0.728;
+    public static final double kMagnetOffset=-0.16;
 
     // EVERYTHING ELSE
     public static final double kTolerance=0.05;
@@ -100,7 +102,7 @@ public final class Constants {
     public static final double kOffset=0.0;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=2.0;
+    public static final double kTolerance=1.0;
   }
     public static class IndexerConstants {
     public static final int kLeadMotorID=57;
@@ -341,7 +343,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(8, 8, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     // TODO: Update values to score to hub
@@ -384,7 +386,7 @@ public final class Constants {
 
     public static class AutoConstants {
       // TRANSLATION PID
-      public static final double kTranslationP = 10;
+      public static final double kTranslationP = 5;
       public static final double kTranslationI = 0;
       public static final double kTranslationD = 0;
       // ROTATION PID
@@ -400,11 +402,11 @@ public final class Constants {
       public static final String shootBottom = "Shoot-Bottom";
       public static final String depo = "DEPO";
       public static final String hp = "HP";
-      public static final String topNeutral = "Top-Neutral";
-      public static final String bottomNeutral = "Bottom-Neutral";
+      public static final String topNeutral = "Left-Neutral";
+      public static final String bottomNeutral = "Right-Neutral";
 
       // Misc.
-      public static final double kShootTimerShort= 3.75;
+      public static final double kShootTimerShort= 2.75;
       public static final double kShootTimerLong= 6.5;
     }
 }

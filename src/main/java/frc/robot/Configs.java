@@ -1,11 +1,14 @@
 package frc.robot;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.EmptyControl;
+import static edu.wpi.first.units.Units.*;
+
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -74,8 +77,8 @@ public final class Configs {
             
             // SoftwareLimitSwitchConfigs: configurations that limit a motor's movement in rotations. 
             // This is applied to the motor.
-            limits.ForwardSoftLimitThreshold = 0.616;
-            limits.ReverseSoftLimitThreshold = 0.01;
+            limits.ForwardSoftLimitThreshold = 0.605;
+            limits.ReverseSoftLimitThreshold = 0.025;
 
             limits.ForwardSoftLimitEnable = true;
             limits.ReverseSoftLimitEnable = true;
@@ -85,8 +88,15 @@ public final class Configs {
     public static class ShooterConfigs {
         // See ShooterHoodConfigs for documentation
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // Swerve azimuth does not require much torque output, so we can set a relatively low
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withStatorCurrentLimit(Amps.of(100))
+                .withStatorCurrentLimitEnable(true));
         public static final MotorOutputConfigs topMotorConfigs = new MotorOutputConfigs();
+        
         public static MotorOutputConfigs bottomMotorConfigs;
 
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
@@ -122,7 +132,13 @@ public final class Configs {
     public static class IndexerConfigs {
         // See ShooterHoodConfigs for documentation
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // Swerve azimuth does not require much torque output, so we can set a relatively low
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withStatorCurrentLimit(Amps.of(40))
+                .withStatorCurrentLimitEnable(true));;
         public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
 
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
@@ -156,9 +172,15 @@ public final class Configs {
     public static class HopperConfigs {
         // See ShooterHoodConfigs for documentation
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // Swerve azimuth does not require much torque output, so we can set a relatively low
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withStatorCurrentLimit(Amps.of(80))
+                .withStatorCurrentLimitEnable(true));;
         public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
-
+        
         public static final FeedbackConfigs feedback = new FeedbackConfigs();
 
         public static final  MotionMagicVelocityVoltage motionRequest = new MotionMagicVelocityVoltage(0);
@@ -189,7 +211,13 @@ public final class Configs {
   public static class IntakePivotConfigs { 
         // See ShooterHoodConfigs for documentation
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // Swerve azimuth does not require much torque output, so we can set a relatively low
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withStatorCurrentLimit(Amps.of(40))
+                .withStatorCurrentLimitEnable(true));;
         public static final MotorOutputConfigs breakMotorOutput = new MotorOutputConfigs();
         public static MotorOutputConfigs coastMotorOutput = new MotorOutputConfigs();
 
@@ -199,7 +227,7 @@ public final class Configs {
         public static final MotionMagicVoltage motionRequest = new MotionMagicVoltage(0);
         public static final MotionMagicVoltage slowMotionRequest = new MotionMagicVoltage(0);
         public static final NeutralOut pausePassiveMotion = new NeutralOut();
-        public static final VoltageOut pauseActiveMotion = new VoltageOut(0.2);
+        public static final VoltageOut pauseActiveMotion = new VoltageOut(0.3);
         // public static final MagnetSensorConfigs encoderConfig = new MagnetSensorConfigs();
 
         static {
@@ -248,7 +276,13 @@ public final class Configs {
     public static class IntakeConfigs {
         // See ShooterHoodConfigs for documentation
 
-        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        public static final TalonFXConfiguration talonConfigs = new TalonFXConfiguration()
+        .withCurrentLimits(
+            new CurrentLimitsConfigs()
+                // Swerve azimuth does not require much torque output, so we can set a relatively low
+                // stator current limit to help avoid brownouts without impacting performance.
+                .withStatorCurrentLimit(Amps.of(50))
+                .withStatorCurrentLimitEnable(true));;
         public static final MotorOutputConfigs topMotorConfigs = new MotorOutputConfigs();
         public static MotorOutputConfigs bottomMotorConfigs;
 

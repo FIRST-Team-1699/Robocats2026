@@ -1,5 +1,6 @@
 package frc.team1699.subsystems;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.Matrix;
@@ -63,7 +64,7 @@ public class VisionSubsystem extends SubsystemBase {
                     hasTag=true;
                     estimatedPose = est.estimatedPose;
                     var estStdDevs = cam.getEstimationStdDevs();
-
+                    
                     estimateConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 },
                 () -> {

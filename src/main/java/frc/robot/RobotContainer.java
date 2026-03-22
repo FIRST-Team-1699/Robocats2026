@@ -29,6 +29,7 @@ import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.commands.AgitateCommand;
 import frc.team1699.commands.CloseShootCommand;
+import frc.team1699.commands.FarShootCommand;
 import frc.team1699.commands.ShootCommand;
 import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
@@ -99,15 +100,15 @@ public class RobotContainer {
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
-        .andThen(new WaitUntilCommand(() -> RobotPose.facingHub())));
+        // .andThen(new WaitUntilCommand(() -> RobotPose.facingHub()))
+        );
     NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
         .alongWith(autoShootCommand)
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("CloseShootCommand", autoCloseShootCommand);
-    NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand()
-        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+    NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand());
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
@@ -166,7 +167,12 @@ public class RobotContainer {
             intake.setSpeedCommand(IntakeSpeeds.STORED)
         );
 
-    
+    operatorController.povUp()
+        .whileTrue(new FarShootCommand(shoot, shootHood, indexer, hopper, intake));
+
+
+    // operatorController.povDown()
+    //     .onTrue(shootHood.setPositionCommand(HoodPositions.MIN));
 
     drivetrain.registerTelemetry(logger::telemeterize);
 

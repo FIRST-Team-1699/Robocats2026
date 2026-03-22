@@ -123,7 +123,7 @@ public class IntakeSubsystem extends SubsystemBase {
         STORED(0,0), 
         // TODO: TUNE
         INTAKE(-.5,1), 
-        OUTTAKE(0.1,-0.1);
+        OUTTAKE(0.25,-0.5);
 
         private double topSpeed, bottomSpeed;
         private IntakeSpeeds(double topSpeed, double bottomSpeed) {

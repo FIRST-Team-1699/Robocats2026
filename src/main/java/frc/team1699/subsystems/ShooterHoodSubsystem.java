@@ -116,7 +116,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         HoodPositions.INTERPOLATED.setDegrees(
             RobotPose.getHoodAngle()
         );
-
+        
         leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
 
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
@@ -135,7 +135,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         INTERPOLATED(0.6),
 
         MIN(0.01),
-        MAX(0.616),
+        MAX(0.6),
         CLOSE(0.45),
         SHUFFLE(0.01);
 
