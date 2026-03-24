@@ -71,7 +71,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return time.hasElapsed(AutoConstants.kShootTimerShort);
+        return time.hasElapsed(AutoConstants.kShootTimerLong);
     }
 
     @Override

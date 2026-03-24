@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.4175447345890415,
-        "y": 7.245707887414384
+        "x": 4.465,
+        "y": 0.8174874785958901
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.025033925513699,
-        "y": 7.34407004494863
+        "x": 7.8512099743150685,
+        "y": 0.7733277504280818
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.829106645976028,
-        "y": 6.8365851348458895
+        "x": 7.850928403253425,
+        "y": 3.3885128424657536
       },
       "prevControl": {
-        "x": 7.225042861729452,
-        "y": 7.534646725171234
-      },
-      "nextControl": {
-        "x": 8.041129847891204,
-        "y": 6.5915691988228735
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.829,
-        "y": 4.635591074486301
-      },
-      "prevControl": {
-        "x": 7.8374471318493155,
-        "y": 5.130123715753425
+        "x": 8.50919461686644,
+        "y": 1.1005602525684917
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,22 +30,22 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5438226744186047,
+      "waypointRelativePos": 0.05842633928571396,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.9133115310077518,
-      "rotationDegrees": 90.0
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.0
     }
   ],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
+      "name": "Fast Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 2.0,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 8.0,
-        "maxAcceleration": 5.0,
+        "maxVelocity": 3.4,
+        "maxAcceleration": 6.57,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -81,10 +65,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Top Neutral paths",
+  "folder": "Fast-Right Neutral",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
