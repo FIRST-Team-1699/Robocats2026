@@ -10,6 +10,7 @@ import frc.robot.Configs.IntakeConfigs;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
+
     private TalonFX topMotor, bottomMotor;
     private IntakeSpeeds currentSpeed;
     public IntakeSubsystem() {
@@ -122,7 +123,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum IntakeSpeeds {
         STORED(0,0), 
         // TODO: TUNE
-        INTAKE(-.5,1), 
+        INTAKE(-.667,1), 
         OUTTAKE(0.25,-0.5);
 
         private double topSpeed, bottomSpeed;

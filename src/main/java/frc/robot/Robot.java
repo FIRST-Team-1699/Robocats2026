@@ -64,6 +64,9 @@ public class Robot extends LoggedRobot {
     autoChooser.addOption(AutoConstants.topNeutral, AutoConstants.topNeutral);
     autoChooser.addOption(AutoConstants.bottomNeutral, AutoConstants.bottomNeutral);
 
+    autoChooser.addOption(AutoConstants.leftFast, AutoConstants.leftFast);
+    autoChooser.addOption(AutoConstants.rightFast, AutoConstants.rightFast);
+
     // default
     autoChooser.setDefaultOption(AutoConstants.shoot, AutoConstants.shoot);
 

@@ -405,6 +405,9 @@ public final class Constants {
       public static final String topNeutral = "Left-Neutral";
       public static final String bottomNeutral = "Right-Neutral";
 
+      public static final String rightFast = "Right-Fast-Auto";
+      public static final String leftFast = "Left-Fast-Auto";
+
       // Misc.
       public static final double kShootTimerShort= 2.75;
       public static final double kShootTimerLong= 6.5;

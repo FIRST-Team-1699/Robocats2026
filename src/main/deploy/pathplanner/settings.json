@@ -3,11 +3,13 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "Bottom Neutral paths",
     "DEPO paths",
+    "Fast-Left Neutral",
     "HP paths",
-    "Simple paths",
-    "Top Neutral paths"
+    "Left Neutral paths",
+    "Fast-Right Neutral",
+    "Right Neutral paths",
+    "Simple paths"
   ],
   "autoFolders": [
     "DEPO auto",

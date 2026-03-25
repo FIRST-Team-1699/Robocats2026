@@ -100,7 +100,6 @@ public class RobotContainer {
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
-        // .andThen(new WaitUntilCommand(() -> RobotPose.facingHub()))
         );
     NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
         .alongWith(autoShootCommand)
@@ -112,6 +111,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
+
+    NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.CLOSE));
 
     configureBindings();
 
