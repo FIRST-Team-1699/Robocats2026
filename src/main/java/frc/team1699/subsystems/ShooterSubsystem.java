@@ -165,7 +165,7 @@ public class ShooterSubsystem extends SubsystemBase {
         INTAKE(50,50),
         OUTTAKE(-50,-50),
         SHUFFLE(-35,-35),
-        // TODO: SET
+        
         CLOSE(-30,-25), 
         FAR(-36,-31),
         INTERPOLATED(-35,-35);

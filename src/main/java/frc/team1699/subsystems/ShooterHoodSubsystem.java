@@ -40,7 +40,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
             new SysIdRoutine.Mechanism((volts) -> this.voltageDrive(volts.in(Volts)), null, this)
         );
 
-        currentPosition=HoodPositions.STORED;
+        currentPosition=HoodPositions.INTERPOLATED;
         configureMotors();
     }
 
@@ -130,14 +130,14 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     }
 
     public enum HoodPositions {
-        STORED(0.01), 
+        STORED(0.02), 
         CLIMB(0.6),
         INTERPOLATED(0.6),
 
-        MIN(0.01),
+        MIN(0.02),
         MAX(0.6),
         CLOSE(0.45),
-        SHUFFLE(0.01);
+        SHUFFLE(0.02);
 
         private double degrees;
         private HoodPositions(double degrees) {

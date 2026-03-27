@@ -28,13 +28,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.commands.AgitateCommand;
-import frc.team1699.commands.CloseShootCommand;
-import frc.team1699.commands.FarShootCommand;
 import frc.team1699.commands.ShootCommand;
-import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
+import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
 import frc.team1699.subsystems.IntakePivotSubsystem.IntakePositions;
 import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
@@ -95,18 +93,32 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
-  private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command shootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake, ShootingPosition.INTERPOLATED);
+  private Command shootOnFlyCommand = new ShootCommand(
+        shoot, 
+        shootHood, 
+        indexer, 
+        hopper, 
+        intake, 
+        ShootingPosition.INTERPOLATED,
+        .25
+    );
+  private Command closeShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake, ShootingPosition.CLOSE);
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
         );
     NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
-        .alongWith(autoShootCommand)
+        .alongWith(shootCommand)
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
         .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
-    NamedCommands.registerCommand("CloseShootCommand", autoCloseShootCommand);
+    NamedCommands.registerCommand("ShootOnFlyCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
+        .alongWith(shootOnFlyCommand)
+        .andThen(() -> isAimingAtHub=false)
+        .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
+        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+    NamedCommands.registerCommand("CloseShootCommand", closeShootCommand);
     NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand());
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
@@ -168,8 +180,25 @@ public class RobotContainer {
             intake.setSpeedCommand(IntakeSpeeds.STORED)
         );
 
+    // TODO: TEST
+    // operatorController.rightTrigger()
+    //     .onTrue(
+    //         intake.setSpeedCommand(IntakeSpeeds.SCORE)
+    //     )
+    //     .onFalse(
+    //         intake.setSpeedCommand(IntakeSpeeds.STORED)
+    //     );
+
     operatorController.povUp()
-        .whileTrue(new FarShootCommand(shoot, shootHood, indexer, hopper, intake));
+        // .whileTrue(new FarShootCommand(shoot, shootHood, indexer, hopper, intake));
+        .whileTrue(new ShootCommand(
+            shoot, 
+            shootHood, 
+            indexer, 
+            hopper, 
+            intake, 
+            ShootingPosition.FAR
+        ));
 
 
     // operatorController.povDown()
@@ -199,21 +228,24 @@ public class RobotContainer {
             intake.toggleSpeedCommand());
 
     operatorController.x()
+        // .whileTrue(
+        //     new CloseShootCommand(shoot, indexer, hopper, intake));
         .whileTrue(
-            new CloseShootCommand(shoot, shootHood, indexer, hopper, intake));
+            new ShootCommand(shoot, shootHood, indexer, hopper, intake, ShootingPosition.CLOSE));
 
     operatorController.y()
+        // .whileTrue(
+        //     new ShuffleCommand(shoot, shootHood, indexer, hopper, intake));
         .whileTrue(
-            new ShuffleCommand(shoot, shootHood, indexer, hopper, intake));
+            new ShootCommand(shoot, shootHood, indexer, hopper, intake, ShootingPosition.SHUFFLE));
 
     operatorController.leftBumper()
         .onTrue(toggleAimToHub())
         .onFalse(toggleAimToHub());
 
-    // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
     operatorController.rightBumper()
         .whileTrue(
-            new ShootCommand(shoot, shootHood, indexer, hopper, intake));
+            new ShootCommand(shoot, shootHood, indexer, hopper, intake, ShootingPosition.INTERPOLATED));
 
     driverController.b().whileTrue(drivetrain.applyRequest(
         () -> point.withModuleDirection(new Rotation2d(-driverController.getLeftY(), -driverController.getLeftX()))));
@@ -244,4 +276,55 @@ public class RobotContainer {
     //     }
     //     return AutoBuilder.buildAuto(autoString);
     // }
+
+    public enum ShootingPosition {
+        CLOSE(
+            ShootingSpeeds.CLOSE,
+            HoodPositions.CLOSE,
+            IndexingSpeeds.INTAKE,
+            HopperSpeeds.INTAKE,
+            IntakeSpeeds.INTAKE
+            ), 
+        FAR(
+            ShootingSpeeds.FAR,
+            HoodPositions.MIN,
+            IndexingSpeeds.INTAKE,
+            HopperSpeeds.INTAKE,
+            IntakeSpeeds.INTAKE    
+            ), 
+        SHUFFLE(
+            ShootingSpeeds.SHUFFLE,
+            HoodPositions.SHUFFLE,
+            IndexingSpeeds.INTAKE,
+            HopperSpeeds.INTAKE,
+            IntakeSpeeds.INTAKE                
+        ),
+        INTERPOLATED(
+            ShootingSpeeds.INTERPOLATED,
+            HoodPositions.INTERPOLATED,
+            IndexingSpeeds.INTAKE,
+            HopperSpeeds.INTAKE,
+            IntakeSpeeds.INTAKE   
+            );
+        
+        public final ShootingSpeeds shootingSpeed;
+        public final HoodPositions hoodPosition;
+        public final IndexingSpeeds indexingSpeed;
+        public final HopperSpeeds hopperSpeed;
+        public final IntakeSpeeds intakeSpeed;
+
+        private ShootingPosition(
+            ShootingSpeeds shootingSpeed,
+            HoodPositions hoodPosition,
+            IndexingSpeeds indexingSpeed,
+            HopperSpeeds hopperSpeed,
+            IntakeSpeeds intakeSpeed
+        ) {
+            this.shootingSpeed=shootingSpeed;
+            this.hoodPosition=hoodPosition;
+            this.indexingSpeed=indexingSpeed;
+            this.hopperSpeed=hopperSpeed;
+            this.intakeSpeed=intakeSpeed;
+        }
+    }
 }

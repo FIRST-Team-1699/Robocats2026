@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.VisionConstants;
 
 public class RobotPose {
+    private static double shootOffset=0;
     private static Supplier<SwerveDriveState> stateSupplier;
     private static Pose2d pose;
     private static Rotation2d headingToHub;
@@ -77,15 +78,19 @@ public class RobotPose {
     }
 
     public static double getFlywheelTopSpeed() {
-        return VisionConstants.speedTopMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.speedTopMap.get(hubTranslation.getDistance(pose.getTranslation())+shootOffset);
     }
 
     public static double getFlywheelBottomSpeed() {
-        return VisionConstants.speedBottomMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.speedBottomMap.get(hubTranslation.getDistance(pose.getTranslation())+shootOffset);
     }
 
     public static double getHoodAngle() {
-        return VisionConstants.shootPivotMap.get(hubTranslation.getDistance(pose.getTranslation()));
+        return VisionConstants.shootPivotMap.get(hubTranslation.getDistance(pose.getTranslation())+shootOffset);
+    }
+
+    public static void setShootOffset(double offset) {
+        shootOffset=offset;
     }
 
     public static boolean facingHub() {

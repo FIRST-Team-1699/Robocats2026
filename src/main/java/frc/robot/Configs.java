@@ -335,8 +335,6 @@ public final class Configs {
             motorConfigs.PeakForwardDutyCycle = ClimbConstants.kForwardLimit;
             motorConfigs.PeakReverseDutyCycle = ClimbConstants.kReverseLimit;
             motorConfigs.NeutralMode = ClimbConstants.kNeutral;
-            // TODO: Mark for removal
-            // motorConfigs.DutyCycleNeutralDeadband = 0.05;
 
             talonConfigs.Slot0.GravityType = ClimbConstants.kGravityCounter;
             talonConfigs.Slot0.StaticFeedforwardSign = ClimbConstants.kFeedForward;

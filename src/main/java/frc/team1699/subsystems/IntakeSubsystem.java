@@ -124,6 +124,9 @@ public class IntakeSubsystem extends SubsystemBase {
         STORED(0,0), 
         // TODO: TUNE
         INTAKE(-.667,1), 
+
+        // TO TEST 
+        SCORE(.5,-.25),
         OUTTAKE(0.25,-0.5);
 
         private double topSpeed, bottomSpeed;

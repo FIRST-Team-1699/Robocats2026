@@ -343,23 +343,10 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(8, 8, 1000);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(6, 6, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-    // TODO: Update values to score to hub
     static {
-        // speedTopMap.put(3.0, -37.0);
-        // speedTopMap.put(2.15, -35.0);
-        // speedTopMap.put(1.37, -28.0);
-
-        // speedBottomMap.put(3.0, -30.0);
-        // speedBottomMap.put(2.15, -30.0);
-        // speedBottomMap.put(1.37, -23.0);
-
-        // shootPivotMap.put(3.0, .15);
-        // shootPivotMap.put(2.15, .2);
-        // shootPivotMap.put(1.37, .39);
-
         speedTopMap.put(.8, -30.0);
         speedTopMap.put(1.6, -30.0);
         speedTopMap.put(2.4, -31.0);
