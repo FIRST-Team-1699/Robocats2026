@@ -397,6 +397,6 @@ public final class Constants {
 
       // Misc.
       public static final double kShootTimerShort= 2.75;
-      public static final double kShootTimerLong= 6.5;
+      public static final double kShootTimerLong= 20;
     }
 }

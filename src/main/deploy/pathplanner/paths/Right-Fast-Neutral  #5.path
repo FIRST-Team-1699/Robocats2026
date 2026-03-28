@@ -31,12 +31,12 @@
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Slow Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.3693734793187349,
+      "name": "Fast Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 3.4,
+        "maxAcceleration": 6.57,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -44,12 +44,12 @@
       }
     },
     {
-      "name": "Fast Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 1.0,
+      "name": "Slow Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.3693734793187349,
       "constraints": {
-        "maxVelocity": 3.4,
-        "maxAcceleration": 6.57,
+        "maxVelocity": 2.0,
+        "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,

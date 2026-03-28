@@ -7,7 +7,7 @@ import frc.robot.Robot;
 import frc.robot.Configs.ShooterHoodConfigs;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.RobotContainer.ShootingPosition;
+// import frc.robot.RobotContainer.ShootingPosition;
 import frc.team1699.subsystems.HopperSubsystem;
 import frc.team1699.subsystems.IndexerSubsystem;
 import frc.team1699.subsystems.IntakePivotSubsystem;
@@ -32,7 +32,7 @@ public class ShootCommand extends Command {
     private final HopperSubsystem hopper;
     private final IntakeSubsystem intake;
 
-    private final ShootingPosition shootingPosition;
+    // private final ShootingPosition shootingPosition;
 
     private final Timer time;
 
@@ -42,7 +42,6 @@ public class ShootCommand extends Command {
         IndexerSubsystem indexer, 
         HopperSubsystem hopper,
         IntakeSubsystem intake,
-        ShootingPosition shootingPosition,
         double shootOffset
     ) {
         this.shoot = shoot;
@@ -51,7 +50,7 @@ public class ShootCommand extends Command {
         this.hopper = hopper;
         this.intake=intake;
         this.time=new Timer();
-        this.shootingPosition=shootingPosition;
+        // this.shootingPosition=shootingPosition;
         this.shootOffset=shootOffset;
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);
@@ -62,8 +61,8 @@ public class ShootCommand extends Command {
         ShooterHoodSubsystem shootHood,
         IndexerSubsystem indexer, 
         HopperSubsystem hopper,
-        IntakeSubsystem intake,
-        ShootingPosition shootingPosition
+        IntakeSubsystem intake
+        // ShootingPosition shootingPosition
     ) {
         this.shoot = shoot;
         this.shootHood = shootHood;
@@ -71,7 +70,7 @@ public class ShootCommand extends Command {
         this.hopper = hopper;
         this.intake=intake;
         this.time=new Timer();
-        this.shootingPosition=shootingPosition;
+        // this.shootingPosition=shootingPosition;
         this.shootOffset=0;
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);

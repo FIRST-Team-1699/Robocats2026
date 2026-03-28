@@ -40,7 +40,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
             new SysIdRoutine.Mechanism((volts) -> this.voltageDrive(volts.in(Volts)), null, this)
         );
 
-        currentPosition=HoodPositions.INTERPOLATED;
+        currentPosition=HoodPositions.STORED;
         configureMotors();
     }
 
@@ -116,7 +116,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         HoodPositions.INTERPOLATED.setDegrees(
             RobotPose.getHoodAngle()
         );
-        
+
         leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
 
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
@@ -130,14 +130,14 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     }
 
     public enum HoodPositions {
-        STORED(0.02), 
+        STORED(0.01), 
         CLIMB(0.6),
         INTERPOLATED(0.6),
 
-        MIN(0.02),
-        MAX(0.6),
+        MIN(0.01),
+        MAX(0.616),
         CLOSE(0.45),
-        SHUFFLE(0.02);
+        SHUFFLE(0.01);
 
         private double degrees;
         private HoodPositions(double degrees) {

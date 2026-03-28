@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.894065087653035,
-        "y": 0.7381013253296407
+        "x": 2.9263338088445074,
+        "y": 0.6256633380884444
       },
       "isLocked": false,
       "linkedName": "Right-Fast-End #3"
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 5.857639929366439,
-        "y": 3.5076643300513695
+        "x": 5.997036144578313,
+        "y": 3.56510843373494
       },
       "prevControl": {
-        "x": 5.490142765410959,
-        "y": 2.664171286386986
+        "x": 5.629538980622834,
+        "y": 2.7216153900705566
       },
       "nextControl": {
-        "x": 6.1166067004003475,
-        "y": 4.102054413382167
+        "x": 6.256002915612222,
+        "y": 4.159498517065737
       },
       "isLocked": false,
       "linkedName": null
@@ -79,10 +79,14 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.44776119402985065,
-      "rotationDegrees": -90.0
+      "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.7719387755102038,
+      "waypointRelativePos": 1.251452282157676,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.503734439834029,
       "rotationDegrees": -90.0
     },
     {

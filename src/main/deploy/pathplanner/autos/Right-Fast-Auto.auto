@@ -62,13 +62,19 @@
         {
           "type": "named",
           "data": {
+            "name": "ToggleIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "StartIntake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right-Fast-Neutral  #4"
+            "pathName": "Slow-Right-Fast-Neutral  #4"
           }
         },
         {

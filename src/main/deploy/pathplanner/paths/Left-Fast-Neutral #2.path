@@ -56,12 +56,12 @@
   ],
   "constraintZones": [
     {
-      "name": "Slow Zone",
-      "minWaypointRelativePos": 0.6850859184914848,
-      "maxWaypointRelativePos": 1.157979774939173,
+      "name": "Fast Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 1.0,
+        "maxVelocity": 3.4,
+        "maxAcceleration": 6.57,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -69,12 +69,12 @@
       }
     },
     {
-      "name": "Fast Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 2.0,
+      "name": "Slow Zone",
+      "minWaypointRelativePos": 0.6850859184914848,
+      "maxWaypointRelativePos": 1.157979774939173,
       "constraints": {
-        "maxVelocity": 3.4,
-        "maxAcceleration": 6.57,
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
