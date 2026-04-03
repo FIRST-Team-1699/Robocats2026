@@ -119,6 +119,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousExit() {
+      robotContainer.setGroundIntake();
       isInAuto=false;
     }
 

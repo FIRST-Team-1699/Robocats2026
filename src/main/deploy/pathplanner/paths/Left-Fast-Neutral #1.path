@@ -8,24 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.101855896832192,
-        "y": 7.265887146832192
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.140148812071919,
-        "y": 6.463831977739726
-      },
-      "prevControl": {
-        "x": 7.536085027825344,
-        "y": 7.161893568065071
-      },
-      "nextControl": {
-        "x": 8.352172013987097,
-        "y": 6.21881604171671
+        "x": 9.602681883024252,
+        "y": 7.961883024251071
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +20,8 @@
         "y": 4.633150791952055
       },
       "prevControl": {
-        "x": 8.021091181506849,
-        "y": 4.047107555650684
+        "x": 8.632282453637659,
+        "y": 4.960114122681883
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,21 +30,21 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.23880597014925156,
+      "waypointRelativePos": 0.1,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.7627710459183681,
+      "waypointRelativePos": 0.4,
       "rotationDegrees": 80.0
     }
   ],
   "constraintZones": [
     {
       "name": "Slow Zone",
-      "minWaypointRelativePos": 1.0641458474004042,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 0.3943281566509113,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.9,
+        "maxVelocity": 1.7,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -71,7 +55,7 @@
     {
       "name": "Fast Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 2.0,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 3.4,
         "maxAcceleration": 6.575,
@@ -93,7 +77,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 2.0,
     "rotation": 80.0
   },
   "reversed": false,

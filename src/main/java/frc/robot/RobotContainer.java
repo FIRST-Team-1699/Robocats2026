@@ -29,6 +29,7 @@ import frc.robot.Constants.*;
 import frc.robot.swerve.*;
 import frc.team1699.commands.AgitateCommand;
 import frc.team1699.commands.CloseShootCommand;
+import frc.team1699.commands.FarShootCommand;
 import frc.team1699.commands.ShootCommand;
 import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
@@ -113,22 +114,24 @@ public class RobotContainer {
         .alongWith(autoShootCommand)
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
-        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+        .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
 
     NamedCommands.registerCommand("ShootOnFlyCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
         .alongWith(shootOnFlyCommand)
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
-        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+        .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
 
     NamedCommands.registerCommand("CloseShootCommand", autoCloseShootCommand);
-    NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand()
-        .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
+    NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand());
+        // .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
 
     NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.CLOSE));
+
+    NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
 
     configureBindings();
 
@@ -202,7 +205,7 @@ public class RobotContainer {
             intakePivot.setPositionCommand(IntakePositions.AGITATE)
         )
         .onFalse(
-            intakePivot.setPositionCommand(IntakePositions.STORED)
+            intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE)
         );
 
     operatorController.leftTrigger()
@@ -213,13 +216,21 @@ public class RobotContainer {
         .whileTrue(
             new CloseShootCommand(shoot, shootHood, indexer, hopper, intake));
 
+    operatorController.povUp()
+        .whileTrue(
+            new FarShootCommand(shoot, shootHood, indexer, hopper, intake));
+
+    // operatorController.povLeft()
+    //     .onTrue(
+    //         Commands.runOnce(() -> isAimingAtHub=false));
+
     operatorController.y()
         .whileTrue(
             new ShuffleCommand(shoot, shootHood, indexer, hopper, intake));
 
     operatorController.leftBumper()
-        .onTrue(toggleAimToHub())
-        .onFalse(toggleAimToHub());
+        .onTrue(Commands.runOnce(() -> isAimingAtHub=true))
+        .onFalse(Commands.runOnce(() -> isAimingAtHub=false));
 
     // TODO: DISCUSS DIFFRENCE FROM X IN SPEEDS W/ DRIVERS
     operatorController.rightBumper()
@@ -241,6 +252,10 @@ public class RobotContainer {
 
     private Command toggleAimToHub() {
         return Commands.runOnce(() -> isAimingAtHub=!isAimingAtHub);
+    }
+
+    public void setGroundIntake() {
+        intakePivot.setPosition(IntakePositions.GROUND_INTAKE);
     }
 
     // public Command getAutoCommand(String autoString) {

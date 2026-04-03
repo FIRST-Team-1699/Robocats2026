@@ -8,40 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.824319937928083,
-        "y": 0.7185152504280827
+        "x": 7.855962910128387,
+        "y": 0.9103138373751789
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.586158872003425,
-        "y": 0.5645428082191779
+        "x": 4.647175463623395,
+        "y": 0.6515406562054205
       },
       "prevControl": {
-        "x": 5.324203553082192,
-        "y": 0.5588644584760265
+        "x": 5.385220144702162,
+        "y": 0.645862306462269
       },
       "nextControl": {
-        "x": 2.6236613894303678,
-        "y": 0.5796418223599146
+        "x": 2.684677981050337,
+        "y": 0.6666396703461571
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.2368616262482157,
-        "y": 2.398259629101284
+        "x": 3.09453637660485,
+        "y": 1.6607560627674753
       },
       "prevControl": {
-        "x": 2.7421030607876715,
-        "y": 1.9546591395547943
+        "x": 2.599777811144306,
+        "y": 1.2171555732209858
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Bottom-Neutral #2"
     }
   ],
   "rotationTargets": [
@@ -73,7 +73,7 @@
   "folder": "Right Neutral paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

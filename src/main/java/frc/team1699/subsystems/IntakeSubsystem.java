@@ -127,7 +127,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         // TO TEST 
         SCORE(.5,-.25),
-        OUTTAKE(0.25,-0.5);
+        OUTTAKE(0.333,-0.667);
 
         private double topSpeed, bottomSpeed;
         private IntakeSpeeds(double topSpeed, double bottomSpeed) {

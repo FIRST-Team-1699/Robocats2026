@@ -146,20 +146,25 @@ public class IntakePivotSubsystem extends SubsystemBase {
     }
 
     public boolean isInGroundIntake() {
-        return getCurrentPosition()==IntakePositions.GROUND_INTAKE;
+        return currentPosition==IntakePositions.GROUND_INTAKE;
     }
 
     public boolean isInStored() {
-        return getCurrentPosition()==IntakePositions.STORED;
+        return currentPosition==IntakePositions.STORED;
     }
 
     public boolean isInAgitate() {
-        return getCurrentPosition()==IntakePositions.AGITATE;
+        return currentPosition==IntakePositions.AGITATE;
     }
 
 
     private boolean hasMotionControl() {
         return leadMotor.getAppliedControl() == IntakePivotConfigs.motionRequest;
+    }
+
+    private boolean hasVoltageControl() {
+        return leadMotor.getAppliedControl() == IntakePivotConfigs.slowUpMotion
+            || leadMotor.getAppliedControl() == IntakePivotConfigs.slowDownMotion;
     }
 
     public void setSlot0() {
@@ -174,28 +179,6 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(isInTolerance() 
-            && currentPosition != IntakePositions.AGITATE
-            && hasMotionControl()
-        ) {
-            if(isInGroundIntake()) {
-                pauseActiveControl();
-                leadMotor.setNeutralMode(NeutralModeValue.Coast);
-                followMotor.setNeutralMode(NeutralModeValue.Coast);
-            }
-            if(isInStored()) {
-                pausePassiveControl();
-                leadMotor.setNeutralMode(NeutralModeValue.Brake);
-                followMotor.setNeutralMode(NeutralModeValue.Brake);
-            }
-            // TODO: DEAD CODE. WILL IMPLEMENT AFTER COMP
-            if(isInAgitate()) {
-                pausePassiveControl();
-                leadMotor.setNeutralMode(NeutralModeValue.Brake);
-                followMotor.setNeutralMode(NeutralModeValue.Brake);
-            }
-        }
-
         SmartDashboard.putNumber("Intake Pivot Position: ", getEncoderPosition());
         // SmartDashboard.putBoolean("Is Intake Pivot Motion Paused: ", hasMotionControl());
         SmartDashboard.putNumber("Inatke Error: ", getError());
@@ -214,13 +197,56 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
         // Logger.recordOutput("Intake/ Velocity: ", leadMotor.getVelocity().getValueAsDouble());
         // Logger.recordOutput("Intake/ Voltage: ", leadMotor.getMotorVoltage().getValueAsDouble());
-        // Logger.recordOutput("Intake/ Position: ", leadMotor.getPosition().getValueAsDouble());        
+        // Logger.recordOutput("Intake/ Position: ", leadMotor.getPosition().getValueAsDouble());     
+
+        if(isInTolerance() 
+            && hasMotionControl()
+        ) {
+            if(isInGroundIntake()) {
+                pauseActiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Coast);
+                followMotor.setNeutralMode(NeutralModeValue.Coast);
+            }
+            if(isInStored()) {
+                pausePassiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Brake);
+                followMotor.setNeutralMode(NeutralModeValue.Brake);
+            }
+            if(isInAgitate()) {
+                pausePassiveControl();
+                leadMotor.setNeutralMode(NeutralModeValue.Brake);
+                followMotor.setNeutralMode(NeutralModeValue.Brake);
+            }
+            return;
+        }
+
+        if(
+            !isInTolerance() 
+            && !hasMotionControl()
+            && !isInGroundIntake()) {
+            if(isInAgitate()) {
+                leadMotor.setControl(
+                    currentPosition.rotations > getEncoderPosition()  ?
+                        IntakePivotConfigs.slowDownMotion :
+                        IntakePivotConfigs.slowUpMotion
+                );
+            } else {
+                leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(currentPosition.rotations));
+            }
+            return;
+        }
+
+        if(hasVoltageControl() 
+            && (currentPosition.rotations < 0.07 || currentPosition.rotations > .13)) {
+            leadMotor.setControl(IntakePivotConfigs.motionRequest.withPosition(currentPosition.rotations));
+            return;
+        }   
     }
 
     public enum IntakePositions {
         STORED(0.00), 
         // PLATEFORM_INTAKE(130), 
-        AGITATE(.15),
+        AGITATE(.1),
         GROUND_INTAKE(0.22);
 
         private double rotations;

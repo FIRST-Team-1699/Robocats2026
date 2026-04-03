@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.953702215325343,
-        "y": 4.8547472174657536
+        "x": 7.537391514891278,
+        "y": 4.284511938798012
       },
       "isLocked": false,
       "linkedName": "Left-Fast-End #1"
     },
     {
       "anchor": {
-        "x": 4.711035637842466,
-        "y": 5.392313302654109
+        "x": 4.608359486447931,
+        "y": 5.503537803138374
       },
       "prevControl": {
-        "x": 5.339877675513699,
-        "y": 5.44003959760274
+        "x": 5.643452211126961,
+        "y": 5.477660485021398
       },
       "nextControl": {
-        "x": 4.212774450410701,
-        "y": 5.3544975095482785
+        "x": 4.108821416145137,
+        "y": 5.516026254895944
       },
       "isLocked": false,
       "linkedName": null
@@ -50,8 +50,12 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.5756929637526629,
       "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 0.68230277185501,
+      "rotationDegrees": -110.0
     }
   ],
   "constraintZones": [
@@ -104,13 +108,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.2,
     "rotation": -45.0
   },
   "reversed": false,
   "folder": "Fast-Left Neutral",
   "idealStartingState": {
-    "velocity": 0.5,
+    "velocity": 2.0,
     "rotation": 80.0
   },
   "useDefaultConstraints": true

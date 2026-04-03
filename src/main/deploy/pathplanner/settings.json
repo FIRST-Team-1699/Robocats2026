@@ -5,9 +5,10 @@
   "pathFolders": [
     "DEPO paths",
     "Fast-Left Neutral",
+    "Fast-Right Neutral",
     "HP paths",
     "Left Neutral paths",
-    "Fast-Right Neutral",
+    "Large-Path-Left Neutral",
     "Right Neutral paths",
     "Simple paths"
   ],

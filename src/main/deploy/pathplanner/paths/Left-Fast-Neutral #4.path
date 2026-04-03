@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.2535235378031384,
-        "y": 7.146747503566334
+        "x": 3.068659058487874,
+        "y": 6.810342368045649
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0126581208749,
-        "y": 7.413894980476764
+        "x": 3.8277936415596354,
+        "y": 7.077489844956079
       },
       "isLocked": false,
       "linkedName": "Left-Fast-End #3"
@@ -36,12 +36,12 @@
         "y": 4.708095622859589
       },
       "prevControl": {
-        "x": 5.789593589469178,
-        "y": 6.37799973244863
+        "x": 6.1351212553495005,
+        "y": 6.422182596291013
       },
       "nextControl": {
-        "x": 5.838506801708047,
-        "y": 4.305942893986817
+        "x": 5.758294511223151,
+        "y": 4.312095927617976
       },
       "isLocked": false,
       "linkedName": null
@@ -52,12 +52,12 @@
         "y": 5.08375834760274
       },
       "prevControl": {
-        "x": 6.784133183220725,
-        "y": 4.545315422848061
+        "x": 6.714160455264957,
+        "y": 4.5383644859252295
       },
       "nextControl": {
-        "x": 6.5776640625,
-        "y": 5.796977846746574
+        "x": 6.665606276747502,
+        "y": 5.943452211126962
       },
       "isLocked": false,
       "linkedName": null
@@ -116,14 +116,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
-    "rotation": 0.0
+    "velocity": 2.0,
+    "rotation": -70.0
   },
   "reversed": false,
   "folder": "Fast-Left Neutral",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": -55.0
+    "velocity": 0.2,
+    "rotation": -64.0
   },
   "useDefaultConstraints": true
 }

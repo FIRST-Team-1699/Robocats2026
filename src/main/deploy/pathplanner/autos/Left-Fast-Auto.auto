@@ -13,6 +13,12 @@
         {
           "type": "named",
           "data": {
+            "name": "MaxShootHood"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "StartIntake"
           }
         },
@@ -87,12 +93,6 @@
           "type": "path",
           "data": {
             "pathName": "Left-Fast-Neutral #5"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AimToHub"
           }
         },
         {

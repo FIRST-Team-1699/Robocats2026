@@ -224,7 +224,7 @@ public final class Constants {
     public static final double rotorToSensor=1;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=0.04;
+    public static final double kTolerance=0.01;
     public static final double kCooldownTimer=1;
   }
 
@@ -343,7 +343,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(6, 6, 1000);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     static {
@@ -397,6 +397,6 @@ public final class Constants {
 
       // Misc.
       public static final double kShootTimerShort= 2.75;
-      public static final double kShootTimerLong= 20;
+      public static final double kShootTimerLong= 2.75;
     }
 }
