@@ -71,7 +71,7 @@ public final class Constants {
     public static final double kMagnetOffset=-0.16;
 
     // EVERYTHING ELSE
-    public static final double kTolerance=0.05;
+    public static final double kTolerance=0.0375;
   }
 
   public static class ShooterConstants {

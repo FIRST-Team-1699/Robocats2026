@@ -23,6 +23,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "WarmupShooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Bottom-Neutral #2"
@@ -32,12 +38,6 @@
           "type": "named",
           "data": {
             "name": "StopIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AimToHub"
           }
         },
         {
@@ -59,6 +59,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "WarmupShooter"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Bottom-Neutral  #4"
@@ -68,12 +74,6 @@
           "type": "named",
           "data": {
             "name": "StopIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AimToHub"
           }
         },
         {

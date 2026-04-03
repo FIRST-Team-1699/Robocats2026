@@ -40,7 +40,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
             new SysIdRoutine.Mechanism((volts) -> this.voltageDrive(volts.in(Volts)), null, this)
         );
 
-        currentPosition=HoodPositions.STORED;
+        currentPosition=HoodPositions.INTERPOLATED;
         configureMotors();
     }
 
@@ -117,7 +117,9 @@ public class ShooterHoodSubsystem extends SubsystemBase {
             RobotPose.getHoodAngle()
         );
 
-        leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
+        if(!isInTolerance()) {
+            leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
+        }
 
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
         SmartDashboard.putNumber("Shooter hypothetical: ", this.currentPosition.degrees);
