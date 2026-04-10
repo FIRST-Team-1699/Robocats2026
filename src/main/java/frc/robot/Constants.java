@@ -304,12 +304,15 @@ public final class Constants {
         new InterpolatingDoubleTreeMap();
 
     // Photon Vision Constants
-    public static final String kLeftCamName = "Left_Cam";
-    public static final String kRightCamName = "Right_Cam";
+    public static final String kFrontLeftName = "Front_Left_Cam";
+    public static final String kFrontRightName = "Front_Right_Cam";
+
+    public static final String kBackLeftName = "Back_Left_Cam";
+    public static final String kBackRightName = "Back_Right_Cam";
 
     // Position of camera relative to the center of the bot. Used for PhotonPoseEstimator
     // in Camera.java
-    public static final Transform3d kRightCamOffset = 
+    public static final Transform3d kFrontRightOffset = 
       new Transform3d(
         new Translation3d(
             0,
@@ -323,16 +326,44 @@ public final class Constants {
         )
     );
 
-    public static final Transform3d kLeftCamOffset = 
+    public static final Transform3d kFrontLeftOffset = 
       new Transform3d(
         new Translation3d(
             0,
-            Units.inchesToMeters(11.5),
+            Units.inchesToMeters(11),
             Units.inchesToMeters(20.625)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
             Angle.ofRelativeUnits(20, Degree),
+            Angle.ofRelativeUnits(0, Degree)
+        )
+    );
+
+    public static final Transform3d kBackRightOffset = 
+      new Transform3d(
+        new Translation3d(
+            0,
+            -Units.inchesToMeters(11),
+            Units.inchesToMeters(20.5)
+        ),
+        new Rotation3d(
+            Angle.ofRelativeUnits(0, Degree),
+            Angle.ofRelativeUnits(170, Degree),
+            Angle.ofRelativeUnits(0, Degree)
+        )
+    );
+
+    public static final Transform3d kBackLeftOffset = 
+      new Transform3d(
+        new Translation3d(
+            0,
+            Units.inchesToMeters(11),
+            Units.inchesToMeters(20.625)
+        ),
+        new Rotation3d(
+            Angle.ofRelativeUnits(0, Degree),
+            Angle.ofRelativeUnits(170, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
@@ -398,5 +429,10 @@ public final class Constants {
       // Misc.
       public static final double kShootTimerShort= 2.75;
       public static final double kShootTimerLong= 2.75;
+    }
+
+    public static final class LEDConstants {
+        public static final int kPort = 0;
+        public static final int kLEDLength = 36;
     }
 }

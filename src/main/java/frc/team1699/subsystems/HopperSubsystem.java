@@ -79,8 +79,8 @@ public class HopperSubsystem extends SubsystemBase {
     public enum HopperSpeeds {
         STORED(0), 
         // TODO: TUNE
-        INTAKE(.07),
-        OUTTAKE(-.05);
+        INTAKE(1),
+        OUTTAKE(-1);
 
 
         private double speed;

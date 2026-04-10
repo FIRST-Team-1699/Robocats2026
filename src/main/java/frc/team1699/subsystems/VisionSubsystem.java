@@ -20,7 +20,7 @@ import frc.utils.vision.*;
 
 public class VisionSubsystem extends SubsystemBase {
     public static double currentAmbiguity;
-    private Camera leftCam, rightCam;
+    private Camera backLeftCam, backRightCam, frontLeftCam, frontRightCam;
     private Camera[] cams;
     private boolean hasTag;
     private Pose3d estimatedPose = new Pose3d();
@@ -33,15 +33,28 @@ public class VisionSubsystem extends SubsystemBase {
 
     public VisionSubsystem (EstimateConsumer estimateConsumer) {
         this.estimateConsumer=estimateConsumer;
-        leftCam = new Camera(
-            VisionConstants.kLeftCamName,
-            VisionConstants.kLeftCamOffset
+        frontLeftCam = new Camera(
+            VisionConstants.kFrontLeftName,
+            VisionConstants.kFrontLeftOffset
         );
-        rightCam = new Camera(
-            VisionConstants.kRightCamName,
-            VisionConstants.kRightCamOffset
+        frontRightCam = new Camera(
+            VisionConstants.kFrontRightName,
+            VisionConstants.kFrontRightOffset
         );
-        cams= new Camera[]{rightCam,leftCam};
+        backLeftCam = new Camera(
+            VisionConstants.kBackLeftName,
+            VisionConstants.kBackLeftOffset
+        );
+        backRightCam = new Camera(
+            VisionConstants.kBackRightName,
+            VisionConstants.kBackRightOffset
+        );
+        cams= new Camera[]{
+            backLeftCam,
+            backRightCam,
+            frontLeftCam,
+            frontRightCam
+        };
 
         PortForwarder.add(5800, "photonvision.local:5800", 5800);
     }

@@ -27,9 +27,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.AutoConstants;
+import frc.utils.LEDController;
 import frc.utils.vision.RobotPose;
 
 public class Robot extends LoggedRobot {
+  public static double time;
+  public static boolean hasWonAuto;
   public static boolean isInAuto=false;
 
   private Command autoCommand;
@@ -85,7 +88,12 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
+    time=DriverStation.getMatchTime();
+
     RobotPose.periodic();
+    // TODO: UNCOMMENT
+    // LEDController.periodic();
+
   }
 
   @Override
@@ -120,6 +128,13 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousExit() {
       robotContainer.setGroundIntake();
+
+      if(lastAlliance.isPresent()) {
+        hasWonAuto=
+          lastAlliance.get() == (
+            DriverStation.getGameSpecificMessage().startsWith("B")
+              ? Alliance.Blue : Alliance.Red);
+      }
       isInAuto=false;
     }
 
