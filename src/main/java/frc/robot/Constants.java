@@ -148,7 +148,7 @@ public final class Constants {
     public static final double kForwardLimit=0.8;
     public static final double kReverseLimit=-0.8;
 
-    public static final InvertedValue kInverted= InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kInverted= InvertedValue.CounterClockwise_Positive;
 
     public static final NeutralModeValue kNeutral= NeutralModeValue.Brake;
 

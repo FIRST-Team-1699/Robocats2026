@@ -43,6 +43,7 @@ public class LEDController extends SubsystemBase {
         blink = false;
 
         start();
+        changeColor(currentRGB);
 
     }
 
