@@ -11,28 +11,43 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.LEDConstants;
 
 // NOTE: THIS CLASS MAY NOT WORK INDEPENDENTLY BECAUSE THE REQUIRED SUBSYSTEMS ARE INVISIBLE TO IT 
-public class LEDController {
+public class LEDController extends SubsystemBase {
     // DECLARATIONS
-    private static final AddressableLED leds = 
-        new AddressableLED(LEDConstants.kPort);
-    private static AddressableLEDBuffer ledBuffer
-        = new AddressableLEDBuffer(LEDConstants.kLEDLength);
+    private AddressableLED leds; 
+    private AddressableLEDBuffer ledBuffer;
+        
 
-    private static int cycleTicks = 0;
-    private static int blinkTicks = 0;
+    private int cycleTicks;
+    private int blinkTicks;
 
-    private static TargetRGB currentRGB = TargetRGB.BLUE;
-    private static boolean blink = false;
-
+    private  TargetRGB currentRGB;
+    private  boolean blink;
+/*
     static {
         leds.setLength(LEDConstants.kLEDLength);
         currentRGB = TargetRGB.BLUE;
         start();
         changeColor(currentRGB);
     }
+*/
+    public LEDController() {
+        leds = new AddressableLED(LEDConstants.kPort);
+        ledBuffer = new AddressableLEDBuffer(LEDConstants.kLEDLength);
+
+        leds.setLength(ledBuffer.getLength());
+
+        cycleTicks = 0;
+        blinkTicks = 0;
+
+        currentRGB = TargetRGB.BLUE;
+        blink = false;
+
+        start();
+
+    }
 
     /**Changes the colot of LEDs */
-    public static void changeColor(TargetRGB targetRGB) {
+    public void changeColor(TargetRGB targetRGB) {
         // STOPS FROM WASTING RESOURCES VIA RETURN
         // ALLOWS LEDS TO TURN ON/OFF, BLINK FOR INTAKE
         if(blink && blinkTicks < 10) {
@@ -43,7 +58,7 @@ public class LEDController {
         leds.setData(ledBuffer);
     }
 
-    public static void setColorDirectly(TargetRGB targetRGB) {
+    public void setColorDirectly(TargetRGB targetRGB) {
         for(int i = 0; i < LEDConstants.kLEDLength; i++) {
             ledBuffer.setRGB(i, targetRGB.red, targetRGB.green, targetRGB.blue);
         }
@@ -53,16 +68,21 @@ public class LEDController {
 
     // METHODS TO MANIPULATE LEDs in-match
     /**Enables LEDs and assigns color to "START_UP" Enum */
-    public static void start() {
+    public void start() {
         leds.start();
     }
 
     /**Disables LEDs*/
-    public static void stop() {
+    public  void stop() {
         leds.stop();
     }
 
-    public static void periodic() {
+    public void periodic() {
+        changeColor(TargetRGB.BLUE);
+        cycleTicks++;
+        blinkTicks++;
+        if (blinkTicks > 20) blinkTicks = 0;
+        /*
         double time = DriverStation.getMatchTime();
         cycleTicks++;
         blinkTicks++;
@@ -79,19 +99,20 @@ public class LEDController {
         if(cycleTicks >= 10) {
             updateColor();
         }
+            */
     }
 
-    private static boolean endOfAuto() {
+    private boolean endOfAuto() {
         return Robot.time <= 5.0;
     }
 
-    private static boolean wonTransitionPeriod() {
+    private boolean wonTransitionPeriod() {
         // TODO: Fix
         // return Robot.time > 130.0;
         return false;
     }
 
-    private static boolean endOfActive() {
+    private boolean endOfActive() {
         if(Robot.hasWonAuto) {
             // return ()
         } else {
@@ -100,7 +121,7 @@ public class LEDController {
         return false;
     }
 
-    private static boolean endOfEndgame() {
+    private boolean endOfEndgame() {
         return Robot.time <= 5.0;
     }
 
@@ -134,12 +155,11 @@ public class LEDController {
         30
     };
 
-    private static void updateColor() {
+    private void updateColor() {
         if(Robot.isInAuto) {
             
             return;
         }
-
 
     }
 

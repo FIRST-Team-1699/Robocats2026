@@ -41,6 +41,7 @@ import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import frc.utils.vision.AllianceFlip;
 import frc.utils.vision.RobotPose;
+import frc.utils.LEDController;
 
 public class RobotContainer {
   public static boolean isAimingAtHub=false;
@@ -94,6 +95,8 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
+
+  private final LEDController leds = new LEDController();
 
   private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
   private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
