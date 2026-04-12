@@ -90,7 +90,7 @@ public class IndexerSubsystem extends SubsystemBase {
         STORED(0), 
         // TODO: TUNE
         INTAKE(0.3),
-        SHOOTING(0.4),
+        SHOOTING(0.6),
         OUTTAKE(-0.1);
 
 
