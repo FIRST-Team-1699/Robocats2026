@@ -81,6 +81,9 @@ public class ShootCommand extends Command {
     @Override
     public void initialize() {
         intake.setSpeed(IntakeSpeeds.INTAKE);
+
+        // start with the indexer speed set to stored, will be changed to shoot when shooter is in tollerance
+        indexer.setSpeed(IndexingSpeeds.STORED);
         time.start();
     }
 
@@ -90,12 +93,8 @@ public class ShootCommand extends Command {
         shoot.setSpeed(ShootingSpeeds.INTERPOLATED);
         shootHood.setPosition(HoodPositions.INTERPOLATED);
         hopper.setSpeed(HopperSpeeds.INTAKE);
-        if(((shoot.isTotalInTollerance().getAsBoolean() && shootHood.isInTolerance()) || this.isInTolerance)
-            && time.get()>.1) {
-            isInTolerance=true;
+        if((shoot.isTotalInTollerance().getAsBoolean() && shootHood.isInTolerance())) {
             indexer.setSpeed(IndexingSpeeds.INTAKE);
-        } else {
-            indexer.setSpeed(IndexingSpeeds.STORED);
         }
     }
 
