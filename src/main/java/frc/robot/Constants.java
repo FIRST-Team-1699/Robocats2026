@@ -405,7 +405,7 @@ public final class Constants {
         shootPivotMap.put(7.0, 0.01);
         shootPivotMap.put(7.8,0.01);
         shootPivotMap.put(7.8,0.01);
-        shootPivotMap.put(10,0.01);
+        shootPivotMap.put(10.0,0.01);
     }
   }
 
