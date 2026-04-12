@@ -43,6 +43,11 @@ public class IntakeSubsystem extends SubsystemBase {
         bottomMotor.set(currentSpeed.bottomSpeed);
     }
 
+    public Command intakeWithIndex(IndexerSubsystem index) {
+        index.indexUntilFull();
+        return toggleSpeedCommand();
+    } 
+      
     public Command toggleSpeedCommand() {
         return new ConditionalCommand(
             setSpeedCommand(IntakeSpeeds.INTAKE), 

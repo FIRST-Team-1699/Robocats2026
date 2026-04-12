@@ -213,7 +213,8 @@ public class RobotContainer {
 
     operatorController.leftTrigger()
         .onTrue(
-            intake.toggleSpeedCommand());
+            intake.intakeWithIndex(indexer));
+ //           intake.toggleSpeedCommand());
 
     operatorController.x()
         .whileTrue(

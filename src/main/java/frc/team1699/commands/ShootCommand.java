@@ -94,7 +94,7 @@ public class ShootCommand extends Command {
         shootHood.setPosition(HoodPositions.INTERPOLATED);
         hopper.setSpeed(HopperSpeeds.INTAKE);
         if((shoot.isTotalInTollerance().getAsBoolean() && shootHood.isInTolerance())) {
-            indexer.setSpeed(IndexingSpeeds.INTAKE);
+            indexer.setSpeed(IndexingSpeeds.SHOOTING);
         }
     }
 
