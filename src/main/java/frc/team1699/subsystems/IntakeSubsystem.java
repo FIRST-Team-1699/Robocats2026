@@ -128,7 +128,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum IntakeSpeeds {
         STORED(0,0), 
         // TODO: TUNE
-        INTAKE(-.667,1), 
+        INTAKE(-.333,1), 
 
         // TO TEST 
         SCORE(.5,-.25),
