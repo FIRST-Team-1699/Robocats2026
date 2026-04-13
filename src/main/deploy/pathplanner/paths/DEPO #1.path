@@ -3,34 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.560328102710413,
-        "y": 6.254
+        "x": 3.549461151541096,
+        "y": 4.283345676369863
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7877318116990146,
-        "y": 6.435141226813288
+        "x": 2.40210600385274,
+        "y": 4.527280072773973
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.494,
-        "y": 7.354
+        "x": 0.7713872003424658,
+        "y": 4.9862409032534245
       },
       "prevControl": {
-        "x": 1.192687589158345,
-        "y": 7.88448502139246
+        "x": 2.120206442636987,
+        "y": 5.705514180222603
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "DEPO #1"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "pointTowardsZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 1.5,
+        "y": 4.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.661648418491484,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Point Towards Zone"
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -42,7 +53,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -53.0
   },
   "reversed": false,
   "folder": "DEPO paths",

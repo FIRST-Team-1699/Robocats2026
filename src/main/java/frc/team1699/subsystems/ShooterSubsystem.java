@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.RobotContainer;
 import frc.robot.Configs.ShooterConfigs;
 import frc.robot.Constants.ShooterConstants;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
@@ -134,12 +135,21 @@ public class ShooterSubsystem extends SubsystemBase {
         bottomMotor.setVoltage(volts);
     }
 
+    private boolean inStored() {
+        return this.currentSpeed==ShootingSpeeds.STORED;
+    }
+
    @Override
     public void periodic() {
         ShooterSubsystem.ShootingSpeeds.INTERPOLATED.setSpeeds(
             RobotPose.getFlywheelTopSpeed(),
             RobotPose.getFlywheelBottomSpeed()
         );        
+
+        if(RobotContainer.isAimingAtHub
+            && inStored()) {
+            setSpeed(ShootingSpeeds.INTERPOLATED);
+        }
 
         SmartDashboard.putNumber("Top Intake Speed: " , topMotor.getVelocity().getValueAsDouble());
         SmartDashboard.putNumber("Bottom Intake Speed: " , bottomMotor.getVelocity().getValueAsDouble());

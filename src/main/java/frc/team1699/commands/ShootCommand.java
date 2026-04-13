@@ -33,6 +33,7 @@ public class ShootCommand extends Command {
     private final IndexerSubsystem indexer;
     private final HopperSubsystem hopper;
     private final IntakeSubsystem intake;
+    private final boolean isLastShot;
 
     // private final ShootingPosition shootingPosition;
 
@@ -53,7 +54,28 @@ public class ShootCommand extends Command {
         this.intake=intake;
         this.time=new Timer();
         // this.shootingPosition=shootingPosition;
+        this.isLastShot=false;
         this.shootOffset=shootOffset;
+
+        addRequirements(shoot, shootHood, indexer, hopper,intake);
+    }
+
+    public ShootCommand(
+        ShooterSubsystem shoot, 
+        ShooterHoodSubsystem shootHood,
+        IndexerSubsystem indexer, 
+        HopperSubsystem hopper,
+        IntakeSubsystem intake,
+        boolean isLastShot
+    ) {
+        this.shoot = shoot;
+        this.shootHood = shootHood;
+        this.indexer = indexer;
+        this.hopper = hopper;
+        this.intake=intake;
+        this.time=new Timer();
+        // this.shootingPosition=shootingPosition;
+        this.isLastShot=isLastShot;
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);
     }
@@ -74,6 +96,7 @@ public class ShootCommand extends Command {
         this.time=new Timer();
         // this.shootingPosition=shootingPosition;
         this.shootOffset=0;
+        this.isLastShot=false;
         // this.isInTolerance=false;
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);
@@ -93,7 +116,7 @@ public class ShootCommand extends Command {
         hopper.setSpeed(HopperSpeeds.INTAKE);
         // if(((shoot.isTotalInTollerance().getAsBoolean() && shootHood.isInTolerance()) || this.isInTolerance)
         //     && time.get()>.1) {
-        if(time.get()>.1 || Robot.isInAuto) {
+        if(time.get()>.05 || Robot.isInAuto) {
             // isInTolerance=true;
             indexer.setSpeed(IndexingSpeeds.INTAKE);
         } else {
@@ -103,7 +126,7 @@ public class ShootCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return time.hasElapsed(AutoConstants.kShootTimerLong) && Robot.isInAuto;
+        return time.hasElapsed(AutoConstants.kShootTimerLong) && Robot.isInAuto && !isLastShot;
     }
 
     @Override

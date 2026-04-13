@@ -95,7 +95,7 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake, true);
   private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
 
   private Command shootOnFlyCommand = new ShootCommand(
@@ -111,6 +111,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
         .andThen(new WaitUntilCommand(() -> RobotPose.facingHub())));
     NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
+        .alongWith(autoShootCommand)
+        .andThen(() -> isAimingAtHub=false)
+        .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
+        .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
+
+    NamedCommands.registerCommand("LastShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
         .alongWith(autoShootCommand)
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))

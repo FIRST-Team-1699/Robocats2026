@@ -35,21 +35,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "DEPO #3"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "AimToHub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootCommand"
+            "name": "LastShootCommand"
           }
         }
       ]
