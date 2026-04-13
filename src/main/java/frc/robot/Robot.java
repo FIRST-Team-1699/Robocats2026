@@ -19,10 +19,14 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -34,7 +38,7 @@ public class Robot extends LoggedRobot {
   public static double time;
   public static boolean hasWonAuto;
   public static boolean isInAuto=false;
-
+  
   private Command autoCommand;
 
   private SendableChooser<String> autoChooser;
@@ -48,6 +52,7 @@ public class Robot extends LoggedRobot {
         .withJoystickReplay();
 
   public Robot() {
+   
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<String>();
     // No auto
@@ -83,6 +88,7 @@ public class Robot extends LoggedRobot {
     Logger.addDataReceiver(new NT4Publisher());
 
     Logger.start();
+
   }
 
   @Override
@@ -92,14 +98,15 @@ public class Robot extends LoggedRobot {
     time=DriverStation.getMatchTime();
 
     RobotPose.periodic();
-    // TODO: UNCOMMENT
-    // LEDController.periodic();
+   // LEDController.periodic();
 
   }
 
   @Override
   public void disabledInit() {
     isInAuto=false;
+    //LEDController.setColorDirectly(LEDController.TargetRGB.BLUE);
+   // LEDController.start();
   }
 
   @Override

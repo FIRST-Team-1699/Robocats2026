@@ -43,6 +43,11 @@ public class IntakeSubsystem extends SubsystemBase {
         bottomMotor.set(currentSpeed.bottomSpeed);
     }
 
+    public Command intakeWithIndex(IndexerSubsystem index) {
+        index.indexUntilFull();
+        return toggleSpeedCommand();
+    } 
+      
     public Command toggleSpeedCommand() {
         return new ConditionalCommand(
             setSpeedCommand(IntakeSpeeds.INTAKE), 
@@ -123,7 +128,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public enum IntakeSpeeds {
         STORED(0,0), 
         // TODO: TUNE
-        INTAKE(-.667,1), 
+        INTAKE(-.333,1), 
 
         // TO TEST 
         SCORE(.5,-.25),

@@ -105,6 +105,9 @@ public class ShootCommand extends Command {
     @Override
     public void initialize() {
         intake.setSpeed(IntakeSpeeds.INTAKE);
+
+        // start with the indexer speed set to stored, will be changed to shoot when shooter is in tollerance
+        indexer.setSpeed(IndexingSpeeds.STORED);
         time.start();
     }
 

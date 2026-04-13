@@ -51,8 +51,10 @@ public class RobotPose {
 
         Logger.recordOutput("Localization/RobotPose/Pose", pose);
         Logger.recordOutput("Localization/RobotPose/HeadingToHub", headingToHub);
-
-        SmartDashboard.putNumber("Distance to Hub: ", getDistanceToHub());
+        
+        Logger.recordOutput
+        ("Localization/RobotPose/HoodAngle ", getHoodAngle());
+        SmartDashboard.putNumber("Localization/RobotPose/HeadingToHub ", getDistanceToHub());
     }
 
     private static void refreshPosesIfAllianceChanged() {
