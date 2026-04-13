@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.Volts;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -64,6 +65,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     
 
     public double getError() {
+                System.out.println(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
         return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
     }
 
@@ -114,12 +116,16 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         HoodPositions.INTERPOLATED.setDegrees(
-            RobotPose.getHoodAngle()
-        );
+            RobotPose.getHoodAngle());
 
         if(!isInTolerance()) {
             leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
-        }
+        //    System.out.println("is not in tolerance");
+        }// else {
+          //  leadMotor.setControl(new StaticBrake());
+         //   System.out.println("tollerance achived");
+       // }
+
 
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
         SmartDashboard.putNumber("Shooter hypothetical: ", this.currentPosition.degrees);

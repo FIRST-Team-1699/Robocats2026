@@ -154,7 +154,8 @@ public final class Configs {
                 .withStatorCurrentLimit(Amps.of(40))
                 .withStatorCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(70)
-                .withSupplyCurrentLimitEnable(true)        
+                .withSupplyCurrentLimitEnable(true) 
+                   
         );
         
         public static final MotorOutputConfigs motorConfigs = new MotorOutputConfigs();
@@ -210,7 +211,7 @@ public final class Configs {
         public static final  EmptyControl pauseMotion = new EmptyControl();
 
         static {
-            motorConfigs.Inverted = IndexerConstants.kInverted;
+            motorConfigs.Inverted = HopperConstants.kInverted;
             motorConfigs.PeakForwardDutyCycle = IndexerConstants.kForwardLimit;
             motorConfigs.PeakReverseDutyCycle = IndexerConstants.kReverseLimit;
             motorConfigs.NeutralMode = IndexerConstants.kNeutral;
