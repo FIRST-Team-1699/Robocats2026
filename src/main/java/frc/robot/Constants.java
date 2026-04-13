@@ -427,8 +427,8 @@ public final class Constants {
       public static final String leftFast = "Left-Fast-Auto";
 
       // Misc.
-      public static final double kShootTimerShort= 2.75;
-      public static final double kShootTimerLong= 2.75;
+      public static final double kShootTimerShort= 2.5;
+      public static final double kShootTimerLong= 2.5;
     }
 
     public static final class LEDConstants {
