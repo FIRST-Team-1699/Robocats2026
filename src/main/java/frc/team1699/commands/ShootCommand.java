@@ -24,7 +24,8 @@ import frc.team1699.subsystems.IntakeSubsystem;
 import frc.utils.vision.RobotPose;
 
 public class ShootCommand extends Command {
-    private boolean isInTolerance;
+    // TODO: CONSIDER DECREASING SHOOTING OFFSET FOR TUNING (MAYBE?)
+    // private boolean isInTolerance;
     private double shootOffset;
 
     private final ShooterSubsystem shoot;
@@ -73,7 +74,7 @@ public class ShootCommand extends Command {
         this.time=new Timer();
         // this.shootingPosition=shootingPosition;
         this.shootOffset=0;
-        this.isInTolerance=false;
+        // this.isInTolerance=false;
 
         addRequirements(shoot, shootHood, indexer, hopper,intake);
     }
