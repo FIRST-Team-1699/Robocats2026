@@ -65,7 +65,6 @@ public class ShooterHoodSubsystem extends SubsystemBase {
     
 
     public double getError() {
-                System.out.println(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
         return Math.abs(Math.abs(currentPosition.getDegrees())-Math.abs(encoderPosition()));
     }
 
@@ -120,12 +119,7 @@ public class ShooterHoodSubsystem extends SubsystemBase {
 
         if(!isInTolerance()) {
             leadMotor.setControl(ShooterHoodConfigs.motionRequest.withPosition(currentPosition.degrees));
-        //    System.out.println("is not in tolerance");
-        }// else {
-          //  leadMotor.setControl(new StaticBrake());
-         //   System.out.println("tollerance achived");
-       // }
-
+        }
 
         SmartDashboard.putNumber("Shooter Pivot position: ", encoderPosition());
         SmartDashboard.putNumber("Shooter hypothetical: ", this.currentPosition.degrees);
@@ -142,8 +136,8 @@ public class ShooterHoodSubsystem extends SubsystemBase {
         CLIMB(0.6),
         INTERPOLATED(0.6),
 
-        MIN(0.01),
-        MAX(0.616),
+        MIN(0.07),
+        MAX(0.605),
         CLOSE(0.45),
         SHUFFLE(0.01);
 

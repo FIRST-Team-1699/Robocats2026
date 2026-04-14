@@ -17,6 +17,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.Constants.*;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 
 /**Public static class designed to store all Subsystems' configurations,
  * where configurations are defined as Motor, 
@@ -87,8 +88,8 @@ public final class Configs {
             
             // SoftwareLimitSwitchConfigs: configurations that limit a motor's movement in rotations. 
             // This is applied to the motor.
-            limits.ForwardSoftLimitThreshold = 0.605;
-            limits.ReverseSoftLimitThreshold = 0.025;
+            limits.ForwardSoftLimitThreshold = HoodPositions.MAX.getDegrees();
+            limits.ReverseSoftLimitThreshold = HoodPositions.MIN.getDegrees();
 
             limits.ForwardSoftLimitEnable = true;
             limits.ReverseSoftLimitEnable = true;

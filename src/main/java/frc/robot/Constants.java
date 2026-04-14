@@ -28,6 +28,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
 
 public final class Constants {
   public static class OIConstants {
@@ -321,7 +322,7 @@ public final class Constants {
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(20, Degree),
+            Angle.ofRelativeUnits(15, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
@@ -335,7 +336,7 @@ public final class Constants {
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(20, Degree),
+            Angle.ofRelativeUnits(15, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
@@ -349,7 +350,7 @@ public final class Constants {
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(170, Degree),
+            Angle.ofRelativeUnits(10, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
@@ -374,7 +375,7 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 1000);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4.0, 4.0, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     static {
@@ -395,17 +396,17 @@ public final class Constants {
         shootPivotMap.put(.8, .45);
         shootPivotMap.put(1.6, .25);
         shootPivotMap.put(2.4, .05);
-        shootPivotMap.put(3.2, 0.01);
-        shootPivotMap.put(4.0, 0.01);
-        shootPivotMap.put(4.8, 0.01);
-        shootPivotMap.put(5.0,0.01);
-        shootPivotMap.put(5.8, 0.01);
-        shootPivotMap.put(6.0,0.01);
-        shootPivotMap.put(6.8, 0.01);
-        shootPivotMap.put(7.0, 0.01);
-        shootPivotMap.put(7.8,0.01);
-        shootPivotMap.put(7.8,0.01);
-        shootPivotMap.put(10.0,0.01);
+        shootPivotMap.put(3.2, HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(4.0, HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(4.8, HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(5.0,HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(5.8, HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(6.0,HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(6.8, HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(7.0, HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
+        // shootPivotMap.put(10.0,HoodPositions.MIN.getDegrees());
     }
   }
 
@@ -434,8 +435,8 @@ public final class Constants {
       public static final String leftFast = "Left-Fast-Auto";
 
       // Misc.
-      public static final double kShootTimerShort= 2.5;
-      public static final double kShootTimerLong= 2.5;
+      public static final double kShootTimerShort= 2.25;
+      public static final double kShootTimerLong= 2.25;
     }
 
     public static final class LEDConstants {

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Configs.IndexerConfigs;
 import frc.robot.Constants.IndexerConstants;
+import frc.team1699.subsystems.ShooterSubsystem.ShootingSpeeds;
 import frc.utils.BeamBreak;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -71,6 +72,10 @@ public class IndexerSubsystem extends SubsystemBase {
 
     private boolean hasMotionControl() {
         return leadMotor.getAppliedControl().equals(IndexerConfigs.motionRequest);
+    }
+
+    public boolean inShooting() {
+        return currentSpeed == IndexingSpeeds.SHOOTING;
     }
 
    @Override

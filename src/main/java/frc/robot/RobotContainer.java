@@ -35,6 +35,7 @@ import frc.team1699.commands.ShuffleCommand;
 import frc.team1699.subsystems.*;
 import frc.team1699.subsystems.ClimbSubsystem.ClimbPosition;
 import frc.team1699.subsystems.HopperSubsystem.HopperSpeeds;
+import frc.team1699.subsystems.IndexerSubsystem.IndexingSpeeds;
 import frc.team1699.subsystems.IntakePivotSubsystem.IntakePositions;
 import frc.team1699.subsystems.IntakeSubsystem.IntakeSpeeds;
 import frc.team1699.subsystems.ShooterHoodSubsystem.HoodPositions;
@@ -98,40 +99,48 @@ public class RobotContainer {
 
   private final LEDController leds = new LEDController();
 
-  private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
-  private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
+//   private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
+//   private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);
 
-  private Command shootOnFlyCommand = new ShootCommand(
-        shoot, 
-        shootHood, 
-        indexer, 
-        hopper, 
-        intake, 
-        .25
-    );
+//   private Command shootOnFlyCommand = new ShootCommand(
+//         shoot, 
+//         shootHood, 
+//         indexer, 
+//         hopper, 
+//         intake, 
+//         .25
+//     );
 
   public RobotContainer() {
     NamedCommands.registerCommand("AimToHub", Commands.runOnce(() -> isAimingAtHub=false)
         .andThen(new WaitUntilCommand(() -> RobotPose.facingHub())));
     NamedCommands.registerCommand("ShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
-        .alongWith(autoShootCommand)
+        .alongWith(new ShootCommand(shoot, shootHood, indexer, hopper, intake))
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
         .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
 
     NamedCommands.registerCommand("LastShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
-        .alongWith(autoShootCommand)
+        .alongWith(new ShootCommand(shoot, shootHood, indexer, hopper, intake,true))
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
         .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
 
     NamedCommands.registerCommand("ShootOnFlyCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
-        .alongWith(shootOnFlyCommand)
+        .alongWith(
+            new ShootCommand(
+                shoot, 
+                shootHood, 
+                indexer, 
+                hopper, 
+                intake, 
+                .25
+            ))
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
         .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
 
-    NamedCommands.registerCommand("CloseShootCommand", autoCloseShootCommand);
+    NamedCommands.registerCommand("CloseShootCommand", new CloseShootCommand(shoot, shootHood, indexer, hopper, intake));
     NamedCommands.registerCommand("ToggleIntake", intakePivot.togglePivotCommand());
         // .andThen(new WaitUntilCommand(() -> intakePivot.isInTolerance())));
     NamedCommands.registerCommand("StartIntake", intake.setSpeedCommand(IntakeSpeeds.INTAKE));
@@ -140,7 +149,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.CLOSE));
 
-    NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
+    // NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
 
     configureBindings();
 
@@ -218,9 +227,12 @@ public class RobotContainer {
         );
 
     operatorController.leftTrigger()
+        .onChange(
+            indexer.indexUntilFull()
+            )
         .onTrue(
-            //intake.intakeWithIndex(indexer));
-            intake.toggleSpeedCommand());
+            intake.toggleSpeedCommand()
+            );
 
     operatorController.x()
         .whileTrue(
@@ -229,6 +241,15 @@ public class RobotContainer {
     operatorController.povUp()
         .whileTrue(
             new FarShootCommand(shoot, shootHood, indexer, hopper, intake));
+
+    // operatorController.povUp()
+    //     .onTrue(shootHood.setRaw(0.1))
+    //     .onFalse(shootHood.setRaw(0));
+
+    // operatorController.povDown()
+    //     .onTrue(shootHood.setRaw(-0.1))
+    //     .onFalse(shootHood.setRaw(0));
+
 
     // operatorController.povLeft()
     //     .onTrue(

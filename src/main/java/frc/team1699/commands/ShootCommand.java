@@ -118,9 +118,10 @@ public class ShootCommand extends Command {
         RobotPose.setShootOffset(shootOffset);
         shoot.setSpeed(ShootingSpeeds.INTERPOLATED);
         shootHood.setPosition(HoodPositions.INTERPOLATED);
-        hopper.setSpeed(HopperSpeeds.INTAKE);
         if(shoot.isTotalInTollerance().getAsBoolean() && shootHood.isInTolerance()) {
+            // && !indexer.inShooting()) {
             indexer.setSpeed(IndexingSpeeds.SHOOTING);
+            hopper.setSpeed(HopperSpeeds.INTAKE);
         } 
     }
 
