@@ -97,7 +97,7 @@ public class RobotContainer {
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
 
-  private final LEDController leds = new LEDController();
+//   private final LEDController leds = new LEDController();
 
 //   private Command autoShootCommand = new ShootCommand(shoot, shootHood, indexer, hopper, intake);
 //   private Command autoCloseShootCommand = new CloseShootCommand(shoot, shootHood, indexer, hopper, intake);

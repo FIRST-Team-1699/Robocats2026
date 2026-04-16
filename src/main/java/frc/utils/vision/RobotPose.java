@@ -50,10 +50,9 @@ public class RobotPose {
         headingToHub = new Rotation2d(hubTranslation.getX() - pose.getX(), hubTranslation.getY() - pose.getY());
 
         Logger.recordOutput("Localization/RobotPose/Pose", pose);
-        Logger.recordOutput("Localization/RobotPose/HeadingToHub", headingToHub);
+        SmartDashboard.putNumber("DistanceToHub", distanceToHub());
         
-        Logger.recordOutput
-        ("Localization/RobotPose/HoodAngle ", getHoodAngle());
+        Logger.recordOutput("Localization/RobotPose/HoodAngle ", getHoodAngle());
         SmartDashboard.putNumber("Localization/RobotPose/HeadingToHub ", getDistanceToHub());
     }
 

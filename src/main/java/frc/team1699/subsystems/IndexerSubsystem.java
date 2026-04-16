@@ -94,7 +94,7 @@ public class IndexerSubsystem extends SubsystemBase {
     public enum IndexingSpeeds {
         STORED(0), 
         // TODO: TUNE
-        INTAKE(0.3),
+        INTAKE(0.15),
         SHOOTING(1.0),
         OUTTAKE(-0.1);
 

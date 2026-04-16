@@ -331,8 +331,8 @@ public final class Constants {
       new Transform3d(
         new Translation3d(
             0,
-            Units.inchesToMeters(11),
-            Units.inchesToMeters(20.625)
+            Units.inchesToMeters(11.5),
+            Units.inchesToMeters(20.5)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
@@ -344,28 +344,28 @@ public final class Constants {
     public static final Transform3d kBackRightOffset = 
       new Transform3d(
         new Translation3d(
-            0,
+            -Units.inchesToMeters(4.5),
             -Units.inchesToMeters(11),
-            Units.inchesToMeters(20.5)
+            Units.inchesToMeters(20.625)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
             Angle.ofRelativeUnits(10, Degree),
-            Angle.ofRelativeUnits(0, Degree)
+            Angle.ofRelativeUnits(180, Degree)
         )
     );
 
     public static final Transform3d kBackLeftOffset = 
       new Transform3d(
         new Translation3d(
-            0,
+            -Units.inchesToMeters(4.5),
             Units.inchesToMeters(11),
             Units.inchesToMeters(20.625)
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(170, Degree),
-            Angle.ofRelativeUnits(0, Degree)
+            Angle.ofRelativeUnits(10, Degree),
+            Angle.ofRelativeUnits(180, Degree)
         )
     );
 
@@ -375,38 +375,38 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4.0, 4.0, 1000);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(5.0, 5.0, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     static {
-        speedTopMap.put(.8, -30.0);
+        speedTopMap.put(1.0, -30.0);
         speedTopMap.put(1.6, -30.0);
-        speedTopMap.put(2.4, -31.0);
+        speedTopMap.put(2.4, -30.0);
         speedTopMap.put(3.2, -33.0);
-        speedTopMap.put(4.0, -36.0);
-        speedTopMap.put(4.8, -44.0);
+        speedTopMap.put(4.0, -35.25);
+        speedTopMap.put(4.8, -42.7);
 
-        speedBottomMap.put(.8, -25.0);
+        speedBottomMap.put(1.0, -25.0);
         speedBottomMap.put(1.6, -25.0);
-        speedBottomMap.put(2.4, -26.0);
+        speedBottomMap.put(2.4, -25.0);
         speedBottomMap.put(3.2, -28.0);
-        speedBottomMap.put(4.0, -31.0);
-        speedBottomMap.put(4.8, -37.0);
+        speedBottomMap.put(4.0, -30.25);
+        speedBottomMap.put(4.8, -35.7);
 
-        shootPivotMap.put(.8, .45);
+        shootPivotMap.put(1.0, .5);
         shootPivotMap.put(1.6, .25);
         shootPivotMap.put(2.4, .05);
         shootPivotMap.put(3.2, HoodPositions.MIN.getDegrees());
         shootPivotMap.put(4.0, HoodPositions.MIN.getDegrees());
         shootPivotMap.put(4.8, HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(5.0,HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(5.8, HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(6.0,HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(6.8, HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(7.0, HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
-        // shootPivotMap.put(10.0,HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(5.0,HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(5.8, HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(6.0,HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(6.8, HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(7.0, HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(7.8,HoodPositions.MIN.getDegrees());
+        shootPivotMap.put(10.0,HoodPositions.MIN.getDegrees());
     }
   }
 
@@ -441,6 +441,38 @@ public final class Constants {
 
     public static final class LEDConstants {
         public static final int kPort = 0;
-        public static final int kLEDLength = 36;
+        public static final int kLEDLength = 26;
+
+        public static final double kTransitionTime = 5.0;
+
+        public static final double[] timeEndsWin = new double[]{
+          // TRANSITION
+          140,
+          // ENDS
+          130,
+          // ACTIVE PERIOD
+          105,
+          // INACTIVE PERIOD
+          80,
+          // ACTIVE
+          55,
+          // ENDGAME
+          30
+        };
+
+      public static final double[] timeEndsLose = new double[]{
+          // TRANSITION
+          140,
+          // ENDS
+          130,
+          // INACTIVE PERIOD
+          105,
+          // ACTIVE PERIOD
+          80,
+          // INACTIVE
+          55,
+          // ENDGAME
+          30
+      };
     }
 }

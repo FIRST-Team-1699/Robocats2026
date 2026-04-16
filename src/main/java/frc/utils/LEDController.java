@@ -1,5 +1,6 @@
 package frc.utils;
 
+import edu.wpi.first.hal.LEDJNI;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,47 +9,46 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.utils.LEDController.TargetRGB;
 import frc.robot.Constants.LEDConstants;
 
 // NOTE: THIS CLASS MAY NOT WORK INDEPENDENTLY BECAUSE THE REQUIRED SUBSYSTEMS ARE INVISIBLE TO IT 
-public class LEDController extends SubsystemBase {
+public class LEDController {
     // DECLARATIONS
-    private AddressableLED leds; 
-    private AddressableLEDBuffer ledBuffer;
-        
+    private static AddressableLED leds = new AddressableLED(LEDConstants.kLEDLength); 
+    private static AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(LEDConstants.kLEDLength);
 
-    private int cycleTicks;
-    private int blinkTicks;
+    private static int cycleTicks=0;
+    private static int blinkTicks=0;
 
-    private  TargetRGB currentRGB;
-    private  boolean blink;
-/*
+    private static TargetRGB currentRGB = TargetRGB.BLUE;
+    private static boolean blink=false;
     static {
         leds.setLength(LEDConstants.kLEDLength);
-        currentRGB = TargetRGB.BLUE;
-        start();
-        changeColor(currentRGB);
-    }
-*/
-    public LEDController() {
-        leds = new AddressableLED(LEDConstants.kPort);
-        ledBuffer = new AddressableLEDBuffer(LEDConstants.kLEDLength);
-
-        leds.setLength(ledBuffer.getLength());
-
-        cycleTicks = 0;
-        blinkTicks = 0;
-
-        currentRGB = TargetRGB.BLUE;
-        blink = false;
 
         start();
         changeColor(currentRGB);
-
     }
+
+    // public LEDController() {
+    //     leds = new AddressableLED(LEDConstants.kPort);
+    //     ledBuffer = new AddressableLEDBuffer(LEDConstants.kLEDLength);
+
+    //     leds.setLength(ledBuffer.getLength());
+
+    //     cycleTicks = 0;
+    //     blinkTicks = 0;
+
+    //     currentRGB = TargetRGB.BLUE;
+    //     blink = false;
+
+    //     start();
+    //     changeColor(currentRGB);
+
+    // }
 
     /**Changes the colot of LEDs */
-    public void changeColor(TargetRGB targetRGB) {
+    public static void changeColor(TargetRGB targetRGB) {
         // STOPS FROM WASTING RESOURCES VIA RETURN
         // ALLOWS LEDS TO TURN ON/OFF, BLINK FOR INTAKE
         if(blink && blinkTicks < 10) {
@@ -59,7 +59,7 @@ public class LEDController extends SubsystemBase {
         leds.setData(ledBuffer);
     }
 
-    public void setColorDirectly(TargetRGB targetRGB) {
+    public static void setColorDirectly(TargetRGB targetRGB) {
         for(int i = 0; i < LEDConstants.kLEDLength; i++) {
             ledBuffer.setRGB(i, targetRGB.red, targetRGB.green, targetRGB.blue);
         }
@@ -69,94 +69,84 @@ public class LEDController extends SubsystemBase {
 
     // METHODS TO MANIPULATE LEDs in-match
     /**Enables LEDs and assigns color to "START_UP" Enum */
-    public void start() {
+    public static void start() {
         leds.start();
     }
 
     /**Disables LEDs*/
-    public  void stop() {
+    public static void stop() {
         leds.stop();
     }
 
-    public void periodic() {
-        changeColor(TargetRGB.BLUE);
+    public static void periodic() {
         cycleTicks++;
         blinkTicks++;
-        if (blinkTicks > 20) blinkTicks = 0;
-        /*
-        double time = DriverStation.getMatchTime();
-        cycleTicks++;
-        blinkTicks++;
-        if(blinkTicks > 20) {
-            blinkTicks = 0;
-        }
+
 
         blink =
-            (endOfAuto())
+            (endOfPeriod())
                 || (wonTransitionPeriod())
-                || (endOfActive())
-                || (endOfEndgame());
+                || (endOfActive());
+        
+        if (blinkTicks > 20) blinkTicks = 0;
 
-        if(cycleTicks >= 10) {
+        if(cycleTicks > 20) {
+            cycleTicks=0;
             updateColor();
         }
-            */
     }
 
-    private boolean endOfAuto() {
-        return Robot.time <= 5.0;
+    private static boolean endOfPeriod() {
+        return Robot.time <= LEDConstants.kTransitionTime;
     }
 
-    private boolean wonTransitionPeriod() {
-        // TODO: Fix
-        // return Robot.time > 130.0;
-        return false;
+    private static boolean wonTransitionPeriod() {
+        return Robot.time > 130.0 && Robot.hasWonAuto;
     }
 
-    private boolean endOfActive() {
+    private static boolean endOfActive() {
         if(Robot.hasWonAuto) {
-            // return ()
+            return 
+                (Robot.time > 105 && Robot.time < 105 + LEDConstants.kTransitionTime) ||
+                (Robot.time > 55 && Robot.time < 55 + LEDConstants.kTransitionTime);
         } else {
-
+            return 
+                (Robot.time > 80 && Robot.time < 80 + LEDConstants.kTransitionTime);
         }
-        return false;
     }
 
-    private boolean endOfEndgame() {
-        return Robot.time <= 5.0;
-    }
 
-    double[] timeEndsWin = new double[]{
-        // TRANSITION
-        140,
-        // ENDS
-        130,
-        // ACTIVE PERIOD
-        105,
-        // INACTIVE PERIOD
-        80,
-        // ACTIVE
-        55,
-        // ENDGAME
-        30
-    };
+        public static final double[] timeEndsWin = new double[]{
+          // TRANSITION
+          140,
+          // ENDS
+          130,
+          // ACTIVE PERIOD
+          105,
+          // INACTIVE PERIOD
+          80,
+          // ACTIVE
+          55,
+          // ENDGAME
+          30
+        };
 
-    double[] timeEndsLose = new double[]{
-        // TRANSITION
-        140,
-        // ENDS
-        130,
-        // INACTIVE PERIOD
-        105,
-        // ACTIVE PERIOD
-        80,
-        // INACTIVE
-        55,
-        // ENDGAME
-        30
-    };
+      public static final double[] timeEndsLose = new double[]{
+          // TRANSITION
+          140,
+          // ENDS
+          130,
+          // INACTIVE PERIOD
+          105,
+          // ACTIVE PERIOD
+          80,
+          // INACTIVE
+          55,
+          // ENDGAME
+          30
+      };
 
-    private void updateColor() {
+    private static void updateColor() {
         if(Robot.isInAuto) {
             
             return;
