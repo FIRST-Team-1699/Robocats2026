@@ -1,0 +1,107 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.107,
+        "y": 7.09
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8607831325301203,
+        "y": 6.657650602409639
+      },
+      "isLocked": false,
+      "linkedName": "Top-Neutral #2"
+    },
+    {
+      "anchor": {
+        "x": 4.63,
+        "y": 7.4
+      },
+      "prevControl": {
+        "x": 1.7301485850161842,
+        "y": 7.429355936645933
+      },
+      "nextControl": {
+        "x": 8.584797360779653,
+        "y": 7.359964576057012
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.303,
+        "y": 4.722
+      },
+      "prevControl": {
+        "x": 7.217259968649162,
+        "y": 4.337041937705374
+      },
+      "nextControl": {
+        "x": 6.056923980212373,
+        "y": 4.8256127042668
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.07,
+        "y": 6.119
+      },
+      "prevControl": {
+        "x": 5.7198808094992994,
+        "y": 5.52907411275387
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Top-Neutral #3"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.1263871173469389,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.3890066964285714,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.6157047193877538,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 2.438934948979591,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 3.0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Left Neutral paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -66.57
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ToggleIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left-Neutral #1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WarmupShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left-Neutral #2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left-Neutral #3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "WarmupShooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left-Neutral #4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LastShootCommand"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Neutral autos",
+  "choreoAuto": false
+}
