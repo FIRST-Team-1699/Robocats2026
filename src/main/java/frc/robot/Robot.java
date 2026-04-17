@@ -99,7 +99,6 @@ public class Robot extends LoggedRobot {
 
     RobotPose.periodic();
    // LEDController.periodic();
-
   }
 
   @Override

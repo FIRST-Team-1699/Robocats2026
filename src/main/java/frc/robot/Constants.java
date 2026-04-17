@@ -313,21 +313,21 @@ public final class Constants {
 
     // Position of camera relative to the center of the bot. Used for PhotonPoseEstimator
     // in Camera.java
-    public static final Transform3d kFrontRightOffset = 
+    public static final Transform3d kFrontLeftOffset = 
       new Transform3d(
         new Translation3d(
             0,
             -Units.inchesToMeters(11.5),
             Units.inchesToMeters(20.5)
-        ),
+        ),  
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(15, Degree),
+            Angle.ofRelativeUnits(20, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
 
-    public static final Transform3d kFrontLeftOffset = 
+    public static final Transform3d kFrontRightOffset = 
       new Transform3d(
         new Translation3d(
             0,
@@ -336,7 +336,7 @@ public final class Constants {
         ),
         new Rotation3d(
             Angle.ofRelativeUnits(0, Degree),
-            Angle.ofRelativeUnits(15, Degree),
+            Angle.ofRelativeUnits(20, Degree),
             Angle.ofRelativeUnits(0, Degree)
         )
     );
@@ -375,26 +375,42 @@ public final class Constants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     // TODO: DEBUG FOR NOISE
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(5.0, 5.0, 1000);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4.0, 4.0, 1000);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     static {
         speedTopMap.put(1.0, -30.0);
-        speedTopMap.put(1.6, -30.0);
+        speedTopMap.put(1.6, -28.25);
         speedTopMap.put(2.4, -30.0);
-        speedTopMap.put(3.2, -33.0);
-        speedTopMap.put(4.0, -35.25);
-        speedTopMap.put(4.8, -42.7);
+        speedTopMap.put(3.2, -32.75);
+        speedTopMap.put(4.0, -35.5);
+        speedTopMap.put(4.8, -43.2);
 
-        speedBottomMap.put(1.0, -25.0);
-        speedBottomMap.put(1.6, -25.0);
-        speedBottomMap.put(2.4, -25.0);
-        speedBottomMap.put(3.2, -28.0);
-        speedBottomMap.put(4.0, -30.25);
-        speedBottomMap.put(4.8, -35.7);
+        speedBottomMap.put(1.0, -25.5);
+        speedBottomMap.put(1.6, -24.25);
+        speedBottomMap.put(2.4, -26.5);
+        speedBottomMap.put(3.2, -29.0);
+        speedBottomMap.put(4.0, -33.0);
+        speedBottomMap.put(4.8, -38.7);
+
+        // speedTopMap.put(1.0, -30.0);
+        // speedTopMap.put(1.6, -30.0);
+        // speedTopMap.put(2.4, -30.0);
+        // speedTopMap.put(3.2, -33.0);
+        // speedTopMap.put(4.0, -35.25);
+        // speedTopMap.put(4.8, -42.7);
+
+        // speedBottomMap.put(1.0, -25.0);
+        // speedBottomMap.put(1.6, -25.0);
+        // speedBottomMap.put(2.4, -25.0);
+        // speedBottomMap.put(3.2, -28.0);
+        // speedBottomMap.put(4.0, -30.25);
+        // speedBottomMap.put(4.8, -35.7);
+
 
         shootPivotMap.put(1.0, .5);
-        shootPivotMap.put(1.6, .25);
+        // shootPivotMap.put(1.6, .25);
+        shootPivotMap.put(1.6, .2);
         shootPivotMap.put(2.4, .05);
         shootPivotMap.put(3.2, HoodPositions.MIN.getDegrees());
         shootPivotMap.put(4.0, HoodPositions.MIN.getDegrees());
@@ -435,8 +451,8 @@ public final class Constants {
       public static final String leftFast = "Left-Fast-Auto";
 
       // Misc.
-      public static final double kShootTimerShort= 2.25;
-      public static final double kShootTimerLong= 2.25;
+      public static final double kShootTimerShort= 2;
+      public static final double kShootTimerLong= 2;
     }
 
     public static final class LEDConstants {

@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.843024251069899,
-        "y": 3.15
+        "x": 7.4548644793152645,
+        "y": 3.019315263908702
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.430580405322853,
-        "y": 0.845462278385348
+        "x": 7.1702139800285325,
+        "y": 0.23620542082738938
       },
       "isLocked": false,
       "linkedName": "Bottom-Neutral #1"
     },
     {
       "anchor": {
-        "x": 4.647175463623395,
-        "y": 0.6515406562054205
+        "x": 4.608,
+        "y": 0.7
       },
       "prevControl": {
-        "x": 6.820997308744399,
-        "y": 0.6623556902607476
+        "x": 4.858,
+        "y": 0.7
       },
       "nextControl": {
-        "x": 2.0465049928673325,
-        "y": 0.6386019971469343
+        "x": 2.6079999999999997,
+        "y": 0.7000000000000002
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.366248216833095,
-        "y": 2.17830242510699
+        "x": 2.7969472182596284,
+        "y": 1.5572467902995721
       },
       "prevControl": {
-        "x": 2.3440941512125533,
-        "y": 2.5405848787446517
+        "x": 1.7623295292439363,
+        "y": 1.4292724679029967
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
       "rotationDegrees": 55.3
     },
     {
-      "waypointRelativePos": 0.6695095948827354,
+      "waypointRelativePos": 0.4392324093816664,
       "rotationDegrees": 180.0
     },
     {
@@ -66,8 +66,8 @@
         "y": 4.035
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 1.3,
-      "maxWaypointRelativePos": 1.75,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.0,
       "name": "Point Towards Zone"
     }
   ],
@@ -82,13 +82,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 66.57130719125448
+    "rotation": 56.5
   },
   "reversed": false,
   "folder": "Right Neutral paths",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 55.305
+    "rotation": -123.51400554431824
   },
   "useDefaultConstraints": true
 }

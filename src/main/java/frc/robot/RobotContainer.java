@@ -118,7 +118,7 @@ public class RobotContainer {
         .alongWith(new ShootCommand(shoot, shootHood, indexer, hopper, intake))
         .andThen(() -> isAimingAtHub=false)
         .andThen(intakePivot.setPositionCommand(IntakePositions.GROUND_INTAKE))
-        .andThen(shootHood.setPositionCommand(HoodPositions.MAX)));
+        .andThen(shootHood.setPositionCommand(HoodPositions.MIN)));
 
     NamedCommands.registerCommand("LastShootCommand", intakePivot.setPositionCommand(IntakePositions.AGITATE)
         .alongWith(new ShootCommand(shoot, shootHood, indexer, hopper, intake,true))
@@ -147,7 +147,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("StopIntake", intake.setSpeedCommand(IntakeSpeeds.STORED));
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
 
-    NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.CLOSE));
+    NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.INTERPOLATED));
 
     // NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
 
