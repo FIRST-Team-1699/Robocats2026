@@ -384,14 +384,14 @@ public final class Constants {
         speedTopMap.put(2.4, -30.0);
         speedTopMap.put(3.2, -32.75);
         speedTopMap.put(4.0, -35.5);
-        speedTopMap.put(4.8, -43.2);
+        speedTopMap.put(4.8, -43.5);
 
         speedBottomMap.put(1.0, -25.5);
         speedBottomMap.put(1.6, -24.25);
         speedBottomMap.put(2.4, -26.5);
         speedBottomMap.put(3.2, -29.0);
-        speedBottomMap.put(4.0, -33.0);
-        speedBottomMap.put(4.8, -38.7);
+        speedBottomMap.put(4.0, -32.0);
+        speedBottomMap.put(4.8, -39.0);
 
         // speedTopMap.put(1.0, -30.0);
         // speedTopMap.put(1.6, -30.0);
