@@ -16,6 +16,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -96,6 +98,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
+  private final LED led = new LED();
 
 //   private final LEDController leds = new LEDController();
 
@@ -148,7 +151,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
 
     NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.INTERPOLATED));
-
+    NamedCommands.registerCommand("LED", led.runPattern(LEDPattern.solid(Color.kBlue)));
     // NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
 
     configureBindings();
