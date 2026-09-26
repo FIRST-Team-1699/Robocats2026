@@ -104,6 +104,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     isInAuto=false;
+    robotContainer.led.runPattern(LEDPattern.solid(Color.kAliceBlue));
     //LEDController.setColorDirectly(LEDController.TargetRGB.BLUE);
    // LEDController.start();
   }

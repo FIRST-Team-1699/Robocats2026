@@ -98,7 +98,7 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem();
   private final ClimbSubsystem climb = new ClimbSubsystem();
   private final VisionSubsystem vision = new VisionSubsystem(drivetrain::addVisionMeasurement);
-  private final LED led = new LED();
+  public final LED led = new LED();
 
 //   private final LEDController leds = new LEDController();
 
@@ -151,7 +151,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Wait2s", new WaitCommand(2));
 
     NamedCommands.registerCommand("WarmupShooter", shoot.setSpeedCommand(ShootingSpeeds.INTERPOLATED));
-    NamedCommands.registerCommand("LED", led.runPattern(LEDPattern.solid(Color.kBlue)));
+    //NamedCommands.registerCommand("LED", led.runPattern(LEDPattern.solid(Color.kBlue)));
     // NamedCommands.registerCommand("MaxShootHood", shootHood.setPositionCommand(HoodPositions.MAX));
 
     configureBindings();
